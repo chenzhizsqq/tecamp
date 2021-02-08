@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
-//カレンダー
+//カレンダーtest
 public class Frag02 extends Fragment
         implements OnDateSelectedListener, OnMonthChangedListener {
 
