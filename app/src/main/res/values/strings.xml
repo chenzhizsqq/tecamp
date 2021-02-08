@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">tecamp8</string>
+    <string name="tab_text_4">電話受付</string>
+    <string name="tab_text_1">予約一覧</string>
+    <string name="tab_text_2">カレンダー</string>
+    <string name="tab_text_3">予約検索</string>
+    <!--<string name="pick_date">予約宿泊日</string>
+    <string name="title_activity_disable">Disabled Days Example</string>-->
+    <string name="pick_date_stay_date">宿泊日 選択</string>
+    <string name="pick_date_search_date">検索日 選択</string>
+    <string name="pick_date_booking_date">予約日 選択</string>
+    <string name="pick_date_prev">前日</string>
+    <string name="pick_date_next">翌日</string>
+    <!-- TODO: Remove or change this placeholder text -->
+</resources>
