@@ -45,12 +45,18 @@
                         android:textSize="20sp" />
                     <Button
                         android:id="@+id/pick_frag01_date_search_date"
-                        android:onClick="showDatePickerDialog"
                         android:gravity="center"
                         android:textSize="20sp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:text="@string/pick_date_search_date" />
+                    <Button
+                        android:id="@+id/pick_frag01_date_search_date_old"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="old" />
 
                     <Button
                         android:id="@+id/Frag01ButtonPrev"

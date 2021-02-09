@@ -18,22 +18,40 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.tecamp.decorators.EventDecorator;
+import com.example.tecamp.decorators.HighlightWeekendsDecorator;
 import com.example.tecamp.sql.DataCenter;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import org.jetbrains.annotations.NotNull;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Frag01SelectFragment extends DialogFragment {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class Frag01SelectFragment extends DialogFragment
+        implements OnDateSelectedListener, OnMonthChangedListener  {
 
     private static final String TAG = "Frag01SelectFragment";
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("EEE曜日, yyyy年 MMM d日 ");
 
+    @BindView(R.id.calendarView_tab)
+    MaterialCalendarView widget;
     @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -45,13 +63,14 @@ public class Frag01SelectFragment extends DialogFragment {
         window.setBackgroundDrawableResource(android.R.color.transparent);
 
         WindowManager.LayoutParams attributes = window.getAttributes();
-        attributes.gravity = Gravity.BOTTOM;//下方
+        attributes.gravity = Gravity.CENTER;//下方
         attributes.width = WindowManager.LayoutParams.MATCH_PARENT;//满屏
+        /*attributes.height = WindowManager.LayoutParams.MATCH_PARENT;//满屏*/
 
         window.setAttributes(attributes);
+
         return dialog;
     }
-
 
 
 
@@ -60,6 +79,19 @@ public class Frag01SelectFragment extends DialogFragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_frag01_select_layout, container, false);
+
+        ButterKnife.bind(this, view);
+        widget.setOnDateChangedListener(this);
+        widget.setOnMonthChangedListener(this);
+
+        //表示設定
+        widget.setHeaderTextAppearance(R.style.TextAppearance_AppCompat_Large);
+        widget.setDateTextAppearance(R.style.TextAppearance_AppCompat_Large);
+        widget.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Large);
+        //widget.setTileSize(LinearLayout.LayoutParams.MATCH_PARENT);
+
+        CalendarDay today = CalendarDay.today();
+        MonthUpdate(today.getYear(), today.getMonth());
 
         Button mActionCancel = view.findViewById(R.id.action_cancel);
         mActionCancel.setOnClickListener(new View.OnClickListener() {
@@ -90,5 +122,120 @@ public class Frag01SelectFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+    }
+
+    /**
+     * Called when a user clicks on a day.
+     * There is no logic to prevent multiple calls for the same date and state.
+     *
+     * @param widget   the view associated with this listener
+     * @param date     the date that was selected or unselected
+     * @param selected true if the day is now selected, false otherwise
+     */
+    @Override
+    public void onDateSelected(
+            @NonNull MaterialCalendarView widget,
+            @NonNull CalendarDay date,
+            boolean selected) {
+        Log.e(TAG, "onDateSelected: " + (selected ? FORMATTER.format(date.getDate()) : "選択ください"));
+        /*mDateManager.setDate(date);
+
+        Frag01DataUpdate(0);*/
+        //Log.e(TAG, "onDateSelected: " + FORMATTER.format(date.getDate()));
+    }
+
+
+    private void MonthUpdate(int year, int month) {
+        //Log.e(TAG, "MonthUpdate: year:"+year+",month:"+month );
+        widget.removeDecorators();
+        //土曜日　日曜日
+        widget.addDecorator(new HighlightWeekendsDecorator());
+
+
+        //DAY選択出来ない　設定
+        widget.addDecorator(new PrimeDayDisableDecorator2());
+
+        //毎月スクリーン　更新
+        HashMap<String, String> getMonthData = DataCenter.pData.getRoomsOneMonth(year, month);
+        //Log.e(TAG, "onCreateView: getRoomsOneMonth:" + getMonthData.toString());
+
+        ArrayList<CalendarDay> datesArray = new ArrayList<>();
+        for (HashMap.Entry<String, String> entry : getMonthData.entrySet()) {
+            datesArray.clear();
+            //Log.e(TAG, "onCreateView: key value :" + entry.getKey() + " : " + entry.getValue());
+
+            int y = Tools.dataGetYear(entry.getKey());
+            int m = Tools.dataGetMonth(entry.getKey());
+            int d = Tools.dataGetDay(entry.getKey());
+
+            LocalDate localDate = LocalDate.of(y, m, d);
+            CalendarDay singleDay = CalendarDay.from(localDate);
+            datesArray.add(singleDay);
+            widget.addDecorator(new EventDecorator(datesArray, "" + entry.getValue()));
+        }
+    }
+
+
+    public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+        try {
+            MonthUpdate(date.getYear(), date.getMonth());
+        } catch (Exception e) {
+            Log.e(TAG, "onMonthChanged: ", e);
+        }
+    }
+
+
+    //選択できないDAY
+    private static class PrimeDayDisableDecorator2 implements DayViewDecorator {
+
+        @Override
+        public boolean shouldDecorate(final CalendarDay day) {
+            return PRIME_TABLE[day.getDay()];
+        }
+
+        @Override
+        public void decorate(final DayViewFacade view) {
+
+            view.setDaysDisabled(true);
+        }
+
+        //trueは選択できる。falseは表示選択できません。
+        private static boolean[] PRIME_TABLE = {
+                true,  // 0?
+                true,
+                true, // 2
+                true, // 3
+                true,
+                true, // 5
+                true,
+                true, // 7
+                true,
+                true,
+                true,
+                true, // 11
+                true,
+                true, // 13
+                true,
+                true,
+                true,
+                true, // 17
+                true,
+                true, // 19
+                true,
+                true,
+                true,
+                true, // 23
+                true,
+                true,
+                true,
+                true,
+                true,
+                true, // 29
+                true,
+                true, // 31
+                true,
+                true,
+                true, //PADDING
+        };
     }
 }

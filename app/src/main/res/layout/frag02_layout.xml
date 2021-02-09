@@ -25,29 +25,6 @@
         app:mcv_selectionColor="#FF9800"
         />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <Button
-                android:id="@+id/button_other_dates"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Other Dates"
-                />
-
-            <CheckBox
-                android:id="@+id/check_text_appearance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Use Large Text"
-                />
-
-        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

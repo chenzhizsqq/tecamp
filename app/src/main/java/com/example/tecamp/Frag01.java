@@ -65,7 +65,7 @@ public class Frag01 extends Fragment implements
     private static final String TAG = "Frag01";
     private TextView mTextViewBookingDate;
     private static String mStringBookingDate = "";
-    private final DateManager mDateManager = new DateManager();
+    public final DateManager mDateManager = new DateManager();
 
 
     private static int mCurrentPage = 1;
@@ -135,7 +135,7 @@ public class Frag01 extends Fragment implements
     }
 
     @SuppressLint("SetTextI18n")
-    void Frag01DataUpdate(int _addDay) throws JSONException {
+    public void Frag01DataUpdate(int _addDay) throws JSONException {
         try {
             //DataCenter.UpdateData();    //buttonNext.setOnClickListener onClick
             //データのday更新
@@ -600,8 +600,31 @@ public class Frag01 extends Fragment implements
 
         }
         mTextViewBookingDate.setText(mStringBookingDate);
+
+
         Button mOpenDialog_booking_date = view.findViewById(R.id.pick_frag01_date_search_date);
         mOpenDialog_booking_date.setOnClickListener(new View.OnClickListener() {
+            /*@Override
+            public void onClick(View v) {
+
+                DatePick dialog = new DatePick();
+
+                dialog.setTargetFragment(Frag01.this, 1);
+                assert getFragmentManager() != null;
+                dialog.show(getFragmentManager(), "booking date Dialog");
+            }*/
+            @Override
+            public void onClick(View v) {
+                Frag01SelectFragment frag01SelectFragment = new Frag01SelectFragment();
+                frag01SelectFragment.setTargetFragment(Frag01.this, 1);
+                assert getFragmentManager() != null;
+                frag01SelectFragment.show(getFragmentManager(), "frag01SelectFragment");
+            }
+        });
+
+
+        Button mOpenDialog_booking_date_old = view.findViewById(R.id.pick_frag01_date_search_date_old);
+        mOpenDialog_booking_date_old.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -616,7 +639,7 @@ public class Frag01 extends Fragment implements
                 Frag01SelectFragment frag01SelectFragment = new Frag01SelectFragment();
                 frag01SelectFragment.setTargetFragment(Frag01.this, 1);
                 assert getFragmentManager() != null;
-                frag01SelectFragment.show(getFragmentManager(), "frag01DialogFragment");
+                frag01SelectFragment.show(getFragmentManager(), "frag01SelectFragment");
             }*/
         });
         //「検索日　選択」セット end
