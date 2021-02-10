@@ -4,6 +4,7 @@
     <string name="tab_text_1">予約一覧</string>
     <string name="tab_text_2">カレンダー</string>
     <string name="tab_text_3">予約検索</string>
+    <string name="tab_exit">tab_exit</string>
     <!--<string name="pick_date">予約宿泊日</string>
     <string name="title_activity_disable">Disabled Days Example</string>-->
     <string name="pick_date_stay_date">宿泊日 選択</string>

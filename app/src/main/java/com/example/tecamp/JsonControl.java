@@ -33,7 +33,11 @@ import okhttp3.Response;
 public class JsonControl {
     private static final String TAG = "JsonControl";
 
+    private SQLiteDatabase mDB = null;
+    OrderListSql orderListSql;
     public JsonControl() {
+        orderListSql = new OrderListSql(null);
+        mDB = orderListSql.getWritableDatabase();
     }
 
     public String EtCampGetDataJson() {
@@ -341,13 +345,7 @@ public class JsonControl {
         return rStrValue;
     }
 
-    private SQLiteDatabase mDB = null;
 
-    //orderListのSql init
-    public void dbInit(Context context) {
-        OrderListSql orderListSql = new OrderListSql(context);
-        mDB = orderListSql.getWritableDatabase();
-    }
 
     public void Json2SqlOrder() {
         try {

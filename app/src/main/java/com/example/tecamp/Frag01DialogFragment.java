@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.example.tecamp.sql.DataCenter;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -155,7 +154,7 @@ public class Frag01DialogFragment extends DialogFragment {
         });
 
 
-        TextView mActionUpdate = view.findViewById(R.id.action_update);
+        TextView mActionUpdate = view.findViewById(R.id.action_select);
         mActionUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

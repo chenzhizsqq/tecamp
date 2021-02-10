@@ -66,7 +66,6 @@
                         android:layout_marginRight="5dp"
                         android:textColor="#FFFFFF" />
 
-
                     <TextView
                         android:id="@+id/textView_frag01_booking_date"
                         android:gravity="center"

@@ -326,7 +326,7 @@ public class Frag01SiteFragment extends DialogFragment {
         });
 
 
-        Button mActionUpdate = view.findViewById(R.id.action_update);
+        Button mActionUpdate = view.findViewById(R.id.action_select);
         mActionUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

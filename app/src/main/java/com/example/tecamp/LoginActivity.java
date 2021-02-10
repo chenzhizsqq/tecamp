@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,8 +36,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Button loginButton = (Button) findViewById(R.id.button);
         loginButton.setOnClickListener(this);
 
-        editTextTextEmailAddress = (EditText)findViewById(R.id.editTextTextEmailAddress);
-        editTextTextPassword = (EditText)findViewById(R.id.editTextTextPassword);
+        editTextTextEmailAddress = (EditText) findViewById(R.id.editTextTextEmailAddress);
+        editTextTextPassword = (EditText) findViewById(R.id.editTextTextPassword);
 
         // ログイン画面表示処理
 
@@ -49,8 +50,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // 保存済の情報をログインID欄に設定
             this.editTextTextEmailAddress.setText(account);
         }
+
+
     }
 
+
+    @Override
+    public void setContentView(View view){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DataCenter.UpdateData();
+            }
+        }).start();
+    }
 
     //EtCampLogin、json登録
     private void postRequest(View view) {
@@ -58,38 +72,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String mEditTextTextEmailAddress = editTextTextEmailAddress.getText().toString();
         String mEditTextTextPassword = editTextTextPassword.getText().toString();
 
-        DataCenter.pData.dbInit( this);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(DataCenter.pData.LoginInit(mEditTextTextEmailAddress,mEditTextTextPassword))
-                {
+                if (DataCenter.pData.LoginInit(mEditTextTextEmailAddress, mEditTextTextPassword)) {
 
-                // 「pref_data」という設定データファイルを読み込み
-                SharedPreferences prefData = getSharedPreferences(SharedPreferences_Login, MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefData.edit();
+                    // 「pref_data」という設定データファイルを読み込み
+                    SharedPreferences prefData = getSharedPreferences(SharedPreferences_Login, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefData.edit();
 
-                // 入力されたログインIDとログインパスワード
-                editor.putString("account", editTextTextEmailAddress.getText().toString());
+                    // 入力されたログインIDとログインパスワード
+                    editor.putString("account", editTextTextEmailAddress.getText().toString());
 
-                // 保存
-                editor.apply();
+                    // 保存
+                    editor.apply();
 
 
-                try {
                     DataCenter.UpdateData();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }else{
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
 
-                Snackbar.make(view, "「アカウント」や「パスウード」が間違います。", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .show();
-            }
+                    Snackbar.make(view, "「アカウント」や「パスウード」が間違います。", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null)
+                            .show();
+                }
 
             }
         }).start();
@@ -106,6 +114,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (view.getId() == R.id.button) {
             Snackbar.make(view, "登録中....", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
+            //Toast.makeText(this, "登録中....", Toast.LENGTH_LONG).show();
             postRequest(view);
         }
     }

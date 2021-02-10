@@ -3,7 +3,6 @@ package com.example.tecamp;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,10 +12,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,20 +35,28 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class Frag01SelectFragment extends DialogFragment
-        implements OnDateSelectedListener, OnMonthChangedListener  {
+        implements OnDateSelectedListener, OnMonthChangedListener {
 
     private static final String TAG = "Frag01SelectFragment";
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("EEE曜日, yyyy年 MMM d日 ");
+    private TextView mTV_date_src;
+    private TextView mTV_Frag01_date;
+    private CalendarDay mSelectDate;
 
+    Frag01SelectFragment(TextView _TextView) {
+        mTV_Frag01_date = _TextView;
+    }
+
+    @SuppressLint("NonConstantResourceId")
     @BindView(R.id.calendarView_tab)
-    MaterialCalendarView widget;
+    public MaterialCalendarView widget;
+
     @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -73,7 +78,6 @@ public class Frag01SelectFragment extends DialogFragment
     }
 
 
-
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
@@ -90,33 +94,48 @@ public class Frag01SelectFragment extends DialogFragment
         widget.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Large);
         //widget.setTileSize(LinearLayout.LayoutParams.MATCH_PARENT);
 
-        CalendarDay today = CalendarDay.today();
-        MonthUpdate(today.getYear(), today.getMonth());
+        MonthUpdate(widget, Frag01.mDateManager.getYear(), Frag01.mDateManager.getMonth());
+        CalendarDay day = CalendarDay.from(Frag01.mDateManager.getYear(),
+                Frag01.mDateManager.getMonth(),
+                Frag01.mDateManager.getDay());
+        widget.setCurrentDate(day);
+
+        mTV_date_src = view.findViewById(R.id.dialog_frag01_date_src);
 
         Button mActionCancel = view.findViewById(R.id.action_cancel);
         mActionCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: closing dialog");
+                Toast.makeText(getContext(), "戻る", Toast.LENGTH_SHORT).show();
                 Objects.requireNonNull(getDialog()).dismiss();
             }
         });
 
 
-        Button mActionUpdate = view.findViewById(R.id.action_update);
-        mActionUpdate.setOnClickListener(new View.OnClickListener() {
+        Button mActionSelect = view.findViewById(R.id.action_select);
+        mActionSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: capturing input.");
+                if(mSelectDate!=null){
 
 
-                Objects.requireNonNull(getDialog()).dismiss();
+
+                    Frag01.bAfterTextChanged = true;
+                    Frag01.mDateManager.setDate(mSelectDate.getYear(), mSelectDate.getMonth(), mSelectDate.getDay());
+
+                    mTV_date_src.setText(mSelectDate.getDate().toString());
+                    mTV_Frag01_date.setText(mSelectDate.getYear() + "/" + mSelectDate.getMonth() + "/" + mSelectDate.getDay());
+
+                    Objects.requireNonNull(getDialog()).dismiss();
+                }else{
+                    Toast.makeText(getContext(), "選択ください", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         return view;
     }
-
 
 
     @Override
@@ -132,12 +151,16 @@ public class Frag01SelectFragment extends DialogFragment
      * @param date     the date that was selected or unselected
      * @param selected true if the day is now selected, false otherwise
      */
+    @SuppressLint("SetTextI18n")
     @Override
     public void onDateSelected(
             @NonNull MaterialCalendarView widget,
             @NonNull CalendarDay date,
             boolean selected) {
+
         Log.e(TAG, "onDateSelected: " + (selected ? FORMATTER.format(date.getDate()) : "選択ください"));
+        mSelectDate=date;
+
         /*mDateManager.setDate(date);
 
         Frag01DataUpdate(0);*/
@@ -145,40 +168,46 @@ public class Frag01SelectFragment extends DialogFragment
     }
 
 
-    private void MonthUpdate(int year, int month) {
-        //Log.e(TAG, "MonthUpdate: year:"+year+",month:"+month );
-        widget.removeDecorators();
-        //土曜日　日曜日
-        widget.addDecorator(new HighlightWeekendsDecorator());
+    private void MonthUpdate(MaterialCalendarView widget, int year, int month) {
+        try {
+
+            //Log.e(TAG, "MonthUpdate: year:"+year+",month:"+month );
+            widget.removeDecorators();
+            //土曜日　日曜日
+            widget.addDecorator(new HighlightWeekendsDecorator());
 
 
-        //DAY選択出来ない　設定
-        widget.addDecorator(new PrimeDayDisableDecorator2());
+            //DAY選択出来ない　設定
+            widget.addDecorator(new PrimeDayDisableDecorator2());
 
-        //毎月スクリーン　更新
-        HashMap<String, String> getMonthData = DataCenter.pData.getRoomsOneMonth(year, month);
-        //Log.e(TAG, "onCreateView: getRoomsOneMonth:" + getMonthData.toString());
+            //毎月スクリーン　更新
+            HashMap<String, String> getMonthData = DataCenter.pData.getRoomsOneMonth(year, month);
+            //Log.e(TAG, "onCreateView: getRoomsOneMonth:" + getMonthData.toString());
 
-        ArrayList<CalendarDay> datesArray = new ArrayList<>();
-        for (HashMap.Entry<String, String> entry : getMonthData.entrySet()) {
-            datesArray.clear();
-            //Log.e(TAG, "onCreateView: key value :" + entry.getKey() + " : " + entry.getValue());
+            ArrayList<CalendarDay> datesArray = new ArrayList<>();
+            for (HashMap.Entry<String, String> entry : getMonthData.entrySet()) {
+                datesArray.clear();
+                //Log.e(TAG, "onCreateView: key value :" + entry.getKey() + " : " + entry.getValue());
 
-            int y = Tools.dataGetYear(entry.getKey());
-            int m = Tools.dataGetMonth(entry.getKey());
-            int d = Tools.dataGetDay(entry.getKey());
+                int y = Tools.dataGetYear(entry.getKey());
+                int m = Tools.dataGetMonth(entry.getKey());
+                int d = Tools.dataGetDay(entry.getKey());
 
-            LocalDate localDate = LocalDate.of(y, m, d);
-            CalendarDay singleDay = CalendarDay.from(localDate);
-            datesArray.add(singleDay);
-            widget.addDecorator(new EventDecorator(datesArray, "" + entry.getValue()));
+                LocalDate localDate = LocalDate.of(y, m, d);
+                CalendarDay singleDay = CalendarDay.from(localDate);
+                datesArray.add(singleDay);
+                widget.addDecorator(new EventDecorator(datesArray, "" + entry.getValue()));
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "MonthUpdate: ", e);
         }
     }
 
 
+    @Override
     public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
         try {
-            MonthUpdate(date.getYear(), date.getMonth());
+            MonthUpdate(widget, date.getYear(), date.getMonth());
         } catch (Exception e) {
             Log.e(TAG, "onMonthChanged: ", e);
         }

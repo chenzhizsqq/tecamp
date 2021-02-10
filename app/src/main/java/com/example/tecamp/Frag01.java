@@ -8,6 +8,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,6 +28,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.tecamp.config.Config;
 import com.example.tecamp.sql.DataCenter;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -44,7 +49,8 @@ import static com.example.tecamp.config.Config.SharedPreferences_Frag01;
 //予約一覧
 public class Frag01 extends Fragment implements
         DatePickerDialog.OnDateSetListener
-        , Frag01DialogFragment.OnInputSelected {
+        , Frag01DialogFragment.OnInputSelected
+        , TextWatcher {
 
     //簡単記録で使うデータ名前  String group_by = "ordernum";
     public static final String[] pSimpleDataSqlNames = {
@@ -63,9 +69,14 @@ public class Frag01 extends Fragment implements
     };
 
     private static final String TAG = "Frag01";
-    private TextView mTextViewBookingDate;
+    public TextView mTextViewBookingDate;
     private static String mStringBookingDate = "";
-    public final DateManager mDateManager = new DateManager();
+    public static  DateManager mDateManager = new DateManager();
+    /*private static CalendarDay selectDate=CalendarDay.from(
+            mDateManager.getYear()
+            , mDateManager.getMonth()
+            , mDateManager.getDay()
+            );*/
 
 
     private static int mCurrentPage = 1;
@@ -540,11 +551,7 @@ public class Frag01 extends Fragment implements
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                DataCenter.UpdateData();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                            DataCenter.UpdateData();
                         }
                     }).start();
                     Frag01DataUpdate(0);
@@ -600,25 +607,23 @@ public class Frag01 extends Fragment implements
 
         }
         mTextViewBookingDate.setText(mStringBookingDate);
-
+        mTextViewBookingDate.addTextChangedListener(this);
 
         Button mOpenDialog_booking_date = view.findViewById(R.id.pick_frag01_date_search_date);
         mOpenDialog_booking_date.setOnClickListener(new View.OnClickListener() {
-            /*@Override
-            public void onClick(View v) {
-
-                DatePick dialog = new DatePick();
-
-                dialog.setTargetFragment(Frag01.this, 1);
-                assert getFragmentManager() != null;
-                dialog.show(getFragmentManager(), "booking date Dialog");
-            }*/
             @Override
             public void onClick(View v) {
-                Frag01SelectFragment frag01SelectFragment = new Frag01SelectFragment();
+                /*selectDate = CalendarDay.from(
+                        mDateManager.getYear()
+                        , mDateManager.getMonth()
+                        , mDateManager.getDay()
+                );*/
+                //Log.e(TAG, "onClick: selectDate:"+selectDate.toString() );
+                Frag01SelectFragment frag01SelectFragment = new Frag01SelectFragment(mTextViewBookingDate);
                 frag01SelectFragment.setTargetFragment(Frag01.this, 1);
                 assert getFragmentManager() != null;
                 frag01SelectFragment.show(getFragmentManager(), "frag01SelectFragment");
+
             }
         });
 
@@ -634,13 +639,6 @@ public class Frag01 extends Fragment implements
                 assert getFragmentManager() != null;
                 dialog.show(getFragmentManager(), "booking date Dialog");
             }
-            /*@Override
-            public void onClick(View v) {
-                Frag01SelectFragment frag01SelectFragment = new Frag01SelectFragment();
-                frag01SelectFragment.setTargetFragment(Frag01.this, 1);
-                assert getFragmentManager() != null;
-                frag01SelectFragment.show(getFragmentManager(), "frag01SelectFragment");
-            }*/
         });
         //「検索日　選択」セット end
 
@@ -694,7 +692,7 @@ public class Frag01 extends Fragment implements
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Log.d(TAG, "onDateSet start");
+        Log.e(TAG, "onDateSet int year"+year+", int month"+month+", int dayOfMonth"+dayOfMonth);
 
         try {
             mDateManager.setDate(year, month + 1, dayOfMonth);
@@ -709,6 +707,80 @@ public class Frag01 extends Fragment implements
         }
         Log.d(TAG, "onDateSet end");
     }
+
+    /**
+     * This method is called to notify you that, within <code>s</code>,
+     * the <code>count</code> characters beginning at <code>start</code>
+     * are about to be replaced by new text with length <code>after</code>.
+     * It is an error to attempt to make changes to <code>s</code> from
+     * this callback.
+     *
+     * @param s
+     * @param start
+     * @param count
+     * @param after
+     */
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
+
+    /**
+     * This method is called to notify you that, within <code>s</code>,
+     * the <code>count</code> characters beginning at <code>start</code>
+     * have just replaced old text that had length <code>before</code>.
+     * It is an error to attempt to make changes to <code>s</code> from
+     * this callback.
+     *
+     * @param s
+     * @param start
+     * @param before
+     * @param count
+     */
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if(bAfterTextChanged){
+            Log.e(TAG, "beforeTextChanged: mDateManager.getYMD():"+mDateManager.getYMD() );
+            bAfterTextChanged=false;
+            try {
+                Frag01DataUpdate(0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * This method is called to notify you that, somewhere within
+     * <code>s</code>, the text has been changed.
+     * It is legitimate to make further changes to <code>s</code> from
+     * this callback, but be careful not to get yourself into an infinite
+     * loop, because any changes you make will cause this method to be
+     * called again recursively.
+     * (You are not told where the change took place because other
+     * afterTextChanged() methods may already have made other changes
+     * and invalidated the offsets.  But if you need to know here,
+     * you can use {@link Spannable#setSpan} in {@link #onTextChanged}
+     * to mark your place and then look up from here where the span
+     * ended up.
+     *
+     * @param s
+     */
+    @Override
+    public void afterTextChanged(Editable s) {
+        /*Log.e(TAG, "afterTextChanged: s.toString():" + s.toString());
+        //Log.e(TAG, "afterTextChanged: selectDate.toString():" + selectDate.toString());
+        String t=s.toString();
+        if(bAfterTextChanged){
+            bAfterTextChanged=false;
+            try {
+                Frag01DataUpdate(0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }*/
+    }
+
+    public static boolean bAfterTextChanged=false;
 
     //時間task
     class CountUpTimerTask extends TimerTask {
@@ -725,11 +797,7 @@ public class Frag01 extends Fragment implements
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                try {
-                                    DataCenter.UpdateData();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
+                                DataCenter.UpdateData();
                             }
                         }).start();
                     } catch (JSONException e) {

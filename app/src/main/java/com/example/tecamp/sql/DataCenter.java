@@ -7,7 +7,7 @@ public class DataCenter {
     private static final String TAG = "DataCenter";
     public static JsonControl pData = new JsonControl();
 
-    public static void UpdateData() throws InterruptedException {
+    public static void UpdateData() {
         //Jsonデータを貰います。 begin
         //DataCenter.pData.dbInit( getActivity());
         JsonControl.mMakeJsonGetDataNext = true;
