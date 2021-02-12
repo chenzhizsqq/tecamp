@@ -424,32 +424,62 @@ public class JsonControl {
     }
 
     public int getSqlCount(String sql) {
+        int count=0;
+        Cursor cursor = null;
+        try {
+            cursor = mDB.rawQuery(sql, null);
+            count=cursor.getCount();
+        } catch (Exception e){
+            // this gets called even if there is an exception somewhere above
+            Log.e(TAG, "getSqlCount: ",e );
+        }finally {
 
-        @SuppressLint("Recycle") Cursor c = mDB.rawQuery(sql, null);
-        Log.i("Number of Records", " :: " + c.getCount());
-        return c.getCount();
+            if(cursor != null)
+                cursor.close();
+        }
+        return count;
     }
 
     public ArrayList<String> SqlGetStringArray(String sql) {
+        ArrayList<String> IntArray = null;
+        Cursor cursor=null;
+        try {
 
-        ArrayList<String> IntArray = new ArrayList<>();
-        @SuppressLint("Recycle") Cursor cursor = mDB.rawQuery(sql, null);
-        boolean isEof = cursor.moveToFirst();
-        while (isEof) {
-            IntArray.add(cursor.getString(0));
-            isEof = cursor.moveToNext();
+            IntArray = new ArrayList<>();
+            cursor= mDB.rawQuery(sql, null);
+            boolean isEof = cursor.moveToFirst();
+            while (isEof) {
+                IntArray.add(cursor.getString(0));
+                isEof = cursor.moveToNext();
+            }
+        }catch (Exception e){
+            Log.e(TAG, "SqlGetStringArray: ",e );
+        }finally {
+
+            if(cursor != null)
+                cursor.close();
         }
         return IntArray;
     }
 
     public HashMap<String, String> SqlGetStringMap(String sql) {
 
-        HashMap<String, String> map = new HashMap<String, String>();
-        @SuppressLint("Recycle") Cursor cursor = mDB.rawQuery(sql, null);
-        boolean isEof = cursor.moveToFirst();
-        while (isEof) {
-            map.put(cursor.getString(0), cursor.getString(1));
-            isEof = cursor.moveToNext();
+        HashMap<String, String> map =null;
+        Cursor cursor = null;
+        try {
+
+            map= new HashMap<String, String>();
+            cursor = mDB.rawQuery(sql, null);
+            boolean isEof = cursor.moveToFirst();
+            while (isEof) {
+                map.put(cursor.getString(0), cursor.getString(1));
+                isEof = cursor.moveToNext();
+            }
+        }catch (Exception e){
+            Log.e(TAG, "SqlGetStringMap: ",e );
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
         return map;
     }
@@ -469,10 +499,11 @@ public class JsonControl {
 
     //更新簡単記録データ
     public void updateSimpleDataArray(String date) {
+        Cursor cursor = null;
         try {
             mSimpleDataArrayList.clear();
             String selection = "date = " + date;
-            @SuppressLint("Recycle") Cursor cursor = mDB.query(
+            cursor = mDB.query(
                     OrderListSql.tableName
                     , Frag01.pSimpleDataSqlNames
                     , selection
@@ -498,16 +529,20 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "updateSimpleDataArray: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
     }
 
 
     //更新「サイト数」詳細記録OrderListデータ
     public void updateSiteDataArray(String date) {
+        Cursor cursor = null;
         try {
             mSiteDataArrayList.clear();
             String selection = "date = " + date;
-            @SuppressLint("Recycle") Cursor cursor = mDB.query(
+            cursor = mDB.query(
                     OrderListSql.tableName
                     , OrderListSql.tableRowNames
                     , selection
@@ -548,16 +583,20 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "updateSiteDataArray: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
     }
 
     //更新「サイト　ROOM」詳細記録OrderListデータ
     public void updateSiteRoomDataArray(String date) {
+        Cursor cursor=null;
         try {
             mSiteDataArrayList.clear();
             String selection = "date = " + date;
             String[] mTableRowNames = {"siteid"};
-            @SuppressLint("Recycle") Cursor cursor = mDB.query(
+            cursor = mDB.query(
                     OrderListSql.tableName
                     , mTableRowNames
                     , selection
@@ -598,16 +637,20 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "updateSiteDataArray: ", e);
+        }finally {
+
+            if(cursor != null)
+                cursor.close();
         }
     }
 
     //更新「Dialog」詳細記録OrderListデータarray
     public HashMap<String, String> getDialogDataArray(String _ordernum, String _date) {
         HashMap<String, String> rMap = new HashMap<String, String>();
-
+        Cursor cursor = null;
         try {
             String selection = " date=" + _date + " and  ordernum = '" + _ordernum + "'";
-            @SuppressLint("Recycle") Cursor cursor = mDB.query(
+            cursor = mDB.query(
                     OrderListSql.tableName
                     , Frag01DialogFragment.mSrcList
                     , selection
@@ -625,6 +668,9 @@ public class JsonControl {
             }
         } catch (Exception e) {
             Log.e(TAG, "updateSiteDataArray: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
         return rMap;
     }
@@ -634,28 +680,28 @@ public class JsonControl {
      */
     public HashMap<String, String> updateSiteDataArray(String _ordernum, String _date) {
         HashMap<String, String> rMap = new HashMap<String, String>();
-
+        Cursor cursor = null;
         try {
             String sql = "select date from etcamp_order where ordernum like '" + _ordernum + "' group by date";
-            @SuppressLint("Recycle") Cursor c = mDB.rawQuery(sql, null);
+            cursor= mDB.rawQuery(sql, null);
 
             StringBuilder sqlDate = new StringBuilder("(");
-            boolean e = c.moveToFirst();
+            boolean e = cursor.moveToFirst();
             while (e) {
-                String r = c.getString(0);
-                if (c.isFirst()) {
+                String r = cursor.getString(0);
+                if (cursor.isFirst()) {
 
                     sqlDate.append(" date=").append(r);
                 } else {
                     sqlDate.append(" or date=").append(r);
                 }
-                e = c.moveToNext();
+                e = cursor.moveToNext();
             }
             sqlDate.append(")");
             //Log.e(TAG, "updateSiteDataArray: sqlDate:" + sqlDate);
 
             String selection = " ordernum = '" + _ordernum + "'" + " and " + sqlDate;
-            @SuppressLint("Recycle") Cursor cursor = mDB.query(
+            cursor = mDB.query(
                     OrderListSql.tableName
                     , Frag01SiteFragment.mSrcArray
                     , selection
@@ -673,6 +719,10 @@ public class JsonControl {
             }
         } catch (Exception e) {
             Log.e(TAG, "updateSiteDataArray: ", e);
+        }finally {
+
+            if(cursor != null)
+                cursor.close();
         }
         return rMap;
     }
@@ -683,9 +733,10 @@ public class JsonControl {
      */
     public String getSiteFirstDay(String _ordernum) {
         String rStr = "";
+        Cursor cursor=null;
         try {
             String sql = "select min(date) from etcamp_order where ordernum like '" + _ordernum + "' ";
-            @SuppressLint("Recycle") Cursor cursor = mDB.rawQuery(sql, null);
+            cursor = mDB.rawQuery(sql, null);
 
             //データ追加
             cursor.moveToFirst();
@@ -693,6 +744,9 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "getSiteRooms: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
         return rStr;
     }
@@ -703,9 +757,11 @@ public class JsonControl {
      */
     public ArrayList<String> getSiteDays(String _ordernum) {
         ArrayList<String> rArray = new ArrayList<>();
+
+        Cursor cursor=null;
         try {
             String sql = "select date from etcamp_order where ordernum='" + _ordernum + "'  group by date order by date";
-            @SuppressLint("Recycle") Cursor cursor = mDB.rawQuery(sql, null);
+            cursor = mDB.rawQuery(sql, null);
 
             //データ追加
             boolean isEof = cursor.moveToFirst();
@@ -716,6 +772,9 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "getSiteRooms: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
         return rArray;
     }
@@ -728,9 +787,10 @@ public class JsonControl {
     public ArrayList<Integer> getSiteRooms(String _ordernum) {
         ArrayList<Integer> rArray = new ArrayList<>();
 
+        Cursor cursor=null;
         try {
             String sql = "select siteid from etcamp_order where ordernum = '" + _ordernum + "' group by siteid";
-            @SuppressLint("Recycle") Cursor cursor = mDB.rawQuery(sql, null);
+            cursor = mDB.rawQuery(sql, null);
 
             //データ追加
             boolean isEof = cursor.moveToFirst();
@@ -741,6 +801,9 @@ public class JsonControl {
             //Log.e(TAG, "getSiteRooms: rArray "+rArray.toString() );
         } catch (Exception e) {
             Log.e(TAG, "getSiteRooms: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
         return rArray;
     }
@@ -751,10 +814,11 @@ public class JsonControl {
     public HashMap<Integer, String> getSqlRoomNames() {
         HashMap<Integer, String> rMap = new HashMap<>();
 
+        Cursor cursor=null;
         try {
 
             String sql = "select siteid, sitename from etcamp_site order by siteid";
-            @SuppressLint("Recycle") Cursor cursor = mDB.rawQuery(sql, null);
+            cursor = mDB.rawQuery(sql, null);
 
             //データ追加
             boolean isEof = cursor.moveToFirst();
@@ -765,6 +829,9 @@ public class JsonControl {
             //Log.e(TAG, "getRoomNames: rArray "+rMap.toString() );
         } catch (Exception e) {
             Log.e(TAG, "getRoomNames: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
         return rMap;
     }
@@ -777,11 +844,12 @@ public class JsonControl {
 
         //select date,count(orderid) from etcamp_order
         // where  date > 20210100 and date<20210200 and canceltime like '' group by date
+        Cursor cursor=null;
         try {
 
             String sql = "select date,count(orderid) from etcamp_order where" +
                     " canceltime like '' and date>" + yearMonth + "00 and date<" + yearMonth + "32 group by date";
-            @SuppressLint("Recycle") Cursor cursor = mDB.rawQuery(sql, null);
+            cursor = mDB.rawQuery(sql, null);
 
             //Log.e(TAG, "getRoomsOneMonth: sql:"+sql );
 
@@ -793,6 +861,9 @@ public class JsonControl {
             }
         } catch (Exception e) {
             Log.e(TAG, "getRoomsOneMonth: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
         return rMap;
     }
@@ -800,7 +871,7 @@ public class JsonControl {
     //更新「サイト数」詳細記録sitenameデータ
     public ArrayList<String> getSiteRoomNames(String _ordernum) {
         ArrayList<String> rArray = new ArrayList<>();
-
+        Cursor cursor=null;
         try {
 
             String sql = "SELECT s.sitename\n" +
@@ -808,9 +879,7 @@ public class JsonControl {
                     "        left join etcamp_site s on (s.siteid= o.siteid) " +
                     " where o.ordernum = '" + _ordernum + "' group by o.siteid";
 
-            /*String sql = "select siteid from etcamp_order " +
-                    "where ordernum = '"+_ordernum+"' group by siteid";*/
-            @SuppressLint("Recycle") Cursor cursor = mDB.rawQuery(sql, null);
+            cursor = mDB.rawQuery(sql, null);
 
             //データ追加
             boolean isEof = cursor.moveToFirst();
@@ -821,6 +890,9 @@ public class JsonControl {
             //Log.e(TAG, "getSiteRooms: rArray "+rArray.toString() );
         } catch (Exception e) {
             Log.e(TAG, "getSiteRooms: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
         return rArray;
     }
@@ -828,10 +900,11 @@ public class JsonControl {
 
     //更新「サイト room」詳細記録SiteRoomデータ
     public void updateSiteRoomDataArray() {
+        Cursor cursor = null;
         //Log.e(TAG, "updateSiteRoomDataArray begin date:" + date);
         try {
             mSiteRoomArrayList.clear();
-            @SuppressLint("Recycle") Cursor cursor = mDB.query(
+            cursor = mDB.query(
                     OrderListSql.SiteTableName
                     , OrderListSql.SiteTableRowNames
                     , ""
@@ -867,17 +940,21 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "updateSiteRoomDataArray: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
     }
 
     public void testSql(String _date) {
+        Cursor cursor=null;
         try {
 
             String sql = "SELECT o.*,s.sitename as name ,t.date as firstdate \n" +
                     "  FROM etcamp_order o\n" +
                     " LEFT JOIN etcamp_site s on ( s.siteid= o.siteid )" +
                     " LEFT JOIN etcamp_order_temp t on ( t.ordernum= o.ordernum ) " + " where o.date = " + _date;
-            Cursor cursor = mDB.rawQuery(sql, null);
+            cursor = mDB.rawQuery(sql, null);
 
             //データ追加
             ArrayList<HashMap<String, String>> mTestArrayList = new ArrayList<>();
@@ -906,15 +983,19 @@ public class JsonControl {
             //データテスト end
         } catch (Exception e) {
             Log.e(TAG, "testSql e: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
     }
 
     //更新「テスト」テスト記録データ
     public void updateTestArray(String date) {
+        Cursor cursor=null;
         try {
             mTestDataArrayList.clear();
             String selection = "date = " + date;
-            @SuppressLint("Recycle") Cursor cursor = mDB.query(
+            cursor = mDB.query(
                     OrderListSql.tableName
                     , OrderListSql.tableRowNames
                     , selection
@@ -951,6 +1032,9 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "updateTestArray: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
         }
     }
 
