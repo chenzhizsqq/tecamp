@@ -622,7 +622,7 @@ public class Frag01 extends Fragment implements
         });
 
 
-        Button mOpenDialog_booking_date_old = view.findViewById(R.id.pick_frag01_date_search_date_old);
+        /*Button mOpenDialog_booking_date_old = view.findViewById(R.id.pick_frag01_date_search_date_old);
         mOpenDialog_booking_date_old.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -633,7 +633,7 @@ public class Frag01 extends Fragment implements
                 assert getFragmentManager() != null;
                 dialog.show(getFragmentManager(), "booking date Dialog");
             }
-        });
+        });*/
         //「検索日　選択」セット end
 
         //記録更新
@@ -730,10 +730,15 @@ public class Frag01 extends Fragment implements
      * @param before
      * @param count
      */
+
+    /**
+    * Frag01とFrag01SelectFragment関連する変数。
+    * */
+    public static boolean bAfterTextChanged=false;
+
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         if(bAfterTextChanged){
-            Log.e(TAG, "beforeTextChanged: mDateManager.getYMD():"+mDateManager.getYMD() );
             bAfterTextChanged=false;
             try {
                 Frag01DataUpdate(0);
@@ -761,20 +766,8 @@ public class Frag01 extends Fragment implements
      */
     @Override
     public void afterTextChanged(Editable s) {
-        /*Log.e(TAG, "afterTextChanged: s.toString():" + s.toString());
-        //Log.e(TAG, "afterTextChanged: selectDate.toString():" + selectDate.toString());
-        String t=s.toString();
-        if(bAfterTextChanged){
-            bAfterTextChanged=false;
-            try {
-                Frag01DataUpdate(0);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }*/
     }
 
-    public static boolean bAfterTextChanged=false;
 
     //時間task
     class CountUpTimerTask extends TimerTask {
