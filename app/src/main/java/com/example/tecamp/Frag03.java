@@ -26,9 +26,6 @@ public class Frag03 extends Fragment  implements DatePickerDialog.OnDateSetListe
     private TextView textView_stay_date;
     private TextView textView_booking_date;
 
-    private Button mOpenDialog_stay_date;
-    private Button mOpenDialog_booking_date;
-
     private String string_stay_date;
     private String string_booking_date;
 
@@ -62,7 +59,7 @@ public class Frag03 extends Fragment  implements DatePickerDialog.OnDateSetListe
         }else{
             textView_stay_date.setText(string_stay_date);
         }
-        mOpenDialog_stay_date = view.findViewById(R.id.pick_date_stay_date);
+        Button mOpenDialog_stay_date = view.findViewById(R.id.pick_date_stay_date);
         mOpenDialog_stay_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
@@ -82,7 +79,7 @@ public class Frag03 extends Fragment  implements DatePickerDialog.OnDateSetListe
         }else{
             textView_booking_date.setText(string_booking_date);
         }
-        mOpenDialog_booking_date = view.findViewById(R.id.pick_date_booking_date);
+        Button mOpenDialog_booking_date = view.findViewById(R.id.pick_date_booking_date);
         mOpenDialog_booking_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
