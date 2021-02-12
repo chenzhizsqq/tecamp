@@ -174,7 +174,7 @@ public class Frag01SiteFragment extends DialogFragment {
         window.setBackgroundDrawableResource(android.R.color.transparent);
 
         WindowManager.LayoutParams attributes = window.getAttributes();
-        attributes.gravity = Gravity.BOTTOM;//下方
+        attributes.gravity = Gravity.CENTER;
         attributes.width = WindowManager.LayoutParams.MATCH_PARENT;//满屏
 
         window.setAttributes(attributes);
@@ -355,9 +355,9 @@ public class Frag01SiteFragment extends DialogFragment {
     }
 
     private void TextViewDefault(TextView textView) {
-        textView.setTextSize(16);
+        textView.setTextSize(14);
         textView.setWidth(240);
-        textView.setHeight(120);
+        textView.setHeight(110);
         textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         textView.setGravity(Gravity.CENTER_VERTICAL);
 

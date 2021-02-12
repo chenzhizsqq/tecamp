@@ -706,6 +706,19 @@
                     android:textAlignment="center">
 
                     <Button
+                        android:id="@+id/action_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginRight="100dp"
+                        android:text="戻る"
+                        android:textAlignment="viewEnd"
+                        android:textColor="#FFFFFF"
+                        android:textSize="25sp" />
+
+                    <Button
                         android:id="@+id/action_delete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -726,19 +739,6 @@
                         android:layout_marginLeft="100dp"
                         android:layout_marginRight="100dp"
                         android:text="更新"
-                        android:textAlignment="viewEnd"
-                        android:textColor="#FFFFFF"
-                        android:textSize="25sp" />
-
-                    <Button
-                        android:id="@+id/action_cancel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="100dp"
-                        android:layout_marginRight="100dp"
-                        android:text="戻る"
                         android:textAlignment="viewEnd"
                         android:textColor="#FFFFFF"
                         android:textSize="25sp" />

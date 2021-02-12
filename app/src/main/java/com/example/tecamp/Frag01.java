@@ -613,12 +613,6 @@ public class Frag01 extends Fragment implements
         mOpenDialog_booking_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*selectDate = CalendarDay.from(
-                        mDateManager.getYear()
-                        , mDateManager.getMonth()
-                        , mDateManager.getDay()
-                );*/
-                //Log.e(TAG, "onClick: selectDate:"+selectDate.toString() );
                 Frag01SelectFragment frag01SelectFragment = new Frag01SelectFragment(mTextViewBookingDate);
                 frag01SelectFragment.setTargetFragment(Frag01.this, 1);
                 assert getFragmentManager() != null;

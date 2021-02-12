@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        >
         <com.prolificinteractive.materialcalendarview.MaterialCalendarView
             android:id="@+id/calendarView_tab"
             android:layout_width="match_parent"
@@ -15,8 +22,9 @@
             android:background="@color/navy"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_margin="1dp"
+            android:padding="1dp"
             app:mcv_selectionColor="#FF9800"
-            app:mcv_tileWidth="100dp"
+            app:mcv_tileWidth="120dp"
             app:mcv_tileHeight="60dp"
             />
 
@@ -24,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="1dp"
+            android:padding="1dp"
             android:background="@color/navy"
             android:gravity="center">
 
@@ -73,8 +82,5 @@
                         </TableRow>
                 </TableLayout>
         </TableRow>
-
-
-
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>
