@@ -46,7 +46,7 @@ import butterknife.ButterKnife;
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.tecamp.config.Config.SharedPreferences_Frag01;
 
-//予約一覧test
+//予約一覧
 public class Frag01 extends Fragment implements
         DatePickerDialog.OnDateSetListener
         , Frag01DialogFragment.OnInputSelected
