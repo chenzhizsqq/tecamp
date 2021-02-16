@@ -12,7 +12,6 @@ public class DataCenter {
         //DataCenter.pData.dbInit( getActivity());
         JsonControl.mMakeJsonGetDataNext = true;
         while (JsonControl.mMakeJsonGetDataNext) {
-            JsonControl.mMakeJsonGetDataNext =false;
             DataCenter.pData.MakeJsonGetData();
             if(JsonControl.mMakeJsonGetDataNext){
 
