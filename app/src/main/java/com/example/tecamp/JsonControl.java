@@ -3,16 +3,13 @@ package com.example.tecamp;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.view.View;
 
 import com.example.tecamp.config.Config;
 import com.example.tecamp.sql.DataCenter;
 import com.example.tecamp.sql.OrderListSql;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -188,6 +185,9 @@ public class JsonControl {
 
                         mGetLastJsonObjGetDate = getJsonObjGetDate;
                         mMakeJsonGetDataNext = true;
+                    }else{
+
+                        mMakeJsonGetDataNext = false;
                     }
                 }
             } else {
@@ -440,6 +440,28 @@ public class JsonControl {
         return count;
     }
 
+    public ArrayList<Integer> SqlGetIntArray(String sql) {
+        ArrayList<Integer> IntArray = null;
+        Cursor cursor=null;
+        try {
+
+            IntArray = new ArrayList<>();
+            cursor= mDB.rawQuery(sql, null);
+            boolean isEof = cursor.moveToFirst();
+            while (isEof) {
+                IntArray.add(cursor.getInt(0));
+                isEof = cursor.moveToNext();
+            }
+        }catch (Exception e){
+            Log.e(TAG, "SqlGetStringArray: ",e );
+        }finally {
+
+            if(cursor != null)
+                cursor.close();
+        }
+        return IntArray;
+    }
+
     public ArrayList<String> SqlGetStringArray(String sql) {
         ArrayList<String> IntArray = null;
         Cursor cursor=null;
@@ -482,6 +504,38 @@ public class JsonControl {
                 cursor.close();
         }
         return map;
+    }
+
+
+    public ArrayList<HashMap<String, String>> SqlGetArrayMap(String sql) {
+
+        ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+
+            cursor = mDB.rawQuery(sql, null);
+            boolean isEof = cursor.moveToFirst();
+            while (isEof) {
+                HashMap<String, String> map = null;
+                map = new HashMap<String, String>();
+                for (int i = 0; i < cursor.getCount(); i++) {
+
+                    //Log.e(TAG, "SqlGetArrayMap: "+cursor.getColumnName(i)+","+ cursor.getString(i));
+                    map.put(cursor.getColumnName(i),cursor.getString(i));
+                }
+                //Log.e(TAG, "SqlGetArrayMap: map:"+map.toString() );
+                arrayList.add(map);
+                isEof = cursor.moveToNext();
+
+            }
+            //Log.e(TAG, "SqlGetArrayMap: arrayList:"+arrayList.toString() );
+        } catch (Exception e) {
+            Log.e(TAG, "SqlGetArrayMap: ", e);
+        }finally {
+            if(cursor != null)
+                cursor.close();
+        }
+        return arrayList;
     }
 
     @SuppressLint("SimpleDateFormat")
