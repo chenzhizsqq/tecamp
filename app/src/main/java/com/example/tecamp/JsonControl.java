@@ -514,11 +514,13 @@ public class JsonControl {
         try {
 
             cursor = mDB.rawQuery(sql, null);
+            //Log.e(TAG, "SqlGetArrayMap: sql:"+sql );
             boolean isEof = cursor.moveToFirst();
             while (isEof) {
                 HashMap<String, String> map = null;
                 map = new HashMap<String, String>();
-                for (int i = 0; i < cursor.getCount(); i++) {
+                //Log.e(TAG, "SqlGetArrayMap: cursor.getColumnCount():"+cursor.getColumnCount() );
+                for (int i = 0; i < cursor.getColumnCount(); i++) {
 
                     //Log.e(TAG, "SqlGetArrayMap: "+cursor.getColumnName(i)+","+ cursor.getString(i));
                     map.put(cursor.getColumnName(i),cursor.getString(i));
