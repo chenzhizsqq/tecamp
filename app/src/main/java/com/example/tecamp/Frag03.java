@@ -78,13 +78,14 @@ public class Frag03 extends Fragment implements DatePickerDialog.OnDateSetListen
         ButterKnife.bind(this, view);
 
 
+        string_stay_date="";
+
         //stay_date
         textView_stay_date = view.findViewById(R.id.frag03_textView_stay_date);
-        if (string_stay_date.isEmpty()) {
-
-        } else {
-            textView_stay_date.setText(string_stay_date);
+        if (!string_stay_date.isEmpty()) {
+            textView_stay_date.setText("");
         }
+
         Button mOpenDialog_stay_date = view.findViewById(R.id.frag03_pick_date_stay_date);
         mOpenDialog_stay_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,7 +132,6 @@ public class Frag03 extends Fragment implements DatePickerDialog.OnDateSetListen
 */
 
                 try {
-
                     String selectUsername = editTextName.getText().toString();
 
                     //データ処理
