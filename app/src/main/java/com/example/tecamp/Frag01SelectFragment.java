@@ -46,7 +46,7 @@ public class Frag01SelectFragment extends DialogFragment
     private static final String TAG = "Frag01SelectFragment";
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("EEE曜日, yyyy年 MMM d日 ");
     private TextView mTV_date_src;
-    private TextView mTV_Frag01_date;
+    private final TextView mTV_Frag01_date;
     private CalendarDay mSelectDate;
 
     Frag01SelectFragment(TextView _TextView) {
@@ -94,10 +94,10 @@ public class Frag01SelectFragment extends DialogFragment
         widget.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Large);
         //widget.setTileSize(LinearLayout.LayoutParams.MATCH_PARENT);
 
-        MonthUpdate(widget, Frag01.mDateManager.getYear(), Frag01.mDateManager.getMonth());
-        CalendarDay day = CalendarDay.from(Frag01.mDateManager.getYear(),
-                Frag01.mDateManager.getMonth(),
-                Frag01.mDateManager.getDay());
+        MonthUpdate(widget, Frag01.pDateManager.getYear(), Frag01.pDateManager.getMonth());
+        CalendarDay day = CalendarDay.from(Frag01.pDateManager.getYear(),
+                Frag01.pDateManager.getMonth(),
+                Frag01.pDateManager.getDay());
         widget.setCurrentDate(day);
 
         mTV_date_src = view.findViewById(R.id.dialog_frag01_date_src);
@@ -122,7 +122,7 @@ public class Frag01SelectFragment extends DialogFragment
 
 
                     Frag01.bAfterTextChanged = true;
-                    Frag01.mDateManager.setDate(mSelectDate.getYear(), mSelectDate.getMonth(), mSelectDate.getDay());
+                    Frag01.pDateManager.setDate(mSelectDate.getYear(), mSelectDate.getMonth(), mSelectDate.getDay());
 
                     mTV_date_src.setText(mSelectDate.getDate().toString());
                     mTV_Frag01_date.setText(mSelectDate.getYear() + "/" + mSelectDate.getMonth() + "/" + mSelectDate.getDay());
@@ -158,7 +158,7 @@ public class Frag01SelectFragment extends DialogFragment
             @NonNull CalendarDay date,
             boolean selected) {
 
-        Log.e(TAG, "onDateSelected: " + (selected ? FORMATTER.format(date.getDate()) : "選択ください"));
+        //Log.e(TAG, "onDateSelected: " + (selected ? FORMATTER.format(date.getDate()) : "選択ください"));
         mSelectDate=date;
 
         /*mDateManager.setDate(date);
