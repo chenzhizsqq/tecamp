@@ -29,7 +29,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.tecamp.config.Config;
 import com.example.tecamp.sql.DataCenter;
-import com.example.tecamp.ui.main.SectionsPagerAdapter;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -490,7 +489,7 @@ public class Frag01 extends Fragment implements
         ButterKnife.bind(this, view);
 
 
-        mTableLayoutBookingList = (TableLayout) view.findViewById(R.id.予約一覧);
+        mTableLayoutBookingList = (TableLayout) view.findViewById(R.id.frag01_予約一覧);
         mTableLayoutFrag01_TableLayout_All = (TableLayout) view.findViewById(R.id.Frag01_TableLayout_All);
         mTableLayoutPageSelect = (TableLayout) view.findViewById(R.id.Frag01_page_select);
 
@@ -787,7 +786,7 @@ public class Frag01 extends Fragment implements
     }
 
 
-    //時間task
+    //データ更新task
     class CountUpTimerTask extends TimerTask {
         @Override
         public void run() {
