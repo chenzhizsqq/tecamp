@@ -25,11 +25,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.tecamp.config.Config;
 import com.example.tecamp.sql.DataCenter;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.example.tecamp.ui.main.SectionsPagerAdapter;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -52,6 +52,13 @@ public class Frag01 extends Fragment implements
         , Frag01DialogFragment.OnInputSelected
         , TextWatcher {
 
+    ViewPager viewPager;
+
+    public Frag01(ViewPager _viewPager){
+        viewPager=_viewPager;
+
+    }
+
     //簡単記録で使うデータ名前  String group_by = "ordernum";
     public static final String[] pSimpleDataSqlNames = {
             "date",
@@ -71,7 +78,7 @@ public class Frag01 extends Fragment implements
     private static final String TAG = "Frag01";
     public TextView mTextViewBookingDate;
     private static String mStringBookingDate = "";
-    public static  DateManager mDateManager = new DateManager();
+    public static  DateManager pDateManager = new DateManager();
     /*private static CalendarDay selectDate=CalendarDay.from(
             mDateManager.getYear()
             , mDateManager.getMonth()
@@ -137,9 +144,9 @@ public class Frag01 extends Fragment implements
 
     public String getSelectDate() {
         String str;
-        String year = "" + mDateManager.getYear();
-        String month = mDateManager.getMonth() < 10 ? "0" + mDateManager.getMonth() : "" + mDateManager.getMonth();
-        String day = mDateManager.getDay() < 10 ? "0" + mDateManager.getDay() : "" + mDateManager.getDay();
+        String year = "" + pDateManager.getYear();
+        String month = pDateManager.getMonth() < 10 ? "0" + pDateManager.getMonth() : "" + pDateManager.getMonth();
+        String day = pDateManager.getDay() < 10 ? "0" + pDateManager.getDay() : "" + pDateManager.getDay();
         str = year + month + day;
         Log.d(TAG, "getSelectDate: " + str);
         return str;
@@ -150,15 +157,15 @@ public class Frag01 extends Fragment implements
         try {
             //DataCenter.UpdateData();    //buttonNext.setOnClickListener onClick
             //データのday更新
-            mDateManager.addDay(_addDay);
+            pDateManager.addDay(_addDay);
 
             //view update
             String str = String.format(
                     Locale.US,
                     "%d/%d/%d",
-                    mDateManager.getYear(),
-                    mDateManager.getMonth(),
-                    mDateManager.getDay()
+                    pDateManager.getYear(),
+                    pDateManager.getMonth(),
+                    pDateManager.getDay()
             );
             mStringBookingDate = str;
             mTextViewBookingDate.setText(str);
@@ -283,7 +290,7 @@ public class Frag01 extends Fragment implements
                         String dateSrc = "";
                         if (dateArray.size() > 1) {
                             //Log.e(TAG, "TableLayoutUpdate: DataCegetItem: mDateManager.getYMD():" + mDateManager.getYMD());
-                            int indexOf = dateArray.indexOf(mDateManager.getYMD()) + 1;
+                            int indexOf = dateArray.indexOf(pDateManager.getYMD()) + 1;
                             dateSrc = dateArray.size() + "(" + indexOf + ")";
                         } else {
                             dateSrc = dateArray.size() + "";
@@ -598,9 +605,9 @@ public class Frag01 extends Fragment implements
             String str = String.format(
                     Locale.US,
                     "%d/%d/%d",
-                    mDateManager.getYear(),
-                    mDateManager.getMonth(),
-                    mDateManager.getDay()
+                    pDateManager.getYear(),
+                    pDateManager.getMonth(),
+                    pDateManager.getDay()
             );
             mStringBookingDate = str;
             mTextViewBookingDate.setText(str);
@@ -689,7 +696,7 @@ public class Frag01 extends Fragment implements
         Log.e(TAG, "onDateSet int year"+year+", int month"+month+", int dayOfMonth"+dayOfMonth);
 
         try {
-            mDateManager.setDate(year, month + 1, dayOfMonth);
+            pDateManager.setDate(year, month + 1, dayOfMonth);
 
             Frag01DataUpdate(0);
 
@@ -766,6 +773,17 @@ public class Frag01 extends Fragment implements
      */
     @Override
     public void afterTextChanged(Editable s) {
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser) {
+            try {
+                Frag01DataUpdate(0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 

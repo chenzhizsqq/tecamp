@@ -1,7 +1,6 @@
 package com.example.tecamp;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,11 +11,12 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.tecamp.decorators.EventDecorator;
 import com.example.tecamp.decorators.HighlightWeekendsDecorator;
 import com.example.tecamp.sql.DataCenter;
-import com.example.tecamp.ui.main.PlaceholderFragment;
+import com.example.tecamp.ui.main.SectionsPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -46,6 +46,13 @@ public class Frag02 extends Fragment
 
     @BindView(R.id.calendarView_1_tab)
     MaterialCalendarView widget;
+
+    ViewPager viewPager;
+
+    public Frag02(ViewPager _viewPager){
+        viewPager=_viewPager;
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,6 +118,12 @@ public class Frag02 extends Fragment
             @NonNull CalendarDay date,
             boolean selected) {
         Log.e(TAG, "onDateSelected: " + (selected ? FORMATTER.format(date.getDate()) : "選択ください"));
+        int y=date.getYear();
+        int m=date.getMonth();
+        int d=date.getDay();
+        Frag01.pDateManager.setDate(y,m,d);
+
+        viewPager.setCurrentItem(1);
         //Log.e(TAG, "onDateSelected: " + FORMATTER.format(date.getDate()));
     }
 

@@ -17,8 +17,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.tecamp.sql.DataCenter;
+import com.example.tecamp.ui.main.SectionsPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +47,14 @@ public class Frag04 extends Fragment implements
 
     //Frag04_TableLayout_tableに予約記録、tagのArrayList
     private final ArrayList<String> tagArrayList=new ArrayList<>();
+
+
+    ViewPager viewPager;
+
+    public Frag04(ViewPager _viewPager){
+        viewPager=_viewPager;
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

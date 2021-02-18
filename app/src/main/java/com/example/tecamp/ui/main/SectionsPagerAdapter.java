@@ -15,19 +15,26 @@ import com.example.tecamp.Frag03;
 import com.example.tecamp.Frag04;
 import com.example.tecamp.R;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    @StringRes
-    private static final int[] TAB_TITLES = new int[]{
-            R.string.tab_text_4
-            ,R.string.tab_text_1
-            , R.string.tab_text_2
-            ,R.string.tab_text_3
-    };
+    private final List<Fragment> fragments = new ArrayList<>();
+    private final List<String> fragmentTitle = new ArrayList<>();
+
+
+    public void add(Fragment fragment,String title)
+    {
+        fragments.add(fragment);
+        fragmentTitle.add(title);
+    }
 
     private static final String TAG = "SectionsPagerAdapter";
     private final Context mContext;
@@ -39,6 +46,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     }
 
+    @NotNull
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
@@ -47,34 +55,20 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         //Log.e(TAG, "getItem: begin");
 
-        Fragment fragment = null;
-        switch (position){
-            case 0:
-                fragment = new Frag04();
-                break;
-            case 1:
-                fragment = new Frag01();
-                break;
-            case 2:
-                fragment = new Frag02();
-                break;
-            case 3:
-                fragment = new Frag03();
-                break;
 
-        }
-        return fragment;
+        return fragments.get(position);
 
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return mContext.getResources().getString(TAB_TITLES[position]);
+        return fragmentTitle.get(position);
     }
 
     @Override
     public int getCount() {
-        return TAB_TITLES.length;
+
+        return fragments.size();
     }
 }

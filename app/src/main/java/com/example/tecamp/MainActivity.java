@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity{
 
     private static final String TAG = "MainActivity";
 
+    private  static ViewPager viewPager;
 
 
     @SuppressLint("NonConstantResourceId")
@@ -39,9 +40,21 @@ public class MainActivity extends AppCompatActivity{
 
 
         setContentView(R.layout.activity_main);
+
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+
+
         ViewPager viewPager = findViewById(R.id.view_pager);
+
+        sectionsPagerAdapter.add(new Frag04(viewPager),"電話受付");
+        sectionsPagerAdapter.add(new Frag01(viewPager),"予約一覧");
+        sectionsPagerAdapter.add(new Frag02(viewPager),"カレンダー");
+        sectionsPagerAdapter.add(new Frag03(viewPager),"予約検索");
+
+
+
         viewPager.setAdapter(sectionsPagerAdapter);
+
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 

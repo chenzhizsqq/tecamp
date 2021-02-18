@@ -19,8 +19,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.tecamp.sql.DataCenter;
+import com.example.tecamp.ui.main.SectionsPagerAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -55,6 +57,14 @@ public class Frag03 extends Fragment implements DatePickerDialog.OnDateSetListen
             , "site_count"
             , "createtime"
     };
+
+
+    ViewPager viewPager;
+
+    public Frag03(ViewPager _viewPager){
+        viewPager=_viewPager;
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
