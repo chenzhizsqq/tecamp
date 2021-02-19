@@ -32,14 +32,16 @@
                     android:gravity="center">
 
                     <Button
-                        android:id="@+id/Frag01Update"
+                        android:id="@+id/Frag01ButtonPrev"
                         android:gravity="center"
-                        android:text="更新"
+                        android:text="@string/pick_date_prev"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:textColor="#FFFFFF" />
                     <TextView
-                        android:id="@+id/Frag01Amount"
+                        android:id="@+id/textView_frag01_booking_date"
+                        android:gravity="center"
+                        android:text="date"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:textSize="20sp" />
@@ -50,29 +52,13 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:text="@string/pick_date_search_date" />
-                    <!--<Button
-                        android:id="@+id/pick_frag01_date_search_date_old"
-                        android:gravity="center"
-                        android:textSize="20sp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:text="old" />-->
-
-                    <Button
-                        android:id="@+id/Frag01ButtonPrev"
-                        android:gravity="center"
-                        android:text="@string/pick_date_prev"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:textColor="#FFFFFF" />
 
                     <TextView
-                        android:id="@+id/textView_frag01_booking_date"
-                        android:gravity="center"
-                        android:text="date"
+                        android:id="@+id/Frag01Amount"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:textSize="20sp" />
+
 
                     <Button
                         android:id="@+id/Frag01ButtonNext"
