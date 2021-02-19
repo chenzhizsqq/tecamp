@@ -21,11 +21,8 @@ public class Config {
     public static final String LoginUrl = "http://192.168.18.126/EthpJson.aspx";
     //public static final String LoginUrl = "http://192.168.18.173/EthpJson.aspx";
 
-    //Frag01でデータ更新時間
-    public static final long minuteFrag01DataUpdate = 60000;    //60000では、毎６０秒更新一回
-
-    //Frag05でデータ更新時間
-    public static final long minuteFrag05DataUpdate = 60000;    //60000では、毎６０秒更新一回
+    //Jsonデータ更新時間
+    public static final long DataUpdateTime = 60000;    //60000では、毎６０秒更新一回
 
     /*sample getData json
         {"app":"EtCampGetData", "token":"202011291352391050000000090010000000000000010125",
