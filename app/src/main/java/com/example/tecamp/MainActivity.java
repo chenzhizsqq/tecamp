@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
+import com.example.tecamp.sql.DataCenter;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ import com.example.tecamp.ui.main.SectionsPagerAdapter;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+
+import org.json.JSONException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,6 +40,14 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DataCenter.timeCreate();
+        /*new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DataCenter.UpdateData();
+            }
+        }).start();*/
 
 
         setContentView(R.layout.activity_main);

@@ -32,6 +32,7 @@ public class JsonControl {
 
     private SQLiteDatabase mDB = null;
     OrderListSql orderListSql;
+
     public JsonControl() {
         orderListSql = new OrderListSql(null);
         mDB = orderListSql.getWritableDatabase();
@@ -107,8 +108,9 @@ public class JsonControl {
         mLoginToken = loginToken;
     }
 
-    public boolean LoginInit(String editTextTextEmailAddress, String editTextTextPassword) {
+    public String LoginInit(String editTextTextEmailAddress, String editTextTextPassword) {
 
+        String status = "";
         OkHttpClient client = new OkHttpClient();
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         String mJson = getLoginJson(
@@ -123,13 +125,15 @@ public class JsonControl {
                 .url(url)
                 .post(body)
                 .build();
+        String getResult = "";
         try {
             Response response = null;
-            String getResult = "";
             response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 getResult = response.body().string();
                 mJsonObjLogin = new JSONObject(getResult);
+                Log.e(TAG, "LoginInit: getResult:" + getResult);
+                status = mJsonObjLogin.getString("status");
                 if (mJsonObjLogin.getString("status").equals("0")) {
                     String mGetJsonObjLogin = getJsonObjLogin().toString();
                     String token = getJsonObjLogin().getJSONObject("result").getString("token");
@@ -137,7 +141,7 @@ public class JsonControl {
 
                     setLoginToken(token);
 
-                    return true;
+                    //return true;
                 }
             } else {
                 throw new IOException("Unexpected code " + response);
@@ -146,17 +150,19 @@ public class JsonControl {
             Log.e(TAG, "LoginInit: ", e);
         }
 
-        return false;
+        return status;
+        //return false;
     }
 
     /*final static OkHttpClient client = new OkHttpClient();
     final static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     static Response response = null;*/
     //予約データ　Jsonデータを貰います。
-    public static boolean mMakeJsonGetDataNext = true;
+    public static boolean pJsonGetDataNext = true;
     public static String mGetLastJsonObjGetDate = "";
 
-    public void MakeJsonGetData() {
+    public String MakeJsonGetData() {
+        String status = "";
         OkHttpClient client = new OkHttpClient();
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         String jsonString = DataCenter.pData.EtCampGetDataJson();
@@ -168,14 +174,17 @@ public class JsonControl {
                 .url(url)
                 .post(body)
                 .build();
+        String getResult = "";
         try {
             Response response = null;
-            String getResult = "";
             response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 getResult = response.body().string();
                 mJsonObject = new JSONObject(getResult);
-                if (getJsonObject().getString("status").equals("0")) {
+                Log.e(TAG, "MakeJsonGetData: getResult:" + getResult);
+                status = getJsonObject().getString("status");
+                //if (getJsonObject().getString("status").equals("0")) {
+                if (status.equals("0")) {
                     String getJsonObjGetDate = getJsonObject().toString();
                     //Log.e(TAG, "GetData: mGetJsonObjGetDate:" + getJsonObjGetDate);
                     DateManager mDateManager = new DateManager();
@@ -184,11 +193,13 @@ public class JsonControl {
                     if (!mGetLastJsonObjGetDate.equals(getJsonObjGetDate)) {
 
                         mGetLastJsonObjGetDate = getJsonObjGetDate;
-                        mMakeJsonGetDataNext = true;
-                    }else{
+                        pJsonGetDataNext = true;
+                    } else {
 
-                        mMakeJsonGetDataNext = false;
+                        pJsonGetDataNext = false;
                     }
+                } else {
+                    pJsonGetDataNext = false;
                 }
             } else {
                 throw new IOException("Unexpected code " + response);
@@ -197,6 +208,7 @@ public class JsonControl {
             Log.e(TAG, "MakeJsonGetData: ", e);
         }
 
+        return status;
     }
 
     //orderlistのjson
@@ -346,7 +358,6 @@ public class JsonControl {
     }
 
 
-
     public void Json2SqlOrder() {
         try {
             //Log.e(TAG, "Json2Sql: getJSONArrayOrderListLength():"+getJSONArrayOrderListLength() );
@@ -424,17 +435,17 @@ public class JsonControl {
     }
 
     public int getSqlCount(String sql) {
-        int count=0;
+        int count = 0;
         Cursor cursor = null;
         try {
             cursor = mDB.rawQuery(sql, null);
-            count=cursor.getCount();
-        } catch (Exception e){
+            count = cursor.getCount();
+        } catch (Exception e) {
             // this gets called even if there is an exception somewhere above
-            Log.e(TAG, "getSqlCount: ",e );
-        }finally {
+            Log.e(TAG, "getSqlCount: ", e);
+        } finally {
 
-            if(cursor != null)
+            if (cursor != null)
                 cursor.close();
         }
         return count;
@@ -442,21 +453,21 @@ public class JsonControl {
 
     public ArrayList<Integer> SqlGetIntArray(String sql) {
         ArrayList<Integer> IntArray = null;
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
 
             IntArray = new ArrayList<>();
-            cursor= mDB.rawQuery(sql, null);
+            cursor = mDB.rawQuery(sql, null);
             boolean isEof = cursor.moveToFirst();
             while (isEof) {
                 IntArray.add(cursor.getInt(0));
                 isEof = cursor.moveToNext();
             }
-        }catch (Exception e){
-            Log.e(TAG, "SqlGetStringArray: ",e );
-        }finally {
+        } catch (Exception e) {
+            Log.e(TAG, "SqlGetStringArray: ", e);
+        } finally {
 
-            if(cursor != null)
+            if (cursor != null)
                 cursor.close();
         }
         return IntArray;
@@ -464,21 +475,21 @@ public class JsonControl {
 
     public ArrayList<String> SqlGetStringArray(String sql) {
         ArrayList<String> IntArray = null;
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
 
             IntArray = new ArrayList<>();
-            cursor= mDB.rawQuery(sql, null);
+            cursor = mDB.rawQuery(sql, null);
             boolean isEof = cursor.moveToFirst();
             while (isEof) {
                 IntArray.add(cursor.getString(0));
                 isEof = cursor.moveToNext();
             }
-        }catch (Exception e){
-            Log.e(TAG, "SqlGetStringArray: ",e );
-        }finally {
+        } catch (Exception e) {
+            Log.e(TAG, "SqlGetStringArray: ", e);
+        } finally {
 
-            if(cursor != null)
+            if (cursor != null)
                 cursor.close();
         }
         return IntArray;
@@ -486,21 +497,21 @@ public class JsonControl {
 
     public HashMap<String, String> SqlGetStringMap(String sql) {
 
-        HashMap<String, String> map =null;
+        HashMap<String, String> map = null;
         Cursor cursor = null;
         try {
 
-            map= new HashMap<String, String>();
+            map = new HashMap<String, String>();
             cursor = mDB.rawQuery(sql, null);
             boolean isEof = cursor.moveToFirst();
             while (isEof) {
                 map.put(cursor.getString(0), cursor.getString(1));
                 isEof = cursor.moveToNext();
             }
-        }catch (Exception e){
-            Log.e(TAG, "SqlGetStringMap: ",e );
-        }finally {
-            if(cursor != null)
+        } catch (Exception e) {
+            Log.e(TAG, "SqlGetStringMap: ", e);
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
         return map;
@@ -523,7 +534,7 @@ public class JsonControl {
                 for (int i = 0; i < cursor.getColumnCount(); i++) {
 
                     //Log.e(TAG, "SqlGetArrayMap: "+cursor.getColumnName(i)+","+ cursor.getString(i));
-                    map.put(cursor.getColumnName(i),cursor.getString(i));
+                    map.put(cursor.getColumnName(i), cursor.getString(i));
                 }
                 //Log.e(TAG, "SqlGetArrayMap: map:"+map.toString() );
                 arrayList.add(map);
@@ -533,8 +544,8 @@ public class JsonControl {
             //Log.e(TAG, "SqlGetArrayMap: arrayList:"+arrayList.toString() );
         } catch (Exception e) {
             Log.e(TAG, "SqlGetArrayMap: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
         return arrayList;
@@ -585,8 +596,8 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "updateSimpleDataArray: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
     }
@@ -639,15 +650,15 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "updateSiteDataArray: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
     }
 
     //更新「サイト　ROOM」詳細記録OrderListデータ
     public void updateSiteRoomDataArray(String date) {
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
             mSiteDataArrayList.clear();
             String selection = "date = " + date;
@@ -693,9 +704,9 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "updateSiteDataArray: ", e);
-        }finally {
+        } finally {
 
-            if(cursor != null)
+            if (cursor != null)
                 cursor.close();
         }
     }
@@ -724,8 +735,8 @@ public class JsonControl {
             }
         } catch (Exception e) {
             Log.e(TAG, "updateSiteDataArray: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
         return rMap;
@@ -739,7 +750,7 @@ public class JsonControl {
         Cursor cursor = null;
         try {
             String sql = "select date from etcamp_order where ordernum like '" + _ordernum + "' group by date";
-            cursor= mDB.rawQuery(sql, null);
+            cursor = mDB.rawQuery(sql, null);
 
             StringBuilder sqlDate = new StringBuilder("(");
             boolean e = cursor.moveToFirst();
@@ -775,9 +786,9 @@ public class JsonControl {
             }
         } catch (Exception e) {
             Log.e(TAG, "updateSiteDataArray: ", e);
-        }finally {
+        } finally {
 
-            if(cursor != null)
+            if (cursor != null)
                 cursor.close();
         }
         return rMap;
@@ -789,7 +800,7 @@ public class JsonControl {
      */
     public String getSiteFirstDay(String _ordernum) {
         String rStr = "";
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
             String sql = "select min(date) from etcamp_order where ordernum like '" + _ordernum + "' ";
             cursor = mDB.rawQuery(sql, null);
@@ -800,8 +811,8 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "getSiteRooms: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
         return rStr;
@@ -814,7 +825,7 @@ public class JsonControl {
     public ArrayList<String> getSiteDays(String _ordernum) {
         ArrayList<String> rArray = new ArrayList<>();
 
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
             String sql = "select date from etcamp_order where ordernum='" + _ordernum + "'  group by date order by date";
             cursor = mDB.rawQuery(sql, null);
@@ -828,8 +839,8 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "getSiteRooms: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
         return rArray;
@@ -843,7 +854,7 @@ public class JsonControl {
     public ArrayList<Integer> getSiteRooms(String _ordernum) {
         ArrayList<Integer> rArray = new ArrayList<>();
 
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
             String sql = "select siteid from etcamp_order where ordernum = '" + _ordernum + "' group by siteid";
             cursor = mDB.rawQuery(sql, null);
@@ -857,8 +868,8 @@ public class JsonControl {
             //Log.e(TAG, "getSiteRooms: rArray "+rArray.toString() );
         } catch (Exception e) {
             Log.e(TAG, "getSiteRooms: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
         return rArray;
@@ -870,7 +881,7 @@ public class JsonControl {
     public HashMap<Integer, String> getSqlRoomNames() {
         HashMap<Integer, String> rMap = new HashMap<>();
 
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
 
             String sql = "select siteid, sitename from etcamp_site order by siteid";
@@ -885,8 +896,8 @@ public class JsonControl {
             //Log.e(TAG, "getRoomNames: rArray "+rMap.toString() );
         } catch (Exception e) {
             Log.e(TAG, "getRoomNames: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
         return rMap;
@@ -900,7 +911,7 @@ public class JsonControl {
 
         //select date,count(orderid) from etcamp_order
         // where  date > 20210100 and date<20210200 and canceltime like '' group by date
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
 
             String sql = "select date,count(orderid) from etcamp_order where" +
@@ -917,8 +928,8 @@ public class JsonControl {
             }
         } catch (Exception e) {
             Log.e(TAG, "getRoomsOneMonth: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
         return rMap;
@@ -927,7 +938,7 @@ public class JsonControl {
     //更新「サイト数」詳細記録sitenameデータ
     public ArrayList<String> getSiteRoomNames(String _ordernum) {
         ArrayList<String> rArray = new ArrayList<>();
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
 
             String sql = "SELECT s.sitename\n" +
@@ -946,8 +957,8 @@ public class JsonControl {
             //Log.e(TAG, "getSiteRooms: rArray "+rArray.toString() );
         } catch (Exception e) {
             Log.e(TAG, "getSiteRooms: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
         return rArray;
@@ -996,14 +1007,14 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "updateSiteRoomDataArray: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
     }
 
     public void testSql(String _date) {
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
 
             String sql = "SELECT o.*,s.sitename as name ,t.date as firstdate \n" +
@@ -1039,15 +1050,15 @@ public class JsonControl {
             //データテスト end
         } catch (Exception e) {
             Log.e(TAG, "testSql e: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
     }
 
     //更新「テスト」テスト記録データ
     public void updateTestArray(String date) {
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
             mTestDataArrayList.clear();
             String selection = "date = " + date;
@@ -1088,8 +1099,8 @@ public class JsonControl {
 
         } catch (Exception e) {
             Log.e(TAG, "updateTestArray: ", e);
-        }finally {
-            if(cursor != null)
+        } finally {
+            if (cursor != null)
                 cursor.close();
         }
     }

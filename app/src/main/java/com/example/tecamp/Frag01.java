@@ -137,7 +137,7 @@ public class Frag01 extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        timeCreate();
+        /*timeCreate();*/
     }
 
 
@@ -540,38 +540,8 @@ public class Frag01 extends Fragment implements
         TextView textViewFrag01Amount = (TextView) mTableLayoutPageSelect.findViewById(R.id.Frag01Amount);
         textViewFrag01Amount.setText("数量：" + DataCenter.pData.getSimpleDataArrayListSize());
 
-        //「次へ」ボタン
+        //「翌日」ボタン
         Button buttonNext = (Button) mTableLayoutPageSelect.findViewById(R.id.Frag01ButtonNext);
-        /*if (currentPage >= getOrderListLength / table_row_id_no.length + 1) {
-            buttonNext.setVisibility(View.INVISIBLE);
-        } else {
-            buttonNext.setVisibility(View.VISIBLE);
-        }*/
-
-        //「更新」ボタン
-        Button buttonUpdate = (Button) mTableLayoutPageSelect.findViewById(R.id.Frag01Update);
-        buttonUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DataCenter.UpdateData();
-                        }
-                    }).start();
-                    Frag01DataUpdate(0);
-                    //「数量」表示
-                    TextView textViewFrag01Amount = (TextView) mTableLayoutPageSelect.findViewById(R.id.Frag01Amount);
-                    textViewFrag01Amount.setText("数量：" + DataCenter.pData.getSimpleDataArrayListSize());
-                } catch (JSONException e) {
-                    Log.e(TAG, "onClick: ", e);
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -583,9 +553,16 @@ public class Frag01 extends Fragment implements
             }
         });
 
+        /*if (currentPage >= getOrderListLength / table_row_id_no.length + 1) {
+            buttonNext.setVisibility(View.INVISIBLE);
+        } else {
+            buttonNext.setVisibility(View.VISIBLE);
+        }*/
+
+
+
         //「前日」ボタン
         Button buttonPre = (Button) mTableLayoutPageSelect.findViewById(R.id.Frag01ButtonPrev);
-
         buttonPre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -660,7 +637,7 @@ public class Frag01 extends Fragment implements
     }
 
 
-    private Timer timer;
+    /*private Timer timer;
     // 'Handler()' is deprecated as of API 30: Android 11.0 (R)
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -680,8 +657,8 @@ public class Frag01 extends Fragment implements
         CountUpTimerTask timerTask = new CountUpTimerTask();
 
         second = 1000;  //1000では、遅延１秒
-        timer.schedule(timerTask, second, Config.minuteFrag01DataUpdate);
-    }
+        timer.schedule(timerTask, second, Config.DataUpdateTime);
+    }*/
 
     /**
      * @param view       the picker associated with the dialog
@@ -786,7 +763,7 @@ public class Frag01 extends Fragment implements
     }
 
 
-    //データ更新task
+    /*//データ更新task
     class CountUpTimerTask extends TimerTask {
         @Override
         public void run() {
@@ -810,7 +787,7 @@ public class Frag01 extends Fragment implements
                 }
             });
         }
-    }
+    }*/
 
     @Override
     public void sendInput(String input) {

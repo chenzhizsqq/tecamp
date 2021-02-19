@@ -75,7 +75,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (DataCenter.pData.LoginInit(mEditTextTextEmailAddress, mEditTextTextPassword)) {
+                String result=DataCenter.pData.LoginInit(mEditTextTextEmailAddress, mEditTextTextPassword);
+                if (result.equals("0")) {
 
                     // 「pref_data」という設定データファイルを読み込み
                     SharedPreferences prefData = getSharedPreferences(SharedPreferences_Login, MODE_PRIVATE);
@@ -92,9 +93,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-                } else {
+                }else if(result.isEmpty()){
 
-                    Snackbar.make(view, "「アカウント」や「パスウード」が間違います。", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, "連接ありません。", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null)
+                            .show();
+                } else{
+
+                    Snackbar.make(view, "「アカウント」や「パスウード」が間違います。result:"+result, Snackbar.LENGTH_LONG)
                             .setAction("Action", null)
                             .show();
                 }

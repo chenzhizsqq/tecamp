@@ -89,7 +89,7 @@ public class Frag05 extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        timeCreate();
+        /*timeCreate();*/
     }
 
     private String LogTokenGet(String tokenVal) {
@@ -192,7 +192,7 @@ public class Frag05 extends Fragment implements
     }
 
 
-    private Timer timer;
+    /*private Timer timer;
     // 'Handler()' is deprecated as of API 30: Android 11.0 (R)
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -213,7 +213,7 @@ public class Frag05 extends Fragment implements
 
         second = 1000;  //1000では、遅延１秒
         timer.schedule(timerTask, second, Config.minuteFrag05DataUpdate);
-    }
+    }*/
 
     /**
      * @param view       the picker associated with the dialog
@@ -290,7 +290,7 @@ public class Frag05 extends Fragment implements
 
 
     //データ更新task
-    class CountUpTimerTask extends TimerTask {
+    /*class CountUpTimerTask extends TimerTask {
         @Override
         public void run() {
             // handlerを使って処理をキューイングする
@@ -307,7 +307,7 @@ public class Frag05 extends Fragment implements
                 }
             });
         }
-    }
+    }*/
 
     @Override
     public void sendInput(String input) {
