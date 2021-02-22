@@ -33,6 +33,8 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Timer;
@@ -43,122 +45,39 @@ import butterknife.ButterKnife;
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.tecamp.config.Config.SharedPreferences_Frag05;
 
-//予約一覧
+//予約一覧List
 public class Frag05 extends Fragment implements
         Frag01DialogFragment.OnInputSelected
         , TextWatcher {
 
     ViewPager viewPager;
 
-    public Frag05(ViewPager _viewPager){
-        viewPager=_viewPager;
+    public Frag05(ViewPager _viewPager) {
+        viewPager = _viewPager;
 
     }
 
-    //簡単記録で使うデータ名前  String group_by = "ordernum";
-    public static final String[] pSimpleDataSqlNames = {
-            "date",
-            "days",
-            "username||username2",
-            "(count_adult + count_child) as count",
-            "count(siteid) as countsiteid",
-            "way",
-            "memo",
-            //Frag05の mShowColumns
-
-            "canceltime",
-            "ordernum",
-            "count_child",
-    };
-
     private static final String TAG = "Frag05";
-    public static  DateManager pDateManager = new DateManager();
-    /*private static CalendarDay selectDate=CalendarDay.from(
-            mDateManager.getYear()
-            , mDateManager.getMonth()
-            , mDateManager.getDay()
-            );*/
 
 
-    private static int mCurrentPage = 1;
-
-    TableLayout mTableLayoutBookingList;
-    TableLayout mTableLayoutFrag05_TableLayout_All;
+    //Show rows 宿泊初日	泊数	代表者	人数	サイト	乗物	備考
+    String[] dataArray = {
+            "min(date)"
+            , "days"
+            , "username||' '||username2"
+            , "CASE WHEN count_child >0 THEN (count_adult + count_child) ||'('||count_child||')' ELSE (count_adult + count_child) END"
+            , "count(siteid)"
+            , "way"
+            , "memo"
+            , "ordernum"
+    };
+    ArrayList<HashMap<String, String>> mSqlGetArrayMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        /*timeCreate();*/
     }
 
-    private String LogTokenGet(String tokenVal) {
-
-        //SharedPreferences対象
-        SharedPreferences sp = Objects.requireNonNull(getActivity()).getSharedPreferences(SharedPreferences_Frag05, MODE_PRIVATE);
-
-        //データLOAD
-        return sp.getString("token", "none");
-        //if NOT_EXIST return "none"
-    }
-
-
-    //Show rows 宿泊初日	泊数	代表者	人数	サイト	乗物	備考
-    private final int mShowColumns = 7;
-
-
-    //詳細内容を見る関数
-    void setTextView2DialogFragment(@NotNull TextView _textView, int _row_id) {
-
-        _textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String ordernum = null;
-                try {
-                    ordernum = DataCenter.pData.getSimpleData(_row_id, "ordernum");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                Frag01DialogFragment frag01DialogFragment = new Frag01DialogFragment(ordernum, "20201230");
-                frag01DialogFragment.setTargetFragment(Frag05.this, 1);
-                assert getFragmentManager() != null;
-                frag01DialogFragment.show(getFragmentManager(), "frag01DialogFragment");
-
-            }
-
-        });
-
-    }
-
-    //サイト内容を見る関数
-    void setTextView2SiteFragment(@NotNull TextView _textView, int _row_id) {
-
-        _textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //バーチャル：予約済みの部屋 begin
-                String ordernum = null;
-                try {
-                    ordernum = DataCenter.pData.getSimpleData(_row_id, "ordernum");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-                //バーチャル：予約済みの部屋 end
-                Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, "20201230");
-                frag01SiteFragment.setTargetFragment(Frag05.this, 1);
-                assert getFragmentManager() != null;
-                frag01SiteFragment.show(getFragmentManager(), "frag01SiteFragment");
-
-
-            }
-
-        });
-
-    }
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -171,57 +90,155 @@ public class Frag05 extends Fragment implements
         ButterKnife.bind(this, view);
 
 
-        mTableLayoutBookingList = (TableLayout) view.findViewById(R.id.frag05_予約一覧);
-        mTableLayoutFrag05_TableLayout_All = (TableLayout) view.findViewById(R.id.Frag05_TableLayout_All);
+        updateView(view);
 
-
-        //簡単記録
-        ArrayList<TableRow> arrayListTableRow = new ArrayList<TableRow>();
-
-
-        //記録更新
-        //表示画面更新
         return view;
     }
 
-    TextView CreateStyleTextView(String strText) {
+    private void updateView(View view) {
+        try {
+
+            //データ処理
+            String selectData = Arrays.toString(dataArray);
+            selectData = selectData.substring(1, selectData.length() - 1);
+            //Log.e(TAG, "onClick: selectData:" + selectData);
+
+            String sql = "select " + selectData + " from etcamp_order where canceltime=='' ";
+            sql += " group by ordernum order by date desc";
+            Log.e(TAG, "updateView: sql:" + sql);
+
+
+            mSqlGetArrayMap = DataCenter.pData.SqlGetArrayMap(sql);
+
+            //TableLayout処理
+            TableLayout mTableLayout = view.findViewById(R.id.frag05_予約一覧);
+
+            mTableLayout.removeViewsInLayout(1, mTableLayout.getChildCount() - 1);
+
+            //TableLayout データ各行処理
+            for (int i = 0; i < mSqlGetArrayMap.size(); i++) {
+                //Log.e(TAG, "onClick: mSqlGetArrayMap:"+i+":"+mSqlGetArrayMap.get(i) );
+
+                TableRow mTableRow = new TableRow(getActivity());
+
+                HashMap<String, String> map = mSqlGetArrayMap.get(i);
+                //Log.e(TAG, "onClick: map:" + map.toString());
+
+                for (int j = 0; j < dataArray.length; j++) {
+                    String data = map.get(dataArray[j]);
+                    String ordernum = map.get("ordernum");
+
+                    switch (dataArray[j]) {
+                        case "ordernum":
+                            break;
+                        case "min(date)":
+                            String srcDate=Tools.dataChange(data,"/");
+                            mTableRow.addView(makeTextView(srcDate, 15), j);
+                            break;
+                        case "username||' '||username2":
+                            TextView textView = makeTextView(data, 15);
+                            if (data.trim().length() > 0) {
+                                Log.e(TAG, "updateView: data:"+data );
+
+                                textView.setTextColor(Color.RED);
+                                textView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Frag01DialogFragment frag01DialogFragment = new Frag01DialogFragment(ordernum, map.get("min(date)"));
+                                        frag01DialogFragment.setTargetFragment(Frag05.this, 1);
+                                        assert getFragmentManager() != null;
+                                        frag01DialogFragment.show(getFragmentManager(), "frag01DialogFragment");
+
+                                    }
+
+                                });
+
+                            }
+                            mTableRow.addView(textView, j);
+                            break;
+                        case "count(siteid)":
+                            String result = "";
+                            String tOrdernum = map.get("ordernum");
+                            //Log.e(TAG, "updateView: tOrdernum:"+tOrdernum );
+                            ArrayList<Integer> nListGetSiteRooms = DataCenter.pData.getSiteRooms(tOrdernum);
+                            //Log.e(TAG, "updateView: nListGetSiteRooms:"+nListGetSiteRooms );
+
+                            StringBuilder allRoomName = new StringBuilder();
+                            boolean bFind = false;
+                            for (int id : nListGetSiteRooms) {
+                                for (Map.Entry<Integer, String> entry : Rooms.mapRoomNames.entrySet()) {
+
+                                    int nGetKey = entry.getKey();
+                                    if (id == nGetKey) {
+                                        bFind = true;
+
+                                        allRoomName.append(Rooms.mapRoomNames.get(id)).append(" ");
+
+                                    }
+                                }
+                            }
+                            if (bFind) {
+                                result = allRoomName.toString();
+                            }
+                            TextView textView2 = makeTextView(result, 15);
+                            textView2.setTextColor(Color.RED);
+                            if (bFind) {
+
+                                textView2.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, map.get("min(date)"));
+                                        frag01SiteFragment.setTargetFragment(Frag05.this, 1);
+                                        assert getFragmentManager() != null;
+                                        frag01SiteFragment.show(getFragmentManager(), "frag01SiteFragment");
+
+                                    }
+
+                                });
+                            }
+                            mTableRow.addView(textView2, j);
+                            break;
+                        default:
+                            mTableRow.addView(makeTextView(data, 15), j);
+                            break;
+
+                    }
+                }
+
+                mTableRow.setBackgroundColor(0xFF4CD7C9);
+                mTableLayout.addView(mTableRow, mTableLayout.getChildCount());
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "onCreateView: ", e);
+        } finally {
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    @NotNull
+    private TextView makeTextView(String text) {
         TextView textView = new TextView(getActivity());
-        textView.setText(strText);
+        textView.setText(text);
+        textView.setTextSize(15);
+        textView.setTextColor(Color.BLACK);
         textView.setGravity(Gravity.CENTER);
+        //textView.setTextSize(20);
+        textView.setPadding(5, 10, 5, 10);
+        //Log.e(TAG, "makeTextView: text:"+text );
         return textView;
     }
 
-
-    /*private Timer timer;
-    // 'Handler()' is deprecated as of API 30: Android 11.0 (R)
-    private final Handler handler = new Handler(Looper.getMainLooper());
-
-
-    private void timeCreate() {
-        long count, second, minute;
-        // タイマーが走っている最中にボタンをタップされたケース
-        if (null != timer) {
-            timer.cancel();
-            timer = null;
+    @SuppressLint("SetTextI18n")
+    @NotNull
+    private TextView makeTextView(String text, int maxLength) {
+        String mText = text.substring(0, Math.min(text.length(), maxLength));
+        if (text.length() > maxLength) {
+            mText += "...";
         }
-
-        // Timer インスタンスを生成
-        timer = new Timer();
-
-        // TimerTask インスタンスを生成
-        CountUpTimerTask timerTask = new CountUpTimerTask();
-
-        second = 1000;  //1000では、遅延１秒
-        timer.schedule(timerTask, second, Config.minuteFrag05DataUpdate);
-    }*/
-
-    /**
-     * @param view       the picker associated with the dialog
-     * @param year       the selected year
-     * @param month      the selected month (0-11 for compatibility with
-     * @param dayOfMonth the selected day of the month (1-31, depending on
-     */
-
+        //Log.e(TAG, "makeTextView: mText:"+mText );
+        return makeTextView(mText);
+    }
 
     /**
      * This method is called to notify you that, within <code>s</code>,
@@ -253,14 +270,14 @@ public class Frag05 extends Fragment implements
      */
 
     /**
-    * Frag05とFrag05SelectFragment関連する変数。
-    * */
-    public static boolean bAfterTextChanged=false;
+     * Frag05とFrag05SelectFragment関連する変数。
+     */
+    public static boolean bAfterTextChanged = false;
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if(bAfterTextChanged){
-            bAfterTextChanged=false;
+        if (bAfterTextChanged) {
+            bAfterTextChanged = false;
         }
     }
 
@@ -288,26 +305,6 @@ public class Frag05 extends Fragment implements
     public void setUserVisibleHint(boolean isVisibleToUser) {
     }
 
-
-    //データ更新task
-    /*class CountUpTimerTask extends TimerTask {
-        @Override
-        public void run() {
-            // handlerを使って処理をキューイングする
-            handler.post(new Runnable() {
-                public void run() {
-                    Log.d(TAG, "CountUpTimerTask class  毎60秒更新一回");
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DataCenter.UpdateData();
-                        }
-                    }).start();
-                }
-            });
-        }
-    }*/
 
     @Override
     public void sendInput(String input) {

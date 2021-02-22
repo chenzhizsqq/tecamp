@@ -38,7 +38,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:width="150dp"
+                        android:width="100dp"
                         android:gravity="center"
                         android:text="宿泊初日"
                         android:textSize="20sp" />
@@ -48,7 +48,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:width="50dp"
+                        android:width="40dp"
                         android:gravity="center"
                         android:text="泊数"
                         android:textSize="20sp" />
@@ -68,7 +68,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:width="80dp"
+                        android:width="60dp"
                         android:gravity="center"
                         android:text="人数"
                         android:textSize="20sp" />
