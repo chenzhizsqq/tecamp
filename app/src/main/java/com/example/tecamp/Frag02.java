@@ -117,7 +117,7 @@ public class Frag02 extends Fragment
             @NonNull MaterialCalendarView widget,
             @NonNull CalendarDay date,
             boolean selected) {
-        Log.e(TAG, "onDateSelected: " + (selected ? FORMATTER.format(date.getDate()) : "選択ください"));
+        //Log.e(TAG, "onDateSelected: " + (selected ? FORMATTER.format(date.getDate()) : "選択ください"));
         int y=date.getYear();
         int m=date.getMonth();
         int d=date.getDay();

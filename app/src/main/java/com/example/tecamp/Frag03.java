@@ -245,8 +245,8 @@ public class Frag03 extends Fragment implements DatePickerDialog.OnDateSetListen
 
     @SuppressLint("SetTextI18n")
     @NotNull
-    private TextView makeTextView(String text, int width) {
-        String mText = text.substring(0, Math.min(text.length(), width));
+    private TextView makeTextView(String text, int maxLength) {
+        String mText = text.substring(0, Math.min(text.length(), maxLength));
         //Log.e(TAG, "makeTextView: mText:"+mText );
         return makeTextView(mText);
     }

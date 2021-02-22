@@ -161,6 +161,7 @@ public class JsonControl {
     public static boolean pJsonGetDataNext = true;
     public static String mGetLastJsonObjGetDate = "";
 
+
     public String MakeJsonGetData() {
         String status = "";
         OkHttpClient client = new OkHttpClient();
@@ -181,6 +182,7 @@ public class JsonControl {
             if (response.isSuccessful()) {
                 getResult = response.body().string();
                 mJsonObject = new JSONObject(getResult);
+
                 Log.e(TAG, "MakeJsonGetData: getResult:" + getResult);
                 status = getJsonObject().getString("status");
                 //if (getJsonObject().getString("status").equals("0")) {
@@ -399,7 +401,7 @@ public class JsonControl {
 
 
         } catch (Exception e) {
-            Log.e(TAG, "Json2Sql: ", e);
+            Log.e(TAG, "Json2SqlOrder: ", e);
         }
     }
 
@@ -415,7 +417,7 @@ public class JsonControl {
                     values.put(OrderListSql.SiteTableRowNames[i], this.getSiteListJsonValue(j, OrderListSql.SiteTableRowNames[i]));
                 }
 
-                String sWhere = "siteid =" + this.getSiteListJsonValue(j, OrderListSql.SiteTableRowNames[0]);
+                String sWhere = "siteid =" + this.getSiteListJsonValue(j, "siteid");
                 String testSql = "select siteid from " + OrderListSql.SiteTableName + " where " + sWhere;
                 int count = getSqlCount(testSql);
                 if (count > 0) {
@@ -430,7 +432,7 @@ public class JsonControl {
 
 
         } catch (Exception e) {
-            Log.e(TAG, "Json2Sql: ", e);
+            Log.e(TAG, "Json2SqlSite: ", e);
         }
     }
 
@@ -604,7 +606,7 @@ public class JsonControl {
 
 
     //更新「サイト数」詳細記録OrderListデータ
-    public void updateSiteDataArray(String date) {
+    public void updateSiteDataArrayList(String date) {
         Cursor cursor = null;
         try {
             mSiteDataArrayList.clear();
@@ -637,7 +639,7 @@ public class JsonControl {
             //データtest
             /*for (HashMap<String, String> mHashMap : mSiteDataArrayList) {
 
-                Log.e(TAG, "updateSiteDataArray:mHashMap.toString(): " + mHashMap.toString());
+                Log.e(TAG, "getSiteDataMap:mHashMap.toString(): " + mHashMap.toString());
                 for (String mSiteDataSqlName : OrderListSql.tableRowNames) {
 
                     String temp = mHashMap.get(mSiteDataSqlName);
@@ -649,7 +651,7 @@ public class JsonControl {
 
 
         } catch (Exception e) {
-            Log.e(TAG, "updateSiteDataArray: ", e);
+            Log.e(TAG, "getSiteDataMap: ", e);
         } finally {
             if (cursor != null)
                 cursor.close();
@@ -691,7 +693,7 @@ public class JsonControl {
             //データtest
             /*for (HashMap<String, String> mHashMap : mSiteDataArrayList) {
 
-                Log.e(TAG, "updateSiteDataArray:mHashMap.toString(): " + mHashMap.toString());
+                Log.e(TAG, "getSiteDataMap:mHashMap.toString(): " + mHashMap.toString());
                 for (String mSiteDataSqlName : OrderListSql.tableRowNames) {
 
                     String temp = mHashMap.get(mSiteDataSqlName);
@@ -703,7 +705,7 @@ public class JsonControl {
 
 
         } catch (Exception e) {
-            Log.e(TAG, "updateSiteDataArray: ", e);
+            Log.e(TAG, "getSiteDataMap: ", e);
         } finally {
 
             if (cursor != null)
@@ -734,7 +736,7 @@ public class JsonControl {
                 rMap.put(Frag01DialogFragment.mSrcList[i], cursor.getString(i));
             }
         } catch (Exception e) {
-            Log.e(TAG, "updateSiteDataArray: ", e);
+            Log.e(TAG, "getSiteDataMap: ", e);
         } finally {
             if (cursor != null)
                 cursor.close();
@@ -745,7 +747,7 @@ public class JsonControl {
     /**
      * 予約者、今回予約で予約ったサイト
      */
-    public HashMap<String, String> updateSiteDataArray(String _ordernum, String _date) {
+    public HashMap<String, String> getSiteDataMap(String _ordernum) {
         HashMap<String, String> rMap = new HashMap<String, String>();
         Cursor cursor = null;
         try {
@@ -765,7 +767,7 @@ public class JsonControl {
                 e = cursor.moveToNext();
             }
             sqlDate.append(")");
-            //Log.e(TAG, "updateSiteDataArray: sqlDate:" + sqlDate);
+            //Log.e(TAG, "getSiteDataMap: sqlDate:" + sqlDate);
 
             String selection = " ordernum = '" + _ordernum + "'" + " and " + sqlDate;
             cursor = mDB.query(
@@ -785,7 +787,7 @@ public class JsonControl {
                 rMap.put(Frag01SiteFragment.mSrcArray[i], cursor.getString(i));
             }
         } catch (Exception e) {
-            Log.e(TAG, "updateSiteDataArray: ", e);
+            Log.e(TAG, "getSiteDataMap: ", e);
         } finally {
 
             if (cursor != null)
