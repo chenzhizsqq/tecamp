@@ -143,9 +143,9 @@ public class Frag01SiteFragment extends DialogFragment {
         mOrderNum = _orederNum;
         mDate = _date;
         mRoomingArray = DataCenter.pData.getSiteRooms(_orederNum);
-        DataCenter.pData.updateSiteDataArray(_date);
+        DataCenter.pData.updateSiteDataArrayList(_date);
 
-        HashMap<String, String> mapOrderList = DataCenter.pData.updateSiteDataArray(_orederNum, _date);
+        HashMap<String, String> mapOrderList = DataCenter.pData.getSiteDataMap(_orederNum);
         arraySiteData.clear();
         for (int n = 0; n < mIdArray.length; n++) {
 

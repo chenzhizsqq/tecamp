@@ -62,7 +62,7 @@ public class Frag01 extends Fragment implements
     public static final String[] pSimpleDataSqlNames = {
             "date",
             "days",
-            "username||username2",
+            "username||' '||username2",
             "(count_adult + count_child) as count",
             "count(siteid) as countsiteid",
             "way",
