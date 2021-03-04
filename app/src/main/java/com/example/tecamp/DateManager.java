@@ -1,6 +1,7 @@
 package com.example.tecamp;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 public class DateManager {
 
@@ -44,6 +45,10 @@ public class DateManager {
         return calendar.get(Calendar.YEAR);
     }
 
+    public String getYearS() {
+        return String.valueOf(calendar.get(Calendar.YEAR));
+    }
+
     //データのday更新
     public void addDay(int apartDays) {
         calendar = addCalendar(apartDays);
@@ -67,5 +72,15 @@ public class DateManager {
     public String getYMD() {
 
         return ""+getYear() + getMonthS() + getDayS() ;
+    }
+    public String getYMD(String add) {
+        String str = String.format(
+                Locale.US,
+                "%d"+add+"%s"+add+"%s",
+                getYear(),
+                getMonthS(),
+                getDayS()
+        );
+        return str;
     }
 }

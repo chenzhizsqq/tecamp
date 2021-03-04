@@ -17,22 +17,40 @@ public class DataCenter {
     private static Timer timer;
 
     public static String UpdateData() {
+        int updateDataTimes = 0;
         String status = "";
         //Jsonデータを貰います。 begin
-        //DataCenter.pData.dbInit( getActivity());
-        JsonControl.pJsonGetDataNext = true;
-        while (JsonControl.pJsonGetDataNext) {
+        try {
+
             status = DataCenter.pData.MakeJsonGetData();
-            if (JsonControl.pJsonGetDataNext) {
+            String resultOrderList="";
+            while (status.equals("0")) {
 
                 DataCenter.pData.Json2SqlOrder();
+                resultOrderList=DataCenter.pData.getResultOrderList();
+                updateDataTimes += 1;
+
+                if(resultOrderList.equals(DataCenter.pData.getResultOrderList())){
+                    Log.e(TAG, "UpdateData: resultOrderList==DataCenter.pData.getResultOrderList() after continue" );
+                    break;
+                }else{
+
+                    status = DataCenter.pData.MakeJsonGetData();
+                }
+
             }
+
+
+            //DataCenter.pData.updateSiteRoomDataArray();
+
+            //DataCenter.pData.Json2SqlSite();
+            Rooms.mapRoomNames = DataCenter.pData.getSqlRoomNames();
+
+            Log.e(TAG, "UpdateData: updateDataTimes:" + updateDataTimes);
+            Log.e(TAG, "UpdateData: last status:" + status);
+        }catch (Exception e){
+            Log.e(TAG, "UpdateData: ",e );
         }
-        DataCenter.pData.Json2SqlSite();
-        DataCenter.pData.updateSiteRoomDataArray();
-
-        Rooms.mapRoomNames = DataCenter.pData.getSqlRoomNames();
-
         return status;
     }
 

@@ -9,9 +9,10 @@ import androidx.annotation.Nullable;
 
 public class OrderListSql extends SQLiteOpenHelper {
     final static private int DB_VERSION = 1;
-    public static final String tableName = "etcamp_order";
-    public static final String tableNameTemp = "etcamp_order_temp";
+    public static final String orderTableName = "etcamp_order";
     public static final String SiteTableName = "etcamp_site";
+    public static final String SiteListTableName = "etcamp_SiteList";
+
     private static final String TAG = "OrderListSql";
 
     protected SQLiteDatabase db;
@@ -39,7 +40,7 @@ public class OrderListSql extends SQLiteOpenHelper {
     }
 
     public final static String[] SiteTableRowNames = {
-            "siteid",
+            //"siteid",
             "sitename",
             "area",
             "acflg",
@@ -48,10 +49,28 @@ public class OrderListSql extends SQLiteOpenHelper {
 
     };
 
+    public final static String[] SiteListRowNames = {
+            //"orderid",
+            "ymd",
+            "subid",
+            "orderflag",
+            "siteid",
+            "sitename",
+            "isac",
+            "issolo",
+            "isonseason",
+            "iscampingcar",
+            "price",
+            "fee",
+
+
+    };
+
     public final static String[] tableRowNames = {
             "orderid",
             "ordernum",
-            "date",
+            //"date",
+            "firstymd",
             "userid",
             "username",
             "username_kana",
@@ -64,13 +83,13 @@ public class OrderListSql extends SQLiteOpenHelper {
             "mail",
             "count_adult",
             "count_child",
-            "siteid",
+            //"siteid",
             "site_count",
             "ac_count",
             "days",
             "fee",
-            "ac_check",
-            "camper",
+            //"ac_check",
+            //"camper",
             "memo",
             "way",
             "orderflag",
@@ -87,9 +106,9 @@ public class OrderListSql extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE  IF EXISTS "+tableName);
-        db.execSQL("DROP TABLE  IF EXISTS "+tableNameTemp);
+        db.execSQL("DROP TABLE  IF EXISTS "+ orderTableName);
         db.execSQL("DROP TABLE  IF EXISTS "+SiteTableName);
+        db.execSQL("DROP TABLE  IF EXISTS "+SiteListTableName);
 
         //Log.e(TAG, "onCreate: begin" );
         // table create
@@ -101,7 +120,7 @@ public class OrderListSql extends SQLiteOpenHelper {
                 sqlStrContent.append(tableRowNames[i]).append(" integer primary key ");
             }
         }
-        String sqlStr = "create table " + tableName + "(" +
+        String sqlStr = "create table " + orderTableName + "(" +
                 sqlStrContent +
                 ");";
         Log.d(TAG, "onCreate- sqlStr:" + sqlStr);
@@ -109,14 +128,33 @@ public class OrderListSql extends SQLiteOpenHelper {
                 sqlStr
         );
 
-        sqlStr = "create table " + tableNameTemp + "(" +
-                sqlStrContent +
-                ");";
-        Log.d(TAG, "onCreate- sqlStr:" + sqlStr);
-        db.execSQL(
-                sqlStr
-        );
-        onSiteCreate(db);
+        onSiteListCreate(db);
+
+
+    }
+
+
+    public void onSiteListCreate(SQLiteDatabase db) {
+        // table create
+        try {
+
+            StringBuilder sqlStrContentSiteList = new StringBuilder();
+            sqlStrContentSiteList.append("orderid").append(" integer ");
+            sqlStrContentSiteList.append(" , ").append(" ordernum ").append(" text ");
+            for (int i = 0; i < SiteListRowNames.length; i++) {
+                sqlStrContentSiteList.append(" , ").append(SiteListRowNames[i]).append(" text ");
+            }
+
+            String sqlStr = "create table " + SiteListTableName + "(" +
+                    sqlStrContentSiteList +
+                    ");";
+            Log.d(TAG, "onCreate- sqlStr:" + sqlStr);
+            db.execSQL(
+                    sqlStr
+            );
+        }catch (Exception e){
+            Log.e(TAG, "onCreate: ",e );
+        }
     }
 
 

@@ -29,7 +29,7 @@ public class Frag01DialogFragment extends DialogFragment {
     private static final String TAG = "Frag01DialogFragment";
 
     static final public String[] mSrcList= new String[]{
-            "date",//R.id.宿泊日,
+            "firstymd",//R.id.宿泊日,
             "days",//R.id.泊数,
             "username",//R.id.代表者氏名_姓,
             "username2",//R.id.代表者氏名_名,
@@ -142,7 +142,9 @@ public class Frag01DialogFragment extends DialogFragment {
 
         //サイト名  mRoomingArray
         TextView textView = (TextView) view.findViewById(R.id.サイト名);
-        textView.setText(mRoomingArray.toString());
+        String s=mRoomingArray.toString();
+
+        textView.setText(s.substring(1,s.length()-1));
 
         TextView mActionCancel = view.findViewById(R.id.action_cancel);
         mActionCancel.setOnClickListener(new View.OnClickListener() {

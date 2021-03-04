@@ -18,8 +18,8 @@ public class Config {
 
 
     //public static final String LoginUrl = "https://ssl.ethp.net/EthpJson.aspx";
-    public static final String LoginUrl = "http://192.168.18.126/EthpJson.aspx";
-    //public static final String LoginUrl = "http://192.168.18.173/EthpJson.aspx";
+    //public static final String LoginUrl = "http://192.168.18.126/EthpJson.aspx";
+    public static final String LoginUrl = "http://192.168.18.173/EthpJson.aspx";
 
     //Jsonデータ更新時間
     public static final long DataUpdateTime = 60000;    //60000では、毎６０秒更新一回

@@ -2,12 +2,8 @@ package com.example.tecamp;
 
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextWatcher;
@@ -16,7 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -26,7 +22,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.tecamp.config.Config;
 import com.example.tecamp.sql.DataCenter;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,37 +31,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.example.tecamp.config.Config.SharedPreferences_Frag05;
-
 //予約一覧List
-public class Frag05 extends Fragment implements
+public class FragEachDay extends Fragment implements
         Frag01DialogFragment.OnInputSelected
         , TextWatcher {
 
     ViewPager viewPager;
 
-    public Frag05(ViewPager _viewPager) {
+    public FragEachDay(ViewPager _viewPager) {
         viewPager = _viewPager;
 
     }
 
-    private static final String TAG = "Frag05";
+    private static final String TAG = "FragEachDay";
 
 
     //Show rows 宿泊初日	泊数	代表者	人数	サイト	乗物	備考
     String[] dataArray = {
-            "firstymd"
+            "min(firstymd)"
             , "days"
             , "username||' '||username2"
             , "CASE WHEN count_child >0 THEN (count_adult + count_child) ||'('||count_child||')' ELSE (count_adult + count_child) END"
-            , "site_count"
+            , "count(siteid)"
             , "way"
             , "memo"
             , "ordernum"
@@ -78,6 +67,9 @@ public class Frag05 extends Fragment implements
         super.onCreate(savedInstanceState);
     }
 
+    public static DateManager pDateManager = new DateManager();
+    private TextView mTextViewBookingDate;
+
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -86,13 +78,97 @@ public class Frag05 extends Fragment implements
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag05_layout, container, false);
+        View view = inflater.inflate(R.layout.frag_each_day_layout, container, false);
         ButterKnife.bind(this, view);
 
+        //「検索日　選択」セット begin
+        String mStringBookingDate = "";
+        mTextViewBookingDate = view.findViewById(R.id.textView_FragEachDay_booking_date);
+        if (mStringBookingDate.isEmpty()) {
+            String str = pDateManager.getYMD("-");
+            mStringBookingDate = str;
+            mTextViewBookingDate.setText(str);
+
+        }
+        mTextViewBookingDate.setText(mStringBookingDate);
+        mTextViewBookingDate.addTextChangedListener(this);
+
+        TableLayout mTableLayoutBookingList;
+        TableLayout mTableLayoutFrag01_TableLayout_All;
+        TableLayout mTableLayoutPageSelect;
+
+        mTableLayoutBookingList = (TableLayout) view.findViewById(R.id.fragEachDay_予約一覧);
+        mTableLayoutFrag01_TableLayout_All = (TableLayout) view.findViewById(R.id.FragEachDay_TableLayout_All);
+        mTableLayoutPageSelect = (TableLayout) view.findViewById(R.id.FragEachDay_page_select);
+
+
+
+        //「翌日」ボタン
+        Button buttonNext = (Button) mTableLayoutPageSelect.findViewById(R.id.FragEachDayButtonNext);
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    FragEachDayDataUpdate(1, view);
+                } catch (JSONException e) {
+                    Log.e(TAG, "onClick: ", e);
+                }
+            }
+        });
+
+        //「前日」ボタン
+        Button buttonPre = (Button) mTableLayoutPageSelect.findViewById(R.id.FragEachDayButtonPrev);
+        buttonPre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    FragEachDayDataUpdate(-1,view);
+                } catch (JSONException e) {
+                    Log.e(TAG, "onClick: ", e);
+                }
+            }
+        });
+
+
+        Button mOpenDialog_booking_date = view.findViewById(R.id.FragEachDay_date_search_date);
+        mOpenDialog_booking_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Frag01SelectFragment frag01SelectFragment = new Frag01SelectFragment(mTextViewBookingDate);
+                frag01SelectFragment.setTargetFragment(FragEachDay.this, 1);
+                assert getFragmentManager() != null;
+                frag01SelectFragment.show(getFragmentManager(), "frag01SelectFragment");
+
+            }
+        });
 
         updateView(view);
 
         return view;
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    public void FragEachDayDataUpdate(int _addDay,View view) throws JSONException {
+        try {
+            //データのday更新
+            pDateManager.addDay(_addDay);
+
+            //view update
+            String str = pDateManager.getYMD("-");
+            TextView mTextViewBookingDate = view.findViewById(R.id.textView_FragEachDay_booking_date);
+            mTextViewBookingDate.setText(str);
+
+            //テスト
+
+
+            //表示画面更新
+            updateView(view);
+
+        } catch (Exception e) {
+            Log.e(TAG, "currentPageUpdate: ", e);
+
+        }
     }
 
     private void updateView(View view) {
@@ -104,15 +180,15 @@ public class Frag05 extends Fragment implements
             //Log.e(TAG, "onClick: selectData:" + selectData);
 
             String sql = "select " + selectData + " from etcamp_order where canceltime=='' ";
-            //sql += " group by ordernum order by date desc";
-            sql += " order by firstymd desc";
+            sql += " and date == "+pDateManager.getYMD();
+            sql += " group by ordernum order by date desc";
             Log.e(TAG, "updateView: sql:" + sql);
 
 
             mSqlGetArrayMap = DataCenter.pData.SqlGetArrayMap(sql);
 
             //TableLayout処理
-            TableLayout mTableLayout = view.findViewById(R.id.frag05_予約一覧);
+            TableLayout mTableLayout = view.findViewById(R.id.fragEachDay_予約一覧);
 
             mTableLayout.removeViewsInLayout(1, mTableLayout.getChildCount() - 1);
 
@@ -132,7 +208,7 @@ public class Frag05 extends Fragment implements
                     switch (dataArray[j]) {
                         case "ordernum":
                             break;
-                        case "firstymd":
+                        case "min(firstymd)":
                             String srcDate=Tools.dataChange(data,"/");
                             mTableRow.addView(makeTextView(srcDate, 15), j);
                             break;
@@ -145,8 +221,8 @@ public class Frag05 extends Fragment implements
                                 textView.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Frag01DialogFragment frag01DialogFragment = new Frag01DialogFragment(ordernum, map.get("firstymd"));
-                                        frag01DialogFragment.setTargetFragment(Frag05.this, 1);
+                                        Frag01DialogFragment frag01DialogFragment = new Frag01DialogFragment(ordernum, map.get("min(firstymd)"));
+                                        frag01DialogFragment.setTargetFragment(FragEachDay.this, 1);
                                         assert getFragmentManager() != null;
                                         frag01DialogFragment.show(getFragmentManager(), "frag01DialogFragment");
 
@@ -157,22 +233,39 @@ public class Frag05 extends Fragment implements
                             }
                             mTableRow.addView(textView, j);
                             break;
-                        case "site_count":
+                        case "count(siteid)":
+                            String result = "";
                             String tOrdernum = map.get("ordernum");
+                            //Log.e(TAG, "updateView: tOrdernum:"+tOrdernum );
+                            ArrayList<Integer> nListGetSiteRooms = DataCenter.pData.getSiteRoomsID(tOrdernum);
+                            //Log.e(TAG, "updateView: nListGetSiteRooms:"+nListGetSiteRooms );
 
-                            ArrayList<String> nListGetSiteRoomsName = DataCenter.pData.getSiteRoomsName(tOrdernum);
-                            String s=nListGetSiteRoomsName.toString();
-                            String s2=s.substring(1,s.length()-1);
+                            StringBuilder allRoomName = new StringBuilder();
+                            boolean bFind = false;
+                            for (int id : nListGetSiteRooms) {
+                                for (Map.Entry<Integer, String> entry : Rooms.mapRoomNames.entrySet()) {
 
-                            TextView textView2 = makeTextView(s2, 15);
+                                    int nGetKey = entry.getKey();
+                                    if (id == nGetKey) {
+                                        bFind = true;
+
+                                        allRoomName.append(Rooms.mapRoomNames.get(id)).append(" ");
+
+                                    }
+                                }
+                            }
+                            if (bFind) {
+                                result = allRoomName.toString();
+                            }
+                            TextView textView2 = makeTextView(result, 15);
                             textView2.setTextColor(Color.RED);
-                            if (!s2.isEmpty()) {
+                            if (bFind) {
 
                                 textView2.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, map.get("firstymd"));
-                                        frag01SiteFragment.setTargetFragment(Frag05.this, 1);
+                                        Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, map.get("min(firstymd)"));
+                                        frag01SiteFragment.setTargetFragment(FragEachDay.this, 1);
                                         assert getFragmentManager() != null;
                                         frag01SiteFragment.show(getFragmentManager(), "frag01SiteFragment");
 
@@ -254,12 +347,13 @@ public class Frag05 extends Fragment implements
      */
 
     /**
-     * Frag05とFrag05SelectFragment関連する変数。
+     * FragEachDayとFragEachDaySelectFragment関連する変数。
      */
     public static boolean bAfterTextChanged = false;
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        Log.e(TAG, "onTextChanged: s:"+s );
         if (bAfterTextChanged) {
             bAfterTextChanged = false;
         }
@@ -292,7 +386,7 @@ public class Frag05 extends Fragment implements
 
     @Override
     public void sendInput(String input) {
-        Log.d(TAG, "Frag05 from Frag05DialogFragment get input: " + input);
+        Log.d(TAG, "FragEachDay from FragEachDayDialogFragment get input: " + input);
     }
 
     @Override

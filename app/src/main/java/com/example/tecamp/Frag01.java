@@ -6,8 +6,6 @@ import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextWatcher;
@@ -27,7 +25,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.tecamp.config.Config;
 import com.example.tecamp.sql.DataCenter;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,8 +34,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 
@@ -60,7 +55,7 @@ public class Frag01 extends Fragment implements
 
     //簡単記録で使うデータ名前  String group_by = "ordernum";
     public static final String[] pSimpleDataSqlNames = {
-            "date",
+            "firstymd",
             "days",
             "username||' '||username2",
             "(count_adult + count_child) as count",
@@ -75,7 +70,7 @@ public class Frag01 extends Fragment implements
     };
 
     private static final String TAG = "Frag01";
-    public TextView mTextViewBookingDate;
+    private TextView mTextViewBookingDate;
     private static String mStringBookingDate = "";
     public static  DateManager pDateManager = new DateManager();
     /*private static CalendarDay selectDate=CalendarDay.from(
@@ -273,7 +268,7 @@ public class Frag01 extends Fragment implements
                 String orderNum = DataCenter.pData.getSimpleData(i, "ordernum");
                 TextView idTextView;
                 switch (pSimpleDataSqlNames[j]) {
-                    case "date":
+                    case "firstymd":
                         String firstDay = DataCenter.pData.getSiteFirstDay(orderNum);
                         //Log.e(TAG, "TableLayoutUpdate: fistDay:" + firstDay);
 
@@ -314,7 +309,7 @@ public class Frag01 extends Fragment implements
                         break;
                     case "count(siteid) as countsiteid":
                         String tOrdernum = DataCenter.pData.getSimpleData(i, "ordernum");
-                        ArrayList<Integer> nListGetSiteRooms = DataCenter.pData.getSiteRooms(tOrdernum);
+                        ArrayList<Integer> nListGetSiteRooms = DataCenter.pData.getSiteRoomsID(tOrdernum);
                         //int nOrderNum=Integer.parseInt(tOrdernum);
 
                         StringBuilder allRoomName = new StringBuilder();
@@ -678,7 +673,7 @@ public class Frag01 extends Fragment implements
 
             //テスト
             //DataCenter.pData.testSql(getSelectDate());
-            //DataCenter.pJsonControl.getSiteRooms("20b4g013");
+            //DataCenter.pJsonControl.getSiteRoomsID("20b4g013");
         } catch (Exception e) {
             Log.e(TAG, "onDateSet: ", e);
         }

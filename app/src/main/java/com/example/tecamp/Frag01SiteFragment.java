@@ -109,7 +109,7 @@ public class Frag01SiteFragment extends DialogFragment {
 
     static final public String[] mSrcArray = new String[]{
 
-            "date",
+            "firstymd",
             "days",
             "username||username2",
             "count_child+count_adult",
@@ -142,7 +142,7 @@ public class Frag01SiteFragment extends DialogFragment {
     public Frag01SiteFragment(String _orederNum, String _date) {
         mOrderNum = _orederNum;
         mDate = _date;
-        mRoomingArray = DataCenter.pData.getSiteRooms(_orederNum);
+        mRoomingArray = DataCenter.pData.getSiteRoomsID(_orederNum);
         DataCenter.pData.updateSiteDataArrayList(_date);
 
         HashMap<String, String> mapOrderList = DataCenter.pData.getSiteDataMap(_orederNum);
@@ -247,7 +247,7 @@ public class Frag01SiteFragment extends DialogFragment {
         }
 
         //予約済みROOM
-        mSiteidArray = DataCenter.pData.SqlGetStringArray("select siteid from etcamp_order where date = " + mDate);
+        mSiteidArray = DataCenter.pData.SqlGetStringArray("select siteid from etcamp_SiteList where ymd = " + mDate);
         mSiteidArray.forEach(s -> {
             //Log.e(TAG, "onCreateView: forEach "+s );
 

@@ -53,7 +53,7 @@ public class Frag03 extends Fragment implements DatePickerDialog.OnDateSetListen
             , "tel_1||'-'||tel_2||'-'||tel_3"
             , "username||' '||username2||'('||username_kana||' '||username_kana2||')'"
             , "days"
-            , "siteid"
+            //, "siteid"
             , "site_count"
             , "createtime"
     };
@@ -156,13 +156,13 @@ public class Frag03 extends Fragment implements DatePickerDialog.OnDateSetListen
                             + "%\")";
                     if (!string_stay_date.isEmpty()) {
 
-                        sql += " and date like '" + sqlDate1 + "%'";
+                        sql += " and firstymd like '" + sqlDate1 + "%'";
                     }
                     if (!string_booking_date.isEmpty()) {
 
                         sql += " and createtime like '" + sqlDate2 + "%'";
                     }
-                    sql += "  order by date";
+                    sql += "  order by firstymd";
                     //Log.e(TAG, "onClick: sql:" + sql);
 
 

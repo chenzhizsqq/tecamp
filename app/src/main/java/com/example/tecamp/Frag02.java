@@ -123,7 +123,7 @@ public class Frag02 extends Fragment
         int d=date.getDay();
         Frag01.pDateManager.setDate(y,m,d);
 
-        viewPager.setCurrentItem(2);
+        viewPager.setCurrentItem(3);
         //Log.e(TAG, "onDateSelected: " + FORMATTER.format(date.getDate()));
     }
 
