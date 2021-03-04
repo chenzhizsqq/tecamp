@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DataCenter.timeCreate();
+        //DataCenter.timeCreate();
         /*new Thread(new Runnable() {
             @Override
             public void run() {
