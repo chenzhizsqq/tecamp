@@ -54,31 +54,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             this.editTextTextEmailAddress.setText(account);
         }
 
-        //测试时候，快速加进去test!!!!!!!!!!!!!!!!!!!
-        /*new Thread(new Runnable() {
+
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                DataCenter.UpdateData();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+
+                String result = DataCenter.pData.LoginInit("root@root.root", "root");
+                if (result.equals("0")) {
+
+                    String status = DataCenter.UpdateData();
+
+                    //テスト使う！！！！！！！！
+                    if (status.equals("0")) {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    //テスト使う！！！！！！！！
+
+                }
             }
-        }).start();*/
-        //测试时候，快速加进去test!!!!!!!!!!!!!!!!!!!
+        }).start();
 
     }
 
 
     @Override
     public void setContentView(View view) {
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DataCenter.UpdateData();
-            }
-        }).start();
-
 
     }
 

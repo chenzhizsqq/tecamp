@@ -951,7 +951,8 @@ public class JsonControl {
     }
 
     /**
-     * select siteid, sitename from etcamp_site order by siteid
+     * 暂时为了能够看到房间号码，而临时做的数据对应。以后一定要修改
+     * select siteid, sitename, sum(isac) from etcamp_SiteList where siteid>0 group by siteid order by siteid
      */
     public HashMap<Integer, String> getSqlRoomNames() {
         HashMap<Integer, String> rMap = new HashMap<>();
