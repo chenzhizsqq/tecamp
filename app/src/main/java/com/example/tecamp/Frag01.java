@@ -59,7 +59,7 @@ public class Frag01 extends Fragment implements
             "days",
             "username||' '||username2",
             "(count_adult + count_child) as count",
-            "count(siteid) as countsiteid",
+            "site_count",
             "way",
             "memo",
             //Frag01の mShowColumns
@@ -162,6 +162,7 @@ public class Frag01 extends Fragment implements
                     pDateManager.getDay()
             );
             mStringBookingDate = str;
+            Log.e(TAG, "!!!!Frag01DataUpdate: str:"+str );
             mTextViewBookingDate.setText(str);
 
             //Sqlからdata update
@@ -307,34 +308,14 @@ public class Frag01 extends Fragment implements
                             }
                         }
                         break;
-                    case "count(siteid) as countsiteid":
+                    case "site_count":
                         String tOrdernum = DataCenter.pData.getSimpleData(i, "ordernum");
-                        ArrayList<Integer> nListGetSiteRooms = DataCenter.pData.getSiteRoomsID(tOrdernum);
-                        //int nOrderNum=Integer.parseInt(tOrdernum);
 
-                        StringBuilder allRoomName = new StringBuilder();
-                        boolean bFind = false;
+                        ArrayList<String> nListGetSiteRoomsName = DataCenter.pData.getSiteRoomsName(tOrdernum);
+                        String s=nListGetSiteRoomsName.toString();
+                        String s2=s.substring(1,s.length()-1);
                         idTextView = (TextView) mTableLayoutBookingList.findViewWithTag(i * mTableRowIdArray.length + 4);
-                        for (int id : nListGetSiteRooms) {
-                            for (Map.Entry<Integer, String> entry : Rooms.mapRoomNames.entrySet()) {
-
-                                int nGetKey = entry.getKey();
-                                if (id == nGetKey) {
-                                    bFind = true;
-
-                                    //Log.e(TAG, "TableLayoutUpdate: id == nGetKey " + id);
-                                    //Log.e(TAG, "TableLayoutUpdate: id == nGetKey get" + Rooms.mapRoomNames.get(id));
-                                    allRoomName.append(Rooms.mapRoomNames.get(id)).append(" ");
-                                    String LastSrc = Tools.SrcContent(allRoomName.toString(), 15);
-                                    idTextView.setText(LastSrc);
-
-                                }
-                            }
-                        }
-                        if (!bFind) {
-                            idTextView.setText("");
-                            idTextView.setEnabled(false);
-                        }
+                        idTextView.setText(s2);
 
                         //Log.e(TAG, "TableLayoutUpdate: ordernum " + tOrdernum);
                         //Log.e(TAG, "TableLayoutUpdate: Rooms.getRoomName(nOrderNum) " + Rooms.getRoomName(nOrderNum));
