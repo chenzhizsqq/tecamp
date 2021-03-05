@@ -19,7 +19,8 @@ public class Config {
 
     //public static final String LoginUrl = "https://ssl.ethp.net/EthpJson.aspx";
     //public static final String LoginUrl = "http://192.168.18.126/EthpJson.aspx";
-    public static final String LoginUrl = "http://192.168.18.173/EthpJson.aspx";
+    //public static final String LoginUrl = "http://192.168.18.173/EthpJson.aspx";
+    public static final String LoginUrl = "http://192.168.0.173/EthpJson.aspx";
 
     //Jsonデータ更新時間
     public static final long DataUpdateTime = 60000;    //60000では、毎６０秒更新一回
@@ -33,6 +34,9 @@ public class Config {
 
     public static String lastToken = "";        //EtCampGetDataで"token"
     public static String jsonGetLastTime = "";  //EtCampGetDataで"lasttime"
+
+    //記録表示で毎回再表示数の最大値
+    public final static int maxSrcCount = 100;
 
 
 }

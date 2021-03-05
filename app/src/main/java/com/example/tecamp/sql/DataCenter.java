@@ -31,7 +31,7 @@ public class DataCenter {
                 updateDataTimes += 1;
 
                 if(resultOrderList.equals(DataCenter.pData.getResultOrderList())){
-                    Log.e(TAG, "UpdateData: resultOrderList==DataCenter.pData.getResultOrderList() after continue" );
+                    Log.d(TAG, "UpdateData: resultOrderList==DataCenter.pData.getResultOrderList() after continue" );
                     break;
                 }else{
 
@@ -47,7 +47,7 @@ public class DataCenter {
             Rooms.mapRoomNames = DataCenter.pData.getSqlRoomNames();
 
             Log.e(TAG, "UpdateData: updateDataTimes:" + updateDataTimes);
-            Log.e(TAG, "UpdateData: last status:" + status);
+            Log.d(TAG, "UpdateData: last status:" + status);
         }catch (Exception e){
             Log.e(TAG, "UpdateData: ",e );
         }

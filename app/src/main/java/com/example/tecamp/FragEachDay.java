@@ -182,7 +182,7 @@ public class FragEachDay extends Fragment implements
             String sql = "select " + selectData + " from etcamp_order where canceltime=='' ";
             sql += " and date == "+pDateManager.getYMD();
             sql += " group by ordernum order by date desc";
-            Log.e(TAG, "updateView: sql:" + sql);
+            //Log.e(TAG, "updateView: sql:" + sql);
 
 
             mSqlGetArrayMap = DataCenter.pData.SqlGetArrayMap(sql);
