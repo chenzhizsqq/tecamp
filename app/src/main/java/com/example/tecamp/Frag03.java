@@ -48,7 +48,7 @@ public class Frag03 extends Fragment implements DatePickerDialog.OnDateSetListen
     private int nSelectView;
 
     String[] dataArray = {
-            "date"
+            "firstymd"
             , "address"
             , "tel_1||'-'||tel_2||'-'||tel_3"
             , "username||' '||username2||'('||username_kana||' '||username_kana2||')'"

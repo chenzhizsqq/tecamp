@@ -99,7 +99,7 @@ public class Frag04 extends Fragment implements
                 //Log.e(TAG, "onCreate: arrayDateManager:" + arrayDate[i].getYMD());
 
                 String date = arrayDate[i].getYMD();
-                String sql = "select siteid,username from etcamp_SiteList a,etcamp_order b where a.orderid=b.orderid and ymd=" + date;
+                String sql = "select siteid,username ||username2 from etcamp_SiteList a,etcamp_order b where a.orderid=b.orderid and siteid>0 and ymd=" + date;
                 //Log.e(TAG, "Frag04DataUpdate: sql:" + sql);
                 HashMap<String, String> map = DataCenter.pData.SqlGetStringMap(sql);
                 //Log.e(TAG, "Frag04DataUpdate: map:" + map.toString());

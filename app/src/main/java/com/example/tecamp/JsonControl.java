@@ -136,7 +136,7 @@ public class JsonControl {
             if (response.isSuccessful()) {
                 getResult = response.body().string();
                 mJsonObjLogin = new JSONObject(getResult);
-                Log.e(TAG, "LoginInit: getResult:" + getResult);
+                Log.d(TAG, "LoginInit: getResult:" + getResult);
                 status = mJsonObjLogin.getString("status");
                 if (mJsonObjLogin.getString("status").equals("0")) {
                     String mGetJsonObjLogin = getJsonObjLogin().toString();
@@ -188,11 +188,11 @@ public class JsonControl {
 
                 setJsonObject(new JSONObject(getResult));
 
-                Log.e(TAG, "MakeJsonGetData: getResultServerTime:" + getResultServerTime());
+                Log.d(TAG, "MakeJsonGetData: getResultServerTime:" + getResultServerTime());
 
                 if (!Config.jsonGetLastTime.equals(getResultServerTime())) {
                     Config.jsonGetLastTime = getResultServerTime();
-                    Log.e(TAG, "MakeJsonGetData: Config.jsonGetLastTime :" + Config.jsonGetLastTime);
+                    Log.d(TAG, "MakeJsonGetData: Config.jsonGetLastTime :" + Config.jsonGetLastTime);
                 } else {
                     return "-1";
                 }
@@ -626,7 +626,7 @@ public class JsonControl {
                     , Frag01.pSimpleDataSqlNames
                     , selection
                     , null
-                    , data_group_by
+                    , null
                     , null
                     , data_order_by);
 
@@ -990,8 +990,9 @@ public class JsonControl {
         Cursor cursor = null;
         try {
 
-            String sql = "select firstymd,count(orderid) from etcamp_order where" +
-                    " canceltime like '' and firstymd>" + yearMonth + "00 and firstymd<" + yearMonth + "32 group by firstymd";
+            /*String sql = "select firstymd,count(orderid) from etcamp_order where" +
+                    " canceltime like '' and firstymd>" + yearMonth + "00 and firstymd<" + yearMonth + "32 group by firstymd";*/
+            String sql = "select ymd,count(orderid) from etcamp_SiteList where  ymd>" + yearMonth + "00 and ymd<" + yearMonth + "32 group by ymd";
             cursor = mDB.rawQuery(sql, null);
 
             //Log.e(TAG, "getRoomsOneMonth: sql:"+sql );
@@ -1051,8 +1052,8 @@ public class JsonControl {
         try {
             mSiteRoomArrayList.clear();
             cursor = mDB.query(
-                    OrderListSql.SiteTableName
-                    , OrderListSql.SiteTableRowNames
+                    OrderListSql.SiteListTableName
+                    , OrderListSql.SiteListRowNames
                     , ""
                     , null, null, null, null);
 
