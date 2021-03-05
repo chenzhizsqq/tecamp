@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity{
 
         sectionsPagerAdapter.add(new Frag05(viewPager),"予約一覧 ALL");
         sectionsPagerAdapter.add(new Frag04(viewPager),"電話受付");;
+        sectionsPagerAdapter.add(new FragEachDay(viewPager),"予約一覧 E");
         sectionsPagerAdapter.add(new Frag02(viewPager),"カレンダー");
         sectionsPagerAdapter.add(new Frag03(viewPager),"予約検索");
         /*
