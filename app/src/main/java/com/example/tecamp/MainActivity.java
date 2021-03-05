@@ -46,13 +46,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //DataCenter.timeCreate();
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DataCenter.UpdateData();
-            }
-        }).start();*/
+        timeCreate();
 
 
         setContentView(R.layout.activity_main);
@@ -62,8 +56,10 @@ public class MainActivity extends AppCompatActivity{
 
         ViewPager viewPager = findViewById(R.id.view_pager);
 
-        sectionsPagerAdapter.add(new Frag05(viewPager),"予約一覧list");
-        sectionsPagerAdapter.add(new Frag04(viewPager),"電話受付");
+        sectionsPagerAdapter.add(new Frag05(viewPager),"予約一覧 ALL");
+        sectionsPagerAdapter.add(new Frag04(viewPager),"電話受付");;
+        sectionsPagerAdapter.add(new Frag02(viewPager),"カレンダー");
+        sectionsPagerAdapter.add(new Frag03(viewPager),"予約検索");
         /*
         sectionsPagerAdapter.add(new Frag05(viewPager),"予約一覧list");
         sectionsPagerAdapter.add(new FragEachDay(viewPager),"予約一覧E");
