@@ -2,12 +2,8 @@ package com.example.tecamp;
 
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextWatcher;
@@ -16,7 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -30,22 +26,14 @@ import com.example.tecamp.config.Config;
 import com.example.tecamp.sql.DataCenter;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.example.tecamp.config.Config.SharedPreferences_Frag05;
-
-//予約一覧List
+//予約一覧 ALL
 public class Frag05 extends Fragment implements
         Frag01DialogFragment.OnInputSelected
         , TextWatcher {
@@ -58,6 +46,7 @@ public class Frag05 extends Fragment implements
     }
 
     private static final String TAG = "Frag05";
+    private int mDataOffSet;
 
 
     //Show rows 宿泊初日	泊数	代表者	人数	サイト	乗物	備考
@@ -89,11 +78,18 @@ public class Frag05 extends Fragment implements
         View view = inflater.inflate(R.layout.frag05_layout, container, false);
         ButterKnife.bind(this, view);
 
+        mDataOffSet = 0;
+
+        TableLayout mTableLayout = view.findViewById(R.id.frag05_予約一覧);
+
+        mTableLayout.removeViewsInLayout(1, mTableLayout.getChildCount() - 1);
 
         updateView(view);
 
+
         return view;
     }
+
 
     private void updateView(View view) {
         try {
@@ -104,17 +100,17 @@ public class Frag05 extends Fragment implements
             //Log.e(TAG, "onClick: selectData:" + selectData);
 
             String sql = "select " + selectData + " from etcamp_order where canceltime=='' ";
-            //sql += " group by ordernum order by date desc";
             sql += " order by firstymd desc";
-            Log.e(TAG, "updateView: sql:" + sql);
+            String sqlLimit = sql + " limit " + Config.maxSrcCount + " OFFSET " + mDataOffSet;
+            //Log.e(TAG, "updateView: sql:" + sqlLimit);
 
 
-            mSqlGetArrayMap = DataCenter.pData.SqlGetArrayMap(sql);
+            mSqlGetArrayMap = DataCenter.pData.SqlGetArrayMap(sqlLimit);
 
             //TableLayout処理
             TableLayout mTableLayout = view.findViewById(R.id.frag05_予約一覧);
 
-            mTableLayout.removeViewsInLayout(1, mTableLayout.getChildCount() - 1);
+            //mTableLayout.removeViewsInLayout(1, mTableLayout.getChildCount() - 1);
 
             //TableLayout データ各行処理
             for (int i = 0; i < mSqlGetArrayMap.size(); i++) {
@@ -133,13 +129,13 @@ public class Frag05 extends Fragment implements
                         case "ordernum":
                             break;
                         case "firstymd":
-                            String srcDate=Tools.dataChange(data,"/");
-                            mTableRow.addView(makeTextView(srcDate, 15), j);
+                            String srcDate = Tools.dataChange(data, "/");
+                            mTableRow.addView(makeTextView(srcDate /*+":"+mTableLayout.getChildCount()*/
+                                    , 15), j);
                             break;
                         case "username||' '||username2":
                             TextView textView = makeTextView(data, 15);
                             if (data.trim().length() > 0) {
-                                //Log.e(TAG, "updateView: data:"+data );
 
                                 textView.setTextColor(Color.RED);
                                 textView.setOnClickListener(new View.OnClickListener() {
@@ -161,8 +157,8 @@ public class Frag05 extends Fragment implements
                             String tOrdernum = map.get("ordernum");
 
                             ArrayList<String> nListGetSiteRoomsName = DataCenter.pData.getSiteRoomsName(tOrdernum);
-                            String s=nListGetSiteRoomsName.toString();
-                            String s2=s.substring(1,s.length()-1);
+                            String s = nListGetSiteRoomsName.toString();
+                            String s2 = s.substring(1, s.length() - 1);
 
                             TextView textView2 = makeTextView(s2, 15);
                             textView2.setTextColor(Color.RED);
@@ -193,10 +189,62 @@ public class Frag05 extends Fragment implements
                 mTableLayout.addView(mTableRow, mTableLayout.getChildCount());
             }
 
+            //最大の記録表示
+            viewMoreSrc(view);
         } catch (Exception e) {
             Log.e(TAG, "onCreateView: ", e);
         } finally {
         }
+    }
+
+    //最大の記録表示
+    private void viewMoreSrc(View view) {
+        TableLayout mTableLayout = view.findViewById(R.id.frag05_予約一覧);
+
+        String selectData = Arrays.toString(dataArray);
+        selectData = selectData.substring(1, selectData.length() - 1);
+        String sql = "select " + selectData + " from etcamp_order where canceltime=='' ";
+        sql += " order by firstymd desc";
+
+        int getSqlCount = DataCenter.pData.getSqlCount(sql);
+        TableRow mTableRow = new TableRow(getActivity());
+        if (getSqlCount > mDataOffSet + Config.maxSrcCount) {
+            int nowCount = mDataOffSet + Config.maxSrcCount;
+            mTableRow.addView(makeTextView("表示数：" + nowCount));
+            mTableRow.addView(makeTextView("/" + getSqlCount + "   ", 15));
+
+            Button updateButton = new Button(getActivity());
+
+            updateButton.setText("もっと");
+            updateButton.setTextSize(15);
+            updateButton.setTextColor(Color.BLACK);
+            updateButton.setGravity(Gravity.CENTER);
+            updateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTableLayout.removeViewsInLayout(mTableLayout.getChildCount() - 1, 1);
+                    mDataOffSet += Config.maxSrcCount;
+                    updateView(view);
+                    Log.e(TAG, "onClick: 更新");
+
+                }
+
+            });
+            mTableRow.addView(updateButton);
+        } else {
+            mTableRow.addView(makeTextView("表示数：" + getSqlCount));
+            mTableRow.addView(makeTextView("/" + getSqlCount + "   "));
+
+            TextView textViewMax = new TextView(getActivity());
+
+            textViewMax.setText("   最大の記録を示しました。");
+            textViewMax.setTextSize(15);
+            textViewMax.setTextColor(Color.BLACK);
+            textViewMax.setGravity(Gravity.CENTER);
+            mTableRow.addView(textViewMax);
+        }
+        mTableRow.setGravity(Gravity.CENTER);
+        mTableLayout.addView(mTableRow, mTableLayout.getChildCount());
     }
 
     @SuppressLint("SetTextI18n")
