@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
+import com.example.tecamp.config.Config;
 import com.example.tecamp.sql.DataCenter;
 import com.google.android.material.tabs.TabLayout;
 
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
@@ -25,6 +28,8 @@ import org.json.JSONException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 
@@ -77,6 +82,41 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    private Timer timer;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
+    private void timeCreate() {
+        long  second;
+        if (null != timer) {
+            timer.cancel();
+            timer = null;
+        }
+
+        timer = new Timer();
+
+        // TimerTask インスタンスを生成
+        CountUpTimerTask timerTask = new CountUpTimerTask();
+
+        second = 60000;  //60000では、遅延１分
+        timer.schedule(timerTask, second, Config.DataUpdateTime);
+    }
+    //データ更新task
+    class CountUpTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            // handlerを使って処理をキューイングする
+            handler.post(new Runnable() {
+                public void run() {
+                        //表示画面更新
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                DataCenter.UpdateData();
+                            }
+                        }).start();
+                }
+            });
+        }
+    }
 }
 
