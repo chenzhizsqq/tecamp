@@ -572,7 +572,7 @@ public class Frag01 extends Fragment implements
         mOpenDialog_booking_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Frag01SelectFragment frag01SelectFragment = new Frag01SelectFragment(mTextViewBookingDate);
+                Frag01SelectFragment frag01SelectFragment = new Frag01SelectFragment(mTextViewBookingDate,pDateManager);
                 frag01SelectFragment.setTargetFragment(Frag01.this, 1);
                 assert getFragmentManager() != null;
                 frag01SelectFragment.show(getFragmentManager(), "frag01SelectFragment");
