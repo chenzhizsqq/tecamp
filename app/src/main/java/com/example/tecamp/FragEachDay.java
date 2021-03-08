@@ -22,10 +22,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.tecamp.config.Config;
 import com.example.tecamp.sql.DataCenter;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,8 +35,7 @@ import butterknife.ButterKnife;
 
 //予約一覧 ALL
 public class FragEachDay extends Fragment implements
-        Frag01DialogFragment.OnInputSelected
-        , TextWatcher {
+        Frag01DialogFragment.OnInputSelected {
 
     ViewPager viewPager;
 
@@ -47,6 +46,7 @@ public class FragEachDay extends Fragment implements
 
     private static final String TAG = "FragEachDay";
     private int mDataOffSet;
+    public static boolean bAfterTextChanged=false;
 
 
     //Show rows 宿泊初日	泊数	代表者	人数	サイト	乗物	備考
@@ -60,7 +60,7 @@ public class FragEachDay extends Fragment implements
             , "memo"
             , "ordernum"
     };
-    ArrayList<HashMap<String, String>> mSqlGetArrayMap;
+    ArrayList<HashMap<String, String>> mDataArrayMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,56 +75,135 @@ public class FragEachDay extends Fragment implements
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
+        Log.e(TAG, "onCreateView: begin" );
         View view = inflater.inflate(R.layout.frag_each_day_layout, container, false);
         ButterKnife.bind(this, view);
 
         mDataOffSet = 0;
 
-        TableLayout mTableLayout = view.findViewById(R.id.FragEachDay_予約一覧);
-
-        mTableLayout.removeViewsInLayout(1, mTableLayout.getChildCount() - 1);
 
         updateView(view);
 
+        //TableLayout処理
+        TableLayout mTableLayout = view.findViewById(R.id.FragEachDay_予約一覧);
 
+        //「前日」ボタン
+        Button buttonPre = (Button) view.findViewById(R.id.FragEachDayButtonPrev);
+        buttonPre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, "buttonPre onClick: begin" );
+                pDateManager.addDay(-1);
+
+                TextView textViewDate=view.findViewById(R.id.textView_FragEachDay_booking_date);
+                String srcSelectTime = pDateManager.getYMD("/");
+                textViewDate.setText(""+srcSelectTime);
+            }
+        });
+
+        //「翌日」ボタン
+        Button buttonNext = (Button) view.findViewById(R.id.FragEachDayButtonNext);
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, "buttonNext onClick: begin" );
+                pDateManager.addDay(1);
+
+                TextView textViewDate=view.findViewById(R.id.textView_FragEachDay_booking_date);
+                String srcSelectTime = pDateManager.getYMD("/");
+                textViewDate.setText(""+srcSelectTime);
+            }
+        });
+
+        TextView textViewDate=view.findViewById(R.id.textView_FragEachDay_booking_date);
+        String srcSelectTime = pDateManager.getYMD("/");
+        textViewDate.setText(""+srcSelectTime);
+        textViewDate.addTextChangedListener(new TextWatcher(){
+
+            // 変化する前.
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                Log.e(TAG, "beforeTextChanged: " );
+
+            }
+
+            // 変化した時.
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                Log.e(TAG, "onTextChanged: " );
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                Log.e(TAG, "afterTextChanged: " );
+                updateView(view);
+
+
+            }
+
+        });
+
+
+        Button mOpenDialog_booking_date = view.findViewById(R.id.pick_FragEachDay_date_search_date);
+        mOpenDialog_booking_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Frag01SelectFragment frag01SelectFragment = new Frag01SelectFragment(textViewDate,pDateManager);
+                frag01SelectFragment.setTargetFragment(FragEachDay.this, 1);
+                assert getFragmentManager() != null;
+                frag01SelectFragment.show(getFragmentManager(), "frag01SelectFragment");
+
+            }
+        });
         return view;
     }
 
+    public static  DateManager pDateManager = new DateManager();
 
     private void updateView(View view) {
         try {
+
+            //TableLayout処理
+            TableLayout mTableLayout = view.findViewById(R.id.FragEachDay_予約一覧);
+            mTableLayout.removeViewsInLayout(1, mTableLayout.getChildCount() - 1);
 
             //データ処理
             String selectData = Arrays.toString(dataArray);
             selectData = selectData.substring(1, selectData.length() - 1);
             //Log.e(TAG, "onClick: selectData:" + selectData);
 
-            String sql = "select " + selectData + " from etcamp_order where canceltime=='' ";
-            sql += " order by firstymd desc";
-            String sqlLimit = sql + " limit " + Config.maxSrcCount + " OFFSET " + mDataOffSet;
-            Log.e(TAG, "updateView: sql:" + sqlLimit);
+            /*String sql = "select " + selectData + " from etcamp_order where firstymd=='"+pDateManager.getYMD()+"' ";
+            sql += " order by firstymd desc";*/
+            String sql = "select firstymd, days, username||' '||username2,\n" +
+                    " CASE WHEN count_child >0 THEN (count_adult + count_child) ||'('||count_child||')' ELSE (count_adult + count_child) END, \n" +
+                    "site_count, way, memo, a.ordernum as ordernum\n" +
+                    " from etcamp_order as a,etcamp_SiteList as b \n" +
+                    " where a.ordernum=b.ordernum and b.ymd=='"+pDateManager.getYMD()+"'  order by firstymd ";
+            //Log.e(TAG, "updateView: sql:"+sql );
 
 
-            mSqlGetArrayMap = DataCenter.pData.SqlGetArrayMap(sqlLimit);
+            mDataArrayMap = DataCenter.pData.SqlGetArrayMap(sql);
 
-            //TableLayout処理
-            TableLayout mTableLayout = view.findViewById(R.id.FragEachDay_予約一覧);
 
             //mTableLayout.removeViewsInLayout(1, mTableLayout.getChildCount() - 1);
 
             //TableLayout データ各行処理
-            for (int i = 0; i < mSqlGetArrayMap.size(); i++) {
+            for (int i = 0; i < mDataArrayMap.size(); i++) {
                 //Log.e(TAG, "onClick: mSqlGetArrayMap:"+i+":"+mSqlGetArrayMap.get(i) );
 
                 TableRow mTableRow = new TableRow(getActivity());
 
-                HashMap<String, String> map = mSqlGetArrayMap.get(i);
+                HashMap<String, String> map = mDataArrayMap.get(i);
                 //Log.e(TAG, "onClick: map:" + map.toString());
 
                 for (int j = 0; j < dataArray.length; j++) {
                     String data = map.get(dataArray[j]);
                     String ordernum = map.get("ordernum");
-
+                    //Log.e(TAG, "updateView: dataArray[j]:"+dataArray[j] );
                     switch (dataArray[j]) {
                         case "ordernum":
                             break;
@@ -167,7 +246,7 @@ public class FragEachDay extends Fragment implements
                                 textView2.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, map.get("firstymd"));
+                                        Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, pDateManager.getYMD());
                                         frag01SiteFragment.setTargetFragment(FragEachDay.this, 1);
                                         assert getFragmentManager() != null;
                                         frag01SiteFragment.show(getFragmentManager(), "frag01SiteFragment");
@@ -189,63 +268,18 @@ public class FragEachDay extends Fragment implements
                 mTableLayout.addView(mTableRow, mTableLayout.getChildCount());
             }
 
-            //最大の記録表示
-            viewMoreSrc(view);
+            int n=mDataArrayMap.size();
+            TextView textViewAmount=view.findViewById(R.id.FragEachDayAmount);
+            textViewAmount.setText("数量："+n);
+
+
+
         } catch (Exception e) {
             Log.e(TAG, "onCreateView: ", e);
         } finally {
         }
     }
 
-    //最大の記録表示
-    private void viewMoreSrc(View view) {
-        TableLayout mTableLayout = view.findViewById(R.id.FragEachDay_予約一覧);
-
-        String selectData = Arrays.toString(dataArray);
-        selectData = selectData.substring(1, selectData.length() - 1);
-        String sql = "select " + selectData + " from etcamp_order where canceltime=='' ";
-        sql += " order by firstymd desc";
-
-        int getSqlCount = DataCenter.pData.getSqlCount(sql);
-        TableRow mTableRow = new TableRow(getActivity());
-        if (getSqlCount > mDataOffSet + Config.maxSrcCount) {
-            int nowCount = mDataOffSet + Config.maxSrcCount;
-            mTableRow.addView(makeTextView("表示数：" + nowCount));
-            mTableRow.addView(makeTextView("/" + getSqlCount + "   ", 15));
-
-            Button updateButton = new Button(getActivity());
-
-            updateButton.setText("もっと");
-            updateButton.setTextSize(15);
-            updateButton.setTextColor(Color.BLACK);
-            updateButton.setGravity(Gravity.CENTER);
-            updateButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mTableLayout.removeViewsInLayout(mTableLayout.getChildCount() - 1, 1);
-                    mDataOffSet += Config.maxSrcCount;
-                    updateView(view);
-                    Log.e(TAG, "onClick: 更新");
-
-                }
-
-            });
-            mTableRow.addView(updateButton);
-        } else {
-            mTableRow.addView(makeTextView("表示数：" + getSqlCount));
-            mTableRow.addView(makeTextView("/" + getSqlCount + "   "));
-
-            TextView textViewMax = new TextView(getActivity());
-
-            textViewMax.setText("   最大の記録を示しました。");
-            textViewMax.setTextSize(15);
-            textViewMax.setTextColor(Color.BLACK);
-            textViewMax.setGravity(Gravity.CENTER);
-            mTableRow.addView(textViewMax);
-        }
-        mTableRow.setGravity(Gravity.CENTER);
-        mTableLayout.addView(mTableRow, mTableLayout.getChildCount());
-    }
 
     @SuppressLint("SetTextI18n")
     @NotNull
@@ -272,66 +306,6 @@ public class FragEachDay extends Fragment implements
         return makeTextView(mText);
     }
 
-    /**
-     * This method is called to notify you that, within <code>s</code>,
-     * the <code>count</code> characters beginning at <code>start</code>
-     * are about to be replaced by new text with length <code>after</code>.
-     * It is an error to attempt to make changes to <code>s</code> from
-     * this callback.
-     *
-     * @param s
-     * @param start
-     * @param count
-     * @param after
-     */
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-    }
-
-    /**
-     * This method is called to notify you that, within <code>s</code>,
-     * the <code>count</code> characters beginning at <code>start</code>
-     * have just replaced old text that had length <code>before</code>.
-     * It is an error to attempt to make changes to <code>s</code> from
-     * this callback.
-     *
-     * @param s
-     * @param start
-     * @param before
-     * @param count
-     */
-
-    /**
-     * FragEachDay とFragEachDay SelectFragment関連する変数。
-     */
-    public static boolean bAfterTextChanged = false;
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (bAfterTextChanged) {
-            bAfterTextChanged = false;
-        }
-    }
-
-    /**
-     * This method is called to notify you that, somewhere within
-     * <code>s</code>, the text has been changed.
-     * It is legitimate to make further changes to <code>s</code> from
-     * this callback, but be careful not to get yourself into an infinite
-     * loop, because any changes you make will cause this method to be
-     * called again recursively.
-     * (You are not told where the change took place because other
-     * afterTextChanged() methods may already have made other changes
-     * and invalidated the offsets.  But if you need to know here,
-     * you can use {@link Spannable#setSpan} in {@link #onTextChanged}
-     * to mark your place and then look up from here where the span
-     * ended up.
-     *
-     * @param s
-     */
-    @Override
-    public void afterTextChanged(Editable s) {
-    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {

@@ -11,6 +11,68 @@
         android:layout_margin="5dp"
         android:gravity="left">
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:gravity="left">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:gravity="left"
+                tools:ignore="UselessParent">
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/FragEachDayButtonPrev"
+                        android:gravity="center"
+                        android:text="@string/pick_date_prev"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:textColor="#FFFFFF" />
+                    <TextView
+                        android:id="@+id/textView_FragEachDay_booking_date"
+                        android:gravity="center"
+                        android:text="date"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:textSize="20sp" />
+                    <Button
+                        android:id="@+id/pick_FragEachDay_date_search_date"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/pick_date_search_date" />
+
+                    <TextView
+                        android:id="@+id/FragEachDayAmount"
+                        android:text="FragEachDayAmount"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:textSize="20sp" />
+
+
+                    <Button
+                        android:id="@+id/FragEachDayButtonNext"
+                        android:gravity="center"
+                        android:text="@string/pick_date_next"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:textColor="#FFFFFF" />
+
+                </TableRow>
+
+
+            </TableLayout>
+        </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
