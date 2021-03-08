@@ -47,10 +47,11 @@ public class Frag01SelectFragment extends DialogFragment
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("EEE曜日, yyyy年 MMM d日 ");
     private TextView mTV_date_src;
     private final TextView mTV_Frag01_date;
-    private CalendarDay mSelectDate;
+    private DateManager mSelectDate;
 
-    Frag01SelectFragment(TextView _TextView) {
+    Frag01SelectFragment(TextView _TextView,DateManager _selectDate) {
         mTV_Frag01_date = _TextView;
+        mSelectDate = _selectDate;
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -94,10 +95,10 @@ public class Frag01SelectFragment extends DialogFragment
         widget.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Large);
         //widget.setTileSize(LinearLayout.LayoutParams.MATCH_PARENT);
 
-        MonthUpdate(widget, Frag01.pDateManager.getYear(), Frag01.pDateManager.getMonth());
-        CalendarDay day = CalendarDay.from(Frag01.pDateManager.getYear(),
-                Frag01.pDateManager.getMonth(),
-                Frag01.pDateManager.getDay());
+        MonthUpdate(widget, mSelectDate.getYear(), mSelectDate.getMonth());
+        CalendarDay day = CalendarDay.from(mSelectDate.getYear(),
+                mSelectDate.getMonth(),
+                mSelectDate.getDay());
         widget.setCurrentDate(day);
 
         mTV_date_src = view.findViewById(R.id.dialog_frag01_date_src);
@@ -119,13 +120,7 @@ public class Frag01SelectFragment extends DialogFragment
             public void onClick(View v) {
                 if(mSelectDate!=null){
 
-
-
-                    Frag01.bAfterTextChanged = true;
-                    Frag01.pDateManager.setDate(mSelectDate.getYear(), mSelectDate.getMonth(), mSelectDate.getDay());
-
-                    mTV_date_src.setText(mSelectDate.getDate().toString());
-                    mTV_Frag01_date.setText(mSelectDate.getYear() + "/" + mSelectDate.getMonth() + "/" + mSelectDate.getDay());
+                    mTV_Frag01_date.setText(mSelectDate.getYMD("/"));
 
                     Objects.requireNonNull(getDialog()).dismiss();
                 }else{
@@ -159,7 +154,7 @@ public class Frag01SelectFragment extends DialogFragment
             boolean selected) {
 
         //Log.e(TAG, "onDateSelected: " + (selected ? FORMATTER.format(date.getDate()) : "選択ください"));
-        mSelectDate=date;
+        mSelectDate.setDate(date.getYear(),date.getMonth(),date.getDay());
 
         /*mDateManager.setDate(date);
 
