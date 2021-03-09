@@ -58,6 +58,7 @@ public class Frag05 extends Fragment implements
             , "site_count"
             , "way"
             , "memo"
+            , "canceltime"
             , "ordernum"
     };
     ArrayList<HashMap<String, String>> mSqlGetArrayMap;
@@ -99,7 +100,7 @@ public class Frag05 extends Fragment implements
             selectData = selectData.substring(1, selectData.length() - 1);
             //Log.e(TAG, "onClick: selectData:" + selectData);
 
-            String sql = "select " + selectData + " from etcamp_order where canceltime=='' ";
+            String sql = "select " + selectData + " from etcamp_order where 1 ";
             sql += " order by firstymd desc";
             String sqlLimit = sql + " limit " + Config.maxSrcCount + " OFFSET " + mDataOffSet;
             //Log.e(TAG, "updateView: sql:" + sqlLimit);
@@ -178,6 +179,15 @@ public class Frag05 extends Fragment implements
                             }
                             mTableRow.addView(textView2, j);
                             break;
+                        case "canceltime":
+                            break;
+                        case "memo":
+                            if(!map.get("canceltime").trim().equals("")){
+                                mTableRow.addView(makeTextView("キャンセル："+map.get("canceltime"), 15), j);
+                            }else{
+                                mTableRow.addView(makeTextView(data, 15), j);
+                            }
+                            break;
                         default:
                             mTableRow.addView(makeTextView(data, 15), j);
                             break;
@@ -185,7 +195,13 @@ public class Frag05 extends Fragment implements
                     }
                 }
 
-                mTableRow.setBackgroundColor(0xFF4CD7C9);
+                if(!map.get("canceltime").trim().equals("")){
+
+                    mTableRow.setBackgroundColor(Color.GRAY);
+                }else{
+
+                    mTableRow.setBackgroundColor(0xFF4CD7C9);
+                }
                 mTableLayout.addView(mTableRow, mTableLayout.getChildCount());
             }
 
@@ -197,13 +213,13 @@ public class Frag05 extends Fragment implements
         }
     }
 
-    //最大の記録表示
+    //最大の表示数表示 表示数:もっと
     private void viewMoreSrc(View view) {
         TableLayout mTableLayout = view.findViewById(R.id.frag05_予約一覧);
 
         String selectData = Arrays.toString(dataArray);
         selectData = selectData.substring(1, selectData.length() - 1);
-        String sql = "select " + selectData + " from etcamp_order where canceltime=='' ";
+        String sql = "select " + selectData + " from etcamp_order where 1 ";
         sql += " order by firstymd desc";
 
         int getSqlCount = DataCenter.pData.getSqlCount(sql);

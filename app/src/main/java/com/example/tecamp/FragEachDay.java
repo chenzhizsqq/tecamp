@@ -58,6 +58,7 @@ public class FragEachDay extends Fragment implements
             , "site_count"
             , "way"
             , "memo"
+            , "canceltime"
             , "ordernum"
     };
     ArrayList<HashMap<String, String>> mDataArrayMap;
@@ -182,10 +183,10 @@ public class FragEachDay extends Fragment implements
             sql += " order by firstymd desc";*/
             String sql = "select firstymd, days, username||' '||username2,\n" +
                     " CASE WHEN count_child >0 THEN (count_adult + count_child) ||'('||count_child||')' ELSE (count_adult + count_child) END, \n" +
-                    "site_count, way, memo, a.ordernum as ordernum\n" +
+                    "site_count, way, memo,canceltime, a.ordernum as ordernum\n" +
                     " from etcamp_order as a,etcamp_SiteList as b \n" +
                     " where a.ordernum=b.ordernum and b.ymd=='"+pDateManager.getYMD()+"'  order by firstymd ";
-            //Log.e(TAG, "updateView: sql:"+sql );
+            Log.e(TAG, "updateView: sql:"+sql );
 
 
             mDataArrayMap = DataCenter.pData.SqlGetArrayMap(sql);
@@ -210,6 +211,8 @@ public class FragEachDay extends Fragment implements
                     switch (dataArray[j]) {
                         case "ordernum":
                             break;
+                        case "canceltime":
+                            break;
                         case "days":
 
                             if(Integer.parseInt(data)>1){
@@ -231,7 +234,7 @@ public class FragEachDay extends Fragment implements
                             mTableRow.addView(makeTextView(srcDate /*+":"+mTableLayout.getChildCount()*/), j);
                             break;
                         case "username||' '||username2":
-                            TextView textView = makeTextView(data, 15);
+                            TextView textView = makeTextView(data);
                             if (data.trim().length() > 0) {
 
                                 textView.setTextColor(Color.RED);
@@ -275,6 +278,13 @@ public class FragEachDay extends Fragment implements
                             }
                             mTableRow.addView(textView2, j);
                             break;
+                        case "memo":
+                            if(!map.get("canceltime").trim().equals("")){
+                                mTableRow.addView(makeTextView("キャンセル："+map.get("canceltime"), 15), j);
+                            }else{
+                                mTableRow.addView(makeTextView(data, 15), j);
+                            }
+                            break;
                         default:
                             mTableRow.addView(makeTextView(data, 15), j);
                             break;
@@ -282,7 +292,13 @@ public class FragEachDay extends Fragment implements
                     }
                 }
 
-                mTableRow.setBackgroundColor(0xFF4CD7C9);
+                if(!map.get("canceltime").trim().equals("")){
+
+                    mTableRow.setBackgroundColor(Color.GRAY);
+                }else{
+
+                    mTableRow.setBackgroundColor(0xFF4CD7C9);
+                }
                 mTableLayout.addView(mTableRow, mTableLayout.getChildCount());
             }
 
