@@ -185,7 +185,7 @@ public class FragEachDay extends Fragment implements
                     " CASE WHEN count_child >0 THEN (count_adult + count_child) ||'('||count_child||')' ELSE (count_adult + count_child) END, \n" +
                     "site_count, way, memo,canceltime, a.ordernum as ordernum\n" +
                     " from etcamp_order as a,etcamp_SiteList as b \n" +
-                    " where a.ordernum=b.ordernum and b.ymd=='"+pDateManager.getYMD()+"'  order by firstymd ";
+                    " where a.ordernum=b.ordernum and b.ymd=='"+pDateManager.getYMD()+"'   group by b.orderid order by firstymd ";
             Log.e(TAG, "updateView: sql:"+sql );
 
 
@@ -254,33 +254,37 @@ public class FragEachDay extends Fragment implements
                             mTableRow.addView(textView, j);
                             break;
                         case "site_count":
-                            String orderNum = map.get("ordernum");
+                            if(!map.get("canceltime").trim().equals("")){
+                                mTableRow.addView(makeTextView("キャンセル："), j);
+                            }else {
+                                String orderNum = map.get("ordernum");
 
-                            ArrayList<String> nListGetSiteRoomsName = DataCenter.pData.getSiteRoomsName(orderNum);
-                            String s = nListGetSiteRoomsName.toString();
-                            String s2 = s.substring(1, s.length() - 1);
+                                ArrayList<String> nListGetSiteRoomsName = DataCenter.pData.getSiteRoomsName(orderNum);
+                                String s = nListGetSiteRoomsName.toString();
+                                String s2 = s.substring(1, s.length() - 1);
 
-                            TextView textView2 = makeTextView(s2, 15);
-                            textView2.setTextColor(Color.RED);
-                            if (!s2.isEmpty()) {
+                                TextView textView2 = makeTextView(s2, 15);
+                                textView2.setTextColor(Color.RED);
+                                if (!s2.isEmpty()) {
 
-                                textView2.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, pDateManager.getYMD());
-                                        frag01SiteFragment.setTargetFragment(FragEachDay.this, 1);
-                                        assert getFragmentManager() != null;
-                                        frag01SiteFragment.show(getFragmentManager(), "frag01SiteFragment");
+                                    textView2.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, pDateManager.getYMD());
+                                            frag01SiteFragment.setTargetFragment(FragEachDay.this, 1);
+                                            assert getFragmentManager() != null;
+                                            frag01SiteFragment.show(getFragmentManager(), "frag01SiteFragment");
 
-                                    }
+                                        }
 
-                                });
+                                    });
+                                }
+                                mTableRow.addView(textView2, j);
                             }
-                            mTableRow.addView(textView2, j);
                             break;
                         case "memo":
                             if(!map.get("canceltime").trim().equals("")){
-                                mTableRow.addView(makeTextView("キャンセル："+map.get("canceltime"), 15), j);
+                                mTableRow.addView(makeTextView(map.get("canceltime"), 15), j);
                             }else{
                                 mTableRow.addView(makeTextView(data, 15), j);
                             }
