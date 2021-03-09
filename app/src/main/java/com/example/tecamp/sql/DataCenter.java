@@ -46,7 +46,7 @@ public class DataCenter {
             //DataCenter.pData.Json2SqlSite();
             Rooms.mapRoomNames = DataCenter.pData.getSqlRoomNames();
 
-            Log.e(TAG, "UpdateData: updateDataTimes:" + updateDataTimes);
+            Log.d(TAG, "UpdateData: updateDataTimes:" + updateDataTimes);
             Log.d(TAG, "UpdateData: last status:" + status);
         }catch (Exception e){
             Log.e(TAG, "UpdateData: ",e );
