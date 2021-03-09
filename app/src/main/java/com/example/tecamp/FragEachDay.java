@@ -67,6 +67,8 @@ public class FragEachDay extends Fragment implements
         super.onCreate(savedInstanceState);
     }
 
+    View view=null;
+    private String lastSelectTime="";
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -75,8 +77,8 @@ public class FragEachDay extends Fragment implements
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        Log.e(TAG, "onCreateView: begin" );
-        View view = inflater.inflate(R.layout.frag_each_day_layout, container, false);
+        //Log.e(TAG, "onCreateView: begin" );
+        view = inflater.inflate(R.layout.frag_each_day_layout, container, false);
         ButterKnife.bind(this, view);
 
         mDataOffSet = 0;
@@ -92,7 +94,7 @@ public class FragEachDay extends Fragment implements
         buttonPre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e(TAG, "buttonPre onClick: begin" );
+                //Log.e(TAG, "buttonPre onClick: begin" );
                 pDateManager.addDay(-1);
 
                 TextView textViewDate=view.findViewById(R.id.textView_FragEachDay_booking_date);
@@ -124,7 +126,7 @@ public class FragEachDay extends Fragment implements
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                Log.e(TAG, "beforeTextChanged: " );
+                //Log.e(TAG, "beforeTextChanged: " );
 
             }
 
@@ -132,14 +134,14 @@ public class FragEachDay extends Fragment implements
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                Log.e(TAG, "onTextChanged: " );
+                //Log.e(TAG, "onTextChanged: " );
 
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
-                Log.e(TAG, "afterTextChanged: " );
+                //Log.e(TAG, "afterTextChanged: " );
                 updateView(view);
 
 
@@ -204,13 +206,30 @@ public class FragEachDay extends Fragment implements
                     String data = map.get(dataArray[j]);
                     String ordernum = map.get("ordernum");
                     //Log.e(TAG, "updateView: dataArray[j]:"+dataArray[j] );
+                    int nDays=0;
+                    DateManager pDateManagerFirstDay = new DateManager();
+
+                    pDateManagerFirstDay.setDate( map.get("firstymd"));
+                    //Log.e(TAG, "updateView: pDateManagerFirstDay.getYMD():"+pDateManagerFirstDay.getYMD() );
+                    nDays=Tools.differentDays(pDateManagerFirstDay.getDate(),pDateManager.getDate());
+                    //Log.e(TAG, "updateView: nDays:"+nDays );
                     switch (dataArray[j]) {
                         case "ordernum":
                             break;
+                        case "days":
+
+                            if(Integer.parseInt(data)>1){
+                                int t=nDays+1;
+
+                                mTableRow.addView(makeTextView(data+"("+t+")"), j);
+                            }else{
+
+                                mTableRow.addView(makeTextView(data), j);
+                            }
+                            break;
                         case "firstymd":
                             String srcDate = Tools.dataChange(data, "/");
-                            mTableRow.addView(makeTextView(srcDate /*+":"+mTableLayout.getChildCount()*/
-                                    , 15), j);
+                            mTableRow.addView(makeTextView(srcDate /*+":"+mTableLayout.getChildCount()*/), j);
                             break;
                         case "username||' '||username2":
                             TextView textView = makeTextView(data, 15);
@@ -233,9 +252,9 @@ public class FragEachDay extends Fragment implements
                             mTableRow.addView(textView, j);
                             break;
                         case "site_count":
-                            String tOrdernum = map.get("ordernum");
+                            String orderNum = map.get("ordernum");
 
-                            ArrayList<String> nListGetSiteRoomsName = DataCenter.pData.getSiteRoomsName(tOrdernum);
+                            ArrayList<String> nListGetSiteRoomsName = DataCenter.pData.getSiteRoomsName(orderNum);
                             String s = nListGetSiteRoomsName.toString();
                             String s2 = s.substring(1, s.length() - 1);
 
@@ -272,7 +291,13 @@ public class FragEachDay extends Fragment implements
             TextView textViewAmount=view.findViewById(R.id.FragEachDayAmount);
             textViewAmount.setText("数量："+n);
 
+            String srcSelectTime = pDateManager.getYMD("/");
+            if(!lastSelectTime.equals(srcSelectTime)){
+                lastSelectTime=srcSelectTime;
 
+                TextView textViewDate=view.findViewById(R.id.textView_FragEachDay_booking_date);
+                textViewDate.setText(""+srcSelectTime);
+            }
 
         } catch (Exception e) {
             Log.e(TAG, "onCreateView: ", e);
@@ -309,6 +334,15 @@ public class FragEachDay extends Fragment implements
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
+        //Log.e(TAG, "setUserVisibleHint: begin" );
+        if (isVisibleToUser) {
+
+            if(view!=null){
+
+                updateView(view);
+            }
+
+        }
     }
 
 
