@@ -206,12 +206,6 @@ public class FragEachDay extends Fragment implements
                     String data = map.get(dataArray[j]);
                     String ordernum = map.get("ordernum");
                     //Log.e(TAG, "updateView: dataArray[j]:"+dataArray[j] );
-                    int nDays=0;
-                    DateManager pDateManagerFirstDay = new DateManager();
-
-                    pDateManagerFirstDay.setDate( map.get("firstymd"));
-                    //Log.e(TAG, "updateView: pDateManagerFirstDay.getYMD():"+pDateManagerFirstDay.getYMD() );
-                    nDays=Tools.differentDays(pDateManagerFirstDay.getDate(),pDateManager.getDate());
                     //Log.e(TAG, "updateView: nDays:"+nDays );
                     switch (dataArray[j]) {
                         case "ordernum":
@@ -219,6 +213,11 @@ public class FragEachDay extends Fragment implements
                         case "days":
 
                             if(Integer.parseInt(data)>1){
+                                int nDays=0;
+                                DateManager pDateManagerFirstDay = new DateManager();
+
+                                pDateManagerFirstDay.setDate( map.get("firstymd"));
+                                nDays=Tools.differentDays(pDateManagerFirstDay.getDate(),pDateManager.getDate());
                                 int t=nDays+1;
 
                                 mTableRow.addView(makeTextView(data+"("+t+")"), j);
