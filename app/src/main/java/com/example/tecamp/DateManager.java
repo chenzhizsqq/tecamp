@@ -1,15 +1,24 @@
 package com.example.tecamp;
 
+import android.util.Log;
+
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class DateManager {
 
+    private static final String TAG = "DateManager";
     private Calendar calendar;
 
 
     public DateManager() {
         calendar = Calendar.getInstance();
+    }
+
+    public Date getDate(){
+        Date date = calendar.getTime();
+        return date;
     }
 
     public void resetNow() {
@@ -55,6 +64,17 @@ public class DateManager {
     }
 
     public void setDate(int year, int month, int day) {
+        calendar.set(year, month - 1, day);
+    }
+
+    public void setDate(String YYYYMMDD) {
+        //Log.e(TAG, "setDate: YYYYMMDD:"+YYYYMMDD );
+        int year=Integer.parseInt(YYYYMMDD.substring(0,4));
+        int month=Integer.parseInt(YYYYMMDD.substring(4,6));
+        int day=Integer.parseInt(YYYYMMDD.substring(6,8));
+        /*Log.e(TAG, "setDate: year:"+year );
+        Log.e(TAG, "setDate: month:"+month );
+        Log.e(TAG, "setDate: day:"+day );*/
         calendar.set(year, month - 1, day);
     }
 
