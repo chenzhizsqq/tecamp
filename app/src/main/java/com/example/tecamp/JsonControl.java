@@ -907,7 +907,8 @@ public class JsonControl {
 
         Cursor cursor = null;
         try {
-            String sql = "select siteid from etcamp_SiteList where ordernum = '" + _ordernum + "' and canceltime=='' group by siteid";
+            String sql = "select siteid from etcamp_SiteList where ordernum = '" + _ordernum + "'  group by siteid";
+            //Log.e(TAG, "getSiteRoomsID: sql:"+sql );
             cursor = mDB.rawQuery(sql, null);
 
             //データ追加
