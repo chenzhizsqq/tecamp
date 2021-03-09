@@ -247,7 +247,8 @@ public class Frag01SiteFragment extends DialogFragment {
         }
 
         //予約済みROOM
-        mSiteidArray = DataCenter.pData.SqlGetStringArray("select siteid from etcamp_SiteList where ymd = " + mDate);
+        mSiteidArray = DataCenter.pData.SqlGetStringArray("select siteid from etcamp_SiteList as a,etcamp_order as b" +
+                " where a.orderid = b.orderid and b.canceltime=='' and ymd =  " + mDate);
         mSiteidArray.forEach(s -> {
             //Log.e(TAG, "onCreateView: forEach "+s );
 

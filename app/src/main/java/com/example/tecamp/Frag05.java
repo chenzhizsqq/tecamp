@@ -155,35 +155,39 @@ public class Frag05 extends Fragment implements
                             mTableRow.addView(textView, j);
                             break;
                         case "site_count":
-                            String tOrdernum = map.get("ordernum");
+                            if(!map.get("canceltime").trim().equals("")){
+                                mTableRow.addView(makeTextView("キャンセル："), j);
+                            }else{
+                                String tOrdernum = map.get("ordernum");
 
-                            ArrayList<String> nListGetSiteRoomsName = DataCenter.pData.getSiteRoomsName(tOrdernum);
-                            String s = nListGetSiteRoomsName.toString();
-                            String s2 = s.substring(1, s.length() - 1);
+                                ArrayList<String> nListGetSiteRoomsName = DataCenter.pData.getSiteRoomsName(tOrdernum);
+                                String s = nListGetSiteRoomsName.toString();
+                                String s2 = s.substring(1, s.length() - 1);
 
-                            TextView textView2 = makeTextView(s2, 15);
-                            textView2.setTextColor(Color.RED);
-                            if (!s2.isEmpty()) {
+                                TextView textView2 = makeTextView(s2, 15);
+                                textView2.setTextColor(Color.RED);
+                                if (!s2.isEmpty()) {
 
-                                textView2.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, map.get("firstymd"));
-                                        frag01SiteFragment.setTargetFragment(Frag05.this, 1);
-                                        assert getFragmentManager() != null;
-                                        frag01SiteFragment.show(getFragmentManager(), "frag01SiteFragment");
+                                    textView2.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, map.get("firstymd"));
+                                            frag01SiteFragment.setTargetFragment(Frag05.this, 1);
+                                            assert getFragmentManager() != null;
+                                            frag01SiteFragment.show(getFragmentManager(), "frag01SiteFragment");
 
-                                    }
+                                        }
 
-                                });
+                                    });
+                                }
+                                mTableRow.addView(textView2, j);
                             }
-                            mTableRow.addView(textView2, j);
                             break;
                         case "canceltime":
                             break;
                         case "memo":
                             if(!map.get("canceltime").trim().equals("")){
-                                mTableRow.addView(makeTextView("キャンセル："+map.get("canceltime"), 15), j);
+                                mTableRow.addView(makeTextView(map.get("canceltime"), 15), j);
                             }else{
                                 mTableRow.addView(makeTextView(data, 15), j);
                             }
@@ -222,12 +226,14 @@ public class Frag05 extends Fragment implements
         String sql = "select " + selectData + " from etcamp_order where 1 ";
         sql += " order by firstymd desc";
 
-        int getSqlCount = DataCenter.pData.getSqlCount(sql);
+        //最大表示数
+        int getSqlMaxCount = DataCenter.pData.getSqlCount(sql);
+
         TableRow mTableRow = new TableRow(getActivity());
-        if (getSqlCount > mDataOffSet + Config.maxSrcCount) {
+        if (getSqlMaxCount > mDataOffSet + Config.maxSrcCount) {
             int nowCount = mDataOffSet + Config.maxSrcCount;
             mTableRow.addView(makeTextView("表示数：" + nowCount));
-            mTableRow.addView(makeTextView("/" + getSqlCount + "   ", 15));
+            mTableRow.addView(makeTextView("/" + getSqlMaxCount + "   ", 15));
 
             Button updateButton = new Button(getActivity());
 
@@ -248,8 +254,8 @@ public class Frag05 extends Fragment implements
             });
             mTableRow.addView(updateButton);
         } else {
-            mTableRow.addView(makeTextView("表示数：" + getSqlCount));
-            mTableRow.addView(makeTextView("/" + getSqlCount + "   "));
+            mTableRow.addView(makeTextView("表示数：" + getSqlMaxCount));
+            mTableRow.addView(makeTextView("/" + getSqlMaxCount + "   "));
 
             TextView textViewMax = new TextView(getActivity());
 
