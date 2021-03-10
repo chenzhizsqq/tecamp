@@ -60,7 +60,8 @@ public class MainActivity extends AppCompatActivity{
         sectionsPagerAdapter.add(new Frag04(viewPager),"電話受付");;
         sectionsPagerAdapter.add(new FragEachDay(viewPager),"予約一覧 E");
         sectionsPagerAdapter.add(new Frag02(viewPager),"カレンダー");
-        sectionsPagerAdapter.add(new Frag03(viewPager),"予約検索");
+        //sectionsPagerAdapter.add(new Frag03(viewPager),"予約検索");
+        sectionsPagerAdapter.add(new FragSelect(viewPager),"予約検索");
         /*
         sectionsPagerAdapter.add(new Frag05(viewPager),"予約一覧list");
         sectionsPagerAdapter.add(new FragEachDay(viewPager),"予約一覧E");
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity{
         tabs.setupWithViewPager(viewPager);
 
         //最初表示Frag
-        viewPager.setCurrentItem(2);
+        viewPager.setCurrentItem(4);
     }
 
     private Timer timer;
