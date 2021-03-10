@@ -83,10 +83,12 @@ public class FragSelect extends Fragment implements
     //TextView  fragSelect_textView_stay_date
     TextView textViewStayDate;
     String mStayDate="";
+    String mSrcStayDate="";
 
     //TextView  fragSelect_textView_booking_date
     TextView textViewBookingDate;
     String mBookingDate="";
+    String mSrcBookingDate="";
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -133,12 +135,14 @@ public class FragSelect extends Fragment implements
                 mSelectName="";
 
                 TextView t2 = view.findViewById(R.id.frag_select_result_宿泊日);
-                t2.setText(mStayDate);
+                t2.setText(mSrcStayDate);
                 mStayDate="";
+                mSrcStayDate="";
 
                 TextView t3 = view.findViewById(R.id.frag_select_result_予約日);
-                t3.setText(mBookingDate);
+                t3.setText(mSrcBookingDate);
                 mBookingDate="";
+                mSrcBookingDate="";
 
 
                 EditText t4 = view.findViewById(R.id.fragSelectEditTextName);
@@ -197,22 +201,11 @@ public class FragSelect extends Fragment implements
 
     private void updateView(View view, String name) {
         try {
+            String sql = getSql(name);
 
-            //データ処理
-            String selectData = Arrays.toString(dataArray);
-            selectData = selectData.substring(1, selectData.length() - 1);
-            //Log.e(TAG, "onClick: selectData:" + selectData);
-
-            String sql = "select " + selectData + " from etcamp_order where username||' '||username2 like '%" + name + "%' ";
-            if(!mStayDate.equals("")){
-                sql +=" and firstymd like '"+mStayDate+"%' ";
-            }
-            if(!mBookingDate.equals("")){
-                sql +=" and createtime like '"+mBookingDate+"%' ";
-            }
-            sql += " order by firstymd desc";
+            //限定数量sql追加
             String sqlLimit = sql + " limit " + Config.maxSrcCount + " OFFSET " + mDataOffSet;
-            Log.e(TAG, "updateView: sql:" + sqlLimit);
+            //Log.e(TAG, "updateView: sql:" + sqlLimit);
 
 
             mSqlGetArrayMap = DataCenter.pData.SqlGetArrayMap(sqlLimit);
@@ -326,21 +319,30 @@ public class FragSelect extends Fragment implements
         }
     }
 
+    @NotNull
+    private String getSql(String name) {
+        //データ処理
+        String selectData = Arrays.toString(dataArray);
+        selectData = selectData.substring(1, selectData.length() - 1);
+        //Log.e(TAG, "onClick: selectData:" + selectData);
+
+        String sql = "select " + selectData + " from etcamp_order where username||' '||username2 like '%" + name + "%' ";
+        if (!mStayDate.equals("")) {
+            sql += " and firstymd like '" + mStayDate + "%' ";
+        }
+        if (!mBookingDate.equals("")) {
+            sql += " and createtime like '" + mBookingDate + "%' ";
+        }
+        sql += " order by firstymd desc";
+        return sql;
+    }
+
     //最大の表示数表示 表示数:もっと
     private void viewMoreSrc(View view, String name) {
         TableLayout mTableLayout = view.findViewById(R.id.frag_select_予約一覧);
 
-        String selectData = Arrays.toString(dataArray);
-        selectData = selectData.substring(1, selectData.length() - 1);
-        String sql = "select " + selectData + " from etcamp_order where username||' '||username2 like '%" + name + "%' ";
-        if(!mStayDate.equals("")){
-            sql +=" and firstymd like '"+mStayDate+"%' ";
-        }
-        if(!mBookingDate.equals("")){
-            sql +=" and createtime like '"+mBookingDate+"%' ";
-        }
-        sql += " order by firstymd desc";
-        Log.e(TAG, "viewMoreSrc: sql:" + sql);
+        String sql = getSql(name);
+        //Log.e(TAG, "viewMoreSrc: sql:" + sql);
 
         //最大表示数
         int getSqlMaxCount = DataCenter.pData.getSqlCount(sql);
@@ -363,7 +365,7 @@ public class FragSelect extends Fragment implements
                     mTableLayout.removeViewsInLayout(mTableLayout.getChildCount() - 1, 1);
                     mDataOffSet += Config.maxSrcCount;
                     updateView(view, mSelectName);
-                    Log.e(TAG, "onClick: 更新");
+                    //Log.e(TAG, "onClick: 更新");
 
                 }
 
@@ -482,19 +484,21 @@ public class FragSelect extends Fragment implements
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
         try {
-            Log.e(TAG, "onDateSet: begin");
+            //Log.e(TAG, "onDateSet: begin");
 
-            Log.e(TAG, "onDateSet: nSelectView:" + nSelectView);
+            //Log.e(TAG, "onDateSet: nSelectView:" + nSelectView);
 
             pDateManager.setDate(year, month + 1, dayOfMonth);
-            Log.e(TAG, "onDateSet: pDateManager.getYMD():" + pDateManager.getYMD());
+            //Log.e(TAG, "onDateSet: pDateManager.getYMD():" + pDateManager.getYMD());
             switch (nSelectView) {
                 case 1:
-                    textViewStayDate.setText(pDateManager.getYMD());
+                    textViewStayDate.setText(pDateManager.getYMD("/"));
+                    mSrcStayDate=pDateManager.getYMD("/");
                     mStayDate=pDateManager.getYMD();
                     break;
                 case 2:
-                    textViewBookingDate.setText(pDateManager.getYMD());
+                    textViewBookingDate.setText(pDateManager.getYMD("/"));
+                    mSrcBookingDate=pDateManager.getYMD("/");
                     mBookingDate=pDateManager.getYMD();
                     break;
             }
