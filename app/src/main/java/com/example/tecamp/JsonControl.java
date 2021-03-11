@@ -993,10 +993,20 @@ public class JsonControl {
 
             /*String sql = "select firstymd,count(orderid) from etcamp_order where" +
                     " canceltime like '' and firstymd>" + yearMonth + "00 and firstymd<" + yearMonth + "32 group by firstymd";*/
-            String sql = "select ymd,count(orderid) from etcamp_SiteList where  ymd>" + yearMonth + "00 and ymd<" + yearMonth + "32 group by ymd";
+            //String sql = "select ymd,count(orderid) from etcamp_SiteList where  ymd>" + yearMonth + "00 and ymd<" + yearMonth + "32 group by ymd";
+            /*select ymd,count(a.orderid) from etcamp_SiteList as a,etcamp_order as b where
+            ymd>20210300 and ymd<20210332
+            and a.orderid=b.orderid
+            and b.canceltime==''
+            group by ymd*/
+            String sql = "select ymd,count(a.orderid) from etcamp_SiteList as a,etcamp_order as b where\n" +
+                    "  ymd>" + yearMonth + "00 and ymd<" + yearMonth + "32\n" +
+                    " and a.orderid=b.orderid\n" +
+                    "  and b.canceltime==''\n" +
+                    "   group by ymd";
             cursor = mDB.rawQuery(sql, null);
 
-            //Log.e(TAG, "getRoomsOneMonth: sql:"+sql );
+            Log.d(TAG, "getRoomsOneMonth: sql:"+sql );
 
             //データ追加
             boolean isEof = cursor.moveToFirst();

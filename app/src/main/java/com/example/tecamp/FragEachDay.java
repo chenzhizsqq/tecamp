@@ -185,8 +185,8 @@ public class FragEachDay extends Fragment implements
                     " CASE WHEN count_child >0 THEN (count_adult + count_child) ||'('||count_child||')' ELSE (count_adult + count_child) END, \n" +
                     "site_count, way, memo,canceltime, a.ordernum as ordernum\n" +
                     " from etcamp_order as a,etcamp_SiteList as b \n" +
-                    " where a.ordernum=b.ordernum and b.ymd=='"+pDateManager.getYMD()+"'   group by b.orderid order by firstymd ";
-            Log.e(TAG, "updateView: sql:"+sql );
+                    " where a.ordernum=b.ordernum and b.ymd=='"+pDateManager.getYMD()+"'   group by b.orderid order by canceltime and  firstymd";
+            Log.d(TAG, "updateView: sql:"+sql );
 
 
             mDataArrayMap = DataCenter.pData.SqlGetArrayMap(sql);
