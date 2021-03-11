@@ -3,6 +3,7 @@ package com.example.tecamp;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,6 +14,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -39,10 +41,7 @@ import java.util.Locale;
 import butterknife.ButterKnife;
 
 //予約一覧 ALL
-public class FragSelect extends Fragment implements
-        Frag01DialogFragment.OnInputSelected
-        , DatePickerDialog.OnDateSetListener
-        , TextWatcher {
+public class FragSelect extends Fragment implements TextWatcher {
 
     ViewPager viewPager;
 
@@ -56,6 +55,8 @@ public class FragSelect extends Fragment implements
 
     private final DateManager pDateManager = new DateManager();
 
+    DateManager pDateManager1 = new DateManager();
+    DateManager pDateManager2 = new DateManager();
 
     //Show rows 宿泊初日	泊数	代表者	人数	サイト	乗物	備考
     String[] dataArray = {
@@ -81,14 +82,14 @@ public class FragSelect extends Fragment implements
 
 
     //TextView  fragSelect_textView_stay_date
-    TextView textViewStayDate;
-    String mStayDate="";
-    String mSrcStayDate="";
+    String mStayDate = "";
+    String mSrcStayDate = "";
 
     //TextView  fragSelect_textView_booking_date
-    TextView textViewBookingDate;
-    String mBookingDate="";
-    String mSrcBookingDate="";
+
+    String mBookingDate = "";
+    String mSrcBookingDate = "";
+
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -107,6 +108,12 @@ public class FragSelect extends Fragment implements
         mTableLayout.removeViewsInLayout(1, mTableLayout.getChildCount() - 1);
 
 
+        //TextView  fragSelect_textView_stay_date
+        //TextView textViewStayDate = view.findViewById(R.id.fragSelect_textView_stay_date);
+
+        //TextView  fragSelect_textView_booking_date
+        //TextView textViewBookingDate = view.findViewById(R.id.fragSelect_textView_booking_date);
+
         //EditText  fragSelectEditTextName
         EditText SelectNameEditText = (EditText) view.findViewById(R.id.fragSelectEditTextName);
 
@@ -117,83 +124,148 @@ public class FragSelect extends Fragment implements
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e(TAG, "buttonSearch onClick: begin");
+                Log.d(TAG, "buttonSearch onClick: begin");
 
 
                 TableLayout mTableLayout = view.findViewById(R.id.frag_select_予約一覧);
                 mTableLayout.removeViewsInLayout(1, mTableLayout.getChildCount() - 1);
 
-                mSelectName = SelectNameEditText.getText().toString();
-                updateView(view, mSelectName);
-
-
-                TableRow tableRow_result=view.findViewById(R.id.TableRow_result);
-                tableRow_result.setVisibility(View.VISIBLE);
+                /*mSelectName = SelectNameEditText.getText().toString();
 
                 TextView t1 = view.findViewById(R.id.frag_select_result_名前);
                 t1.setText(mSelectName);
-                mSelectName="";
 
                 TextView t2 = view.findViewById(R.id.frag_select_result_宿泊日);
                 t2.setText(mSrcStayDate);
-                mStayDate="";
-                mSrcStayDate="";
 
                 TextView t3 = view.findViewById(R.id.frag_select_result_予約日);
-                t3.setText(mSrcBookingDate);
-                mBookingDate="";
-                mSrcBookingDate="";
+                t3.setText(mSrcBookingDate);*/
 
 
-                EditText t4 = view.findViewById(R.id.fragSelectEditTextName);
-                t4.setText("");
+                //textViewStayDate.setText("選択");
 
-                TextView t5 = view.findViewById(R.id.fragSelect_textView_stay_date);
-                t5.setText("");
+                //textViewBookingDate.setText("選択");
 
-                TextView t6 = view.findViewById(R.id.fragSelect_textView_booking_date);
-                t6.setText("");
+
+                /*SelectNameEditText.requestFocus();
+                InputMethodManager manager =
+                        (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                manager.hideSoftInputFromWindow(view.getWindowToken(), 0);*/
+
+
+                updateView(view, mSelectName);
             }
         });
 
-        //TextView  fragSelect_textView_stay_date
-        textViewStayDate = view.findViewById(R.id.fragSelect_textView_stay_date);
+
+        //Button    fragSelect_name_enter
+        Button mSelectNameEnter = view.findViewById(R.id.fragSelect_name_enter);
+        mSelectNameEnter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSelectName = SelectNameEditText.getText().toString();
+
+                TextView t1 = view.findViewById(R.id.frag_select_result_名前);
+                t1.setText(mSelectName);
+            }
+
+        });
+
+        //Button    fragSelect_clear
+        Button mFragSelectClear = view.findViewById(R.id.fragSelect_clear);
+        mFragSelectClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mSelectName = "";
+                mStayDate = "";
+                mSrcStayDate = "";
+                mBookingDate = "";
+                mSrcBookingDate = "";
+
+                SelectNameEditText.setText("");
+
+                TextView t1 = view.findViewById(R.id.frag_select_result_名前);
+                t1.setText(mSelectName);
+
+                TextView t2 = view.findViewById(R.id.frag_select_result_宿泊日);
+                t2.setText(mSrcStayDate);
+
+                TextView t3 = view.findViewById(R.id.frag_select_result_予約日);
+                t3.setText(mSrcBookingDate);
+            }
+        });
 
         //Button    fragSelect_pick_date_stay_date
         Button mOpenDialog_stay_date = view.findViewById(R.id.fragSelect_pick_date_stay_date);
         mOpenDialog_stay_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //textViewStayDate.setText("選択");
 
-                nSelectView = 1;
-                DatePick dialog = new DatePick();
-                dialog.setTargetFragment(FragSelect.this, 1);
-                dialog.show(getFragmentManager(), "stay date Dialog");
+                DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedYear, int selectedMonth, int selectedDay) {
+                        Log.d(TAG, "onDateSet: selectedYear:" + selectedYear
+                                + ",  selectedMonth:" + selectedMonth
+                                + ",  selectedDay:" + selectedDay);
+
+                        pDateManager1.setDate(selectedYear, selectedMonth + 1, selectedDay);
+                        //textViewStayDate.setText(pDateManager1.getYMD("/"));
+                        mSrcStayDate = pDateManager1.getYMD("/");
+                        mStayDate = pDateManager1.getYMD();
+
+                        SelectNameEditText.requestFocus();
+                        InputMethodManager manager =
+                                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+
+                        TextView t2 = view.findViewById(R.id.frag_select_result_宿泊日);
+                        t2.setText(mSrcStayDate);
+                    }
+                }, pDateManager1.getYear(), pDateManager1.getMonth() - 1, pDateManager1.getDay());
+                mDatePicker.show();
             }
         });
 
-        //TextView  fragSelect_textView_booking_date
-        textViewBookingDate = view.findViewById(R.id.fragSelect_textView_booking_date);
 
         //Button    fragSelect_pick_date_booking_date
         Button mOpenDialog_booking_date = view.findViewById(R.id.fragSelect_pick_date_booking_date);
         mOpenDialog_booking_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //textViewBookingDate.setText("選択");
 
-                nSelectView = 2;
-                DatePick dialog = new DatePick();
-                dialog.setTargetFragment(FragSelect.this, 1);
-                dialog.show(getFragmentManager(), "booking date Dialog");
+                DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedYear, int selectedMonth, int selectedDay) {
+                        Log.d(TAG, "onDateSet: selectedYear:" + selectedYear
+                                + ",  selectedMonth:" + selectedMonth
+                                + ",  selectedDay:" + selectedDay);
 
+                        pDateManager2.setDate(selectedYear, selectedMonth + 1, selectedDay);
+                        //textViewBookingDate.setText(pDateManager2.getYMD("/"));
+                        mSrcBookingDate = pDateManager2.getYMD("/");
+                        mBookingDate = pDateManager2.getYMD();
+
+
+                        SelectNameEditText.requestFocus();
+                        InputMethodManager manager =
+                                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                        TextView t3 = view.findViewById(R.id.frag_select_result_予約日);
+                        t3.setText(mSrcBookingDate);
+                    }
+                }, pDateManager2.getYear(), pDateManager2.getMonth() - 1, pDateManager2.getDay());
+                mDatePicker.show();
 
             }
         });
 
         //TableRow_result
-        TableRow tableRow_result=view.findViewById(R.id.TableRow_result);
-        tableRow_result.setVisibility(View.INVISIBLE);
-        tableRow_result.setMinimumHeight(0);
+        TableRow tableRow_result = view.findViewById(R.id.TableRow_result);
+        /*tableRow_result.setVisibility(View.INVISIBLE);*/
+
 
         return view;
     }
@@ -201,11 +273,12 @@ public class FragSelect extends Fragment implements
 
     private void updateView(View view, String name) {
         try {
+            Log.d(TAG, "updateView: name:" + name);
             String sql = getSql(name);
 
             //限定数量sql追加
             String sqlLimit = sql + " limit " + Config.maxSrcCount + " OFFSET " + mDataOffSet;
-            //Log.e(TAG, "updateView: sql:" + sqlLimit);
+            Log.d(TAG, "updateView: sql:" + sqlLimit);
 
 
             mSqlGetArrayMap = DataCenter.pData.SqlGetArrayMap(sqlLimit);
@@ -217,12 +290,12 @@ public class FragSelect extends Fragment implements
 
             //TableLayout データ各行処理
             for (int i = 0; i < mSqlGetArrayMap.size(); i++) {
-                //Log.e(TAG, "onClick: mSqlGetArrayMap:"+i+":"+mSqlGetArrayMap.get(i) );
+                //Log.d(TAG, "onClick: mSqlGetArrayMap:"+i+":"+mSqlGetArrayMap.get(i) );
 
                 TableRow mTableRow = new TableRow(getActivity());
 
                 HashMap<String, String> map = mSqlGetArrayMap.get(i);
-                //Log.e(TAG, "onClick: map:" + map.toString());
+                //Log.d(TAG, "onClick: map:" + map.toString());
 
                 for (int j = 0; j < dataArray.length; j++) {
                     String data = map.get(dataArray[j]);
@@ -324,7 +397,7 @@ public class FragSelect extends Fragment implements
         //データ処理
         String selectData = Arrays.toString(dataArray);
         selectData = selectData.substring(1, selectData.length() - 1);
-        //Log.e(TAG, "onClick: selectData:" + selectData);
+        Log.d(TAG, "onClick: selectData:" + selectData);
 
         String sql = "select " + selectData + " from etcamp_order where username||' '||username2 like '%" + name + "%' ";
         if (!mStayDate.equals("")) {
@@ -342,7 +415,7 @@ public class FragSelect extends Fragment implements
         TableLayout mTableLayout = view.findViewById(R.id.frag_select_予約一覧);
 
         String sql = getSql(name);
-        //Log.e(TAG, "viewMoreSrc: sql:" + sql);
+        Log.d(TAG, "viewMoreSrc: sql:" + sql);
 
         //最大表示数
         int getSqlMaxCount = DataCenter.pData.getSqlCount(sql);
@@ -365,7 +438,7 @@ public class FragSelect extends Fragment implements
                     mTableLayout.removeViewsInLayout(mTableLayout.getChildCount() - 1, 1);
                     mDataOffSet += Config.maxSrcCount;
                     updateView(view, mSelectName);
-                    //Log.e(TAG, "onClick: 更新");
+                    Log.d(TAG, "onClick: 更新");
 
                 }
 
@@ -397,7 +470,7 @@ public class FragSelect extends Fragment implements
         textView.setGravity(Gravity.CENTER);
         //textView.setTextSize(20);
         textView.setPadding(5, 10, 5, 10);
-        //Log.e(TAG, "makeTextView: text:"+text );
+        //Log.d(TAG, "makeTextView: text:"+text );
         return textView;
     }
 
@@ -408,7 +481,7 @@ public class FragSelect extends Fragment implements
         if (text.length() > maxLength) {
             mText += "...";
         }
-        //Log.e(TAG, "makeTextView: mText:"+mText );
+        //Log.d(TAG, "makeTextView: mText:"+mText );
         return makeTextView(mText);
     }
 
@@ -470,42 +543,11 @@ public class FragSelect extends Fragment implements
     public void setUserVisibleHint(boolean isVisibleToUser) {
     }
 
-
-    @Override
-    public void sendInput(String input) {
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
 
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
-        try {
-            //Log.e(TAG, "onDateSet: begin");
-
-            //Log.e(TAG, "onDateSet: nSelectView:" + nSelectView);
-
-            pDateManager.setDate(year, month + 1, dayOfMonth);
-            //Log.e(TAG, "onDateSet: pDateManager.getYMD():" + pDateManager.getYMD());
-            switch (nSelectView) {
-                case 1:
-                    textViewStayDate.setText(pDateManager.getYMD("/"));
-                    mSrcStayDate=pDateManager.getYMD("/");
-                    mStayDate=pDateManager.getYMD();
-                    break;
-                case 2:
-                    textViewBookingDate.setText(pDateManager.getYMD("/"));
-                    mSrcBookingDate=pDateManager.getYMD("/");
-                    mBookingDate=pDateManager.getYMD();
-                    break;
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "onDateSet: ", e);
-        }
-    }
 }
 
 //特定日期 按钮 end
