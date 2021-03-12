@@ -50,19 +50,19 @@ public class JsonControl {
     }
 
     public String getUid() {
-        return this.uid;
+        return uid;
     }
 
     public void setUid(String uid) {
-        this.uid = uid;
+        JsonControl.uid = uid;
     }
 
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        JsonControl.password = password;
     }
 
     private static String uid = "";
@@ -104,11 +104,11 @@ public class JsonControl {
     }
 
     public String getLoginToken() {
-        return this.mLoginToken;
+        return mLoginToken;
     }
 
     public void setLoginToken(String loginToken) {
-        Log.d(TAG + ":setLoginToken", loginToken);
+        Log.d(TAG, ":setLoginToken:" + loginToken);
         mLoginToken = loginToken;
     }
 
@@ -134,6 +134,7 @@ public class JsonControl {
             Response response = null;
             response = client.newCall(request).execute();
             if (response.isSuccessful()) {
+                assert response.body() != null;
                 getResult = response.body().string();
                 mJsonObjLogin = new JSONObject(getResult);
                 Log.d(TAG, "LoginInit: getResult:" + getResult);
@@ -1006,7 +1007,7 @@ public class JsonControl {
                     "   group by ymd";
             cursor = mDB.rawQuery(sql, null);
 
-            Log.d(TAG, "getRoomsOneMonth: sql:"+sql );
+            Log.d(TAG, "getRoomsOneMonth: sql:" + sql);
 
             //データ追加
             boolean isEof = cursor.moveToFirst();
@@ -1034,7 +1035,7 @@ public class JsonControl {
                     "        left join etcamp_site s on (s.siteid= o.siteid) " +
                     " where o.ordernum = '" + _ordernum + "' group by o.siteid";*/
 
-            String sql = "SELECT sitename FROM etcamp_SiteList where siteid>0 and ordernum = '"+_ordernum+"' group by siteid";
+            String sql = "SELECT sitename FROM etcamp_SiteList where siteid>0 and ordernum = '" + _ordernum + "' group by siteid";
 
 
             cursor = mDB.rawQuery(sql, null);
