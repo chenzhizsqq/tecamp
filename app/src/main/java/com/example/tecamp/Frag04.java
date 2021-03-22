@@ -88,12 +88,16 @@ public class Frag04 extends Fragment implements
 
             for (int i = 0; i < mSrcDays; i++) {
                 arrayDate[i].addDay(_addDay);
-                textView_Src_Days[i].setText(arrayDate[i].getYear() + "/" + arrayDate[i].getMonth() + "/" + arrayDate[i].getDay());
+
+                //textView_Src_Days[i].setText(arrayDate[i].getYear() + "/" + arrayDate[i].getMonth() + "/" + arrayDate[i].getDay());
+                textView_Src_Days[i].setText(Tools.dataChange(arrayDate[i].getYMD(), "/"));
+
                 //textView_Src_Days[i].setText(arrayDate[i].getYMD());
             }
 
             TextView TV_frag04_current_date = tableLayout_menu.findViewById(R.id.frag04_current_date);
-            TV_frag04_current_date.setText(arrayDate[0].getYear() + "/" + arrayDate[0].getMonth() + "/" + arrayDate[0].getDay());
+            //TV_frag04_current_date.setText(arrayDate[0].getYear() + "/" + arrayDate[0].getMonth() + "/" + arrayDate[0].getDay());
+            TV_frag04_current_date.setText(Tools.dataChange(arrayDate[0].getYMD(), "/"));
 
             for (int i = 0; i < mSrcDays; i++) {
                 //Log.e(TAG, "onCreate: arrayDateManager:" + arrayDate[i].getYMD());
@@ -162,13 +166,13 @@ public class Frag04 extends Fragment implements
             textView_Src_Days[4] = tableLayout_table.findViewById(R.id.Frag04_textView_date_4);
             textView_Src_Days[5] = tableLayout_table.findViewById(R.id.Frag04_textView_date_5);
             textView_Src_Days[6] = tableLayout_table.findViewById(R.id.Frag04_textView_date_6);
-            for (int i = 0; i < mSrcDays; i++) {
+            /*for (int i = 0; i < mSrcDays; i++) {
                 textView_Src_Days[i].setText(arrayDate[i].getMonth() + "/" + arrayDate[i].getDay());
                 textView_Src_Days[i].setText(arrayDate[i].getYMD());
-            }
+            }*/
 
             TextView TV_frag04_current_date = tableLayout_menu.findViewById(R.id.frag04_current_date);
-            TV_frag04_current_date.setText(arrayDate[0].getYear() + "/" + arrayDate[0].getMonth() + "/" + arrayDate[0].getDay());
+            //TV_frag04_current_date.setText(arrayDate[0].getYear() + "/" + arrayDate[0].getMonth() + "/" + arrayDate[0].getDay());
 
             TableRow tableRow;
             int roomIndex = 0;
