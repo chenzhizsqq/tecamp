@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 JsonFile jsonFile=new JsonFile(getApplication());
                 jsonFile.saveFile(DataCenter.pData.getJsonObject().toString());
-                Log.e(TAG, "run: jsonFile.readFile():"+jsonFile.readFile() );
+                //Log.e(TAG, "run: jsonFile.readFile():"+jsonFile.readFile() );
 
             }else{
                 JsonFile jsonFile=new JsonFile(getApplication());
