@@ -28,6 +28,7 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 import org.jetbrains.annotations.NotNull;
 import org.threeten.bp.LocalDate;
@@ -94,6 +95,19 @@ public class Frag01SelectFragment extends DialogFragment
         widget.setDateTextAppearance(R.style.TextAppearance_AppCompat_Large);
         widget.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Large);
         //widget.setTileSize(LinearLayout.LayoutParams.MATCH_PARENT);
+
+
+        //日本年月表示方法
+        widget.setTitleFormatter(new TitleFormatter() {
+            @Override
+            public CharSequence format(CalendarDay day) {
+                StringBuffer buffer = new StringBuffer();
+                int yearOne = day.getYear();
+                int monthOne = day.getMonth() ;
+                buffer.append(yearOne).append("年").append(monthOne).append("月");
+                return buffer;
+            }
+        });
 
         MonthUpdate(widget, mSelectDate.getYear(), mSelectDate.getMonth());
         CalendarDay day = CalendarDay.from(mSelectDate.getYear(),

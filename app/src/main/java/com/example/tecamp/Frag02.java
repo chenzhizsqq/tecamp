@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
 
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 //カレンダー
 public class Frag02 extends Fragment
@@ -75,6 +76,18 @@ public class Frag02 extends Fragment
         widget.setDateTextAppearance(R.style.TextAppearance_AppCompat_Large);
         widget.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Large);
         widget.setTileSize(LinearLayout.LayoutParams.MATCH_PARENT);
+
+        //日本年月表示方法
+        widget.setTitleFormatter(new TitleFormatter() {
+            @Override
+            public CharSequence format(CalendarDay day) {
+                StringBuffer buffer = new StringBuffer();
+                int yearOne = day.getYear();
+                int monthOne = day.getMonth() ;
+                buffer.append(yearOne).append("年").append(monthOne).append("月");
+                return buffer;
+            }
+        });
 
         CalendarDay today = CalendarDay.today();
         MonthUpdate(today.getYear(), today.getMonth());
