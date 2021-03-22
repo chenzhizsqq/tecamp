@@ -3,6 +3,7 @@ package com.example.tecamp;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -33,8 +34,8 @@ public class JsonControl {
     private SQLiteDatabase mDB = null;
     OrderListSql orderListSql;
 
-    public JsonControl() {
-        orderListSql = new OrderListSql(null);
+    public JsonControl(Context context) {
+        orderListSql = new OrderListSql(context);
         mDB = orderListSql.getWritableDatabase();
     }
 
@@ -76,12 +77,10 @@ public class JsonControl {
         return mJsonObjLogin;
     }
 
+    JSONObject mJsonObject = new JSONObject();
     public void setJsonObject(JSONObject mJsonObject) {
         this.mJsonObject = mJsonObject;
     }
-
-    JSONObject mJsonObject = new JSONObject();
-
     public JSONObject getJsonObject() {
         return mJsonObject;
     }

@@ -15,7 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.example.tecamp.sql.DataCenter;
+import com.example.tecamp.sql.JsonFile;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import okhttp3.OkHttpClient;
 
@@ -30,9 +34,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DataCenter.setContext(this);
         setContentView(R.layout.activity_login);
 
-        Rooms.onCreate();
+        //Rooms.onCreate();
 
         Button loginButton = (Button) findViewById(R.id.button);
         loginButton.setOnClickListener(this);
@@ -59,23 +64,53 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void run() {
 
-                String result = DataCenter.pData.LoginInit("root@root.root", "root");
-                if (result.equals("0")) {
-
-                    String status = DataCenter.UpdateData();
-
-                    //テスト使う！！！！！！！！
-                    if (status.equals("0")) {
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                    //テスト使う！！！！！！！！
-
-                }
+                Login("root@root.root", "root");
             }
         }).start();
 
+    }
+
+    private void Login(String mail,String pw) {
+        String result = DataCenter.pData.LoginInit(mail,pw);
+        if (result.equals("0")) {
+
+            String status = DataCenter.UpdateData();
+
+            if (status.equals("0")) {
+
+                JsonFile jsonFile=new JsonFile(getApplication());
+                jsonFile.saveFile(DataCenter.pData.getJsonObject().toString());
+                Log.e(TAG, "run: jsonFile.readFile():"+jsonFile.readFile() );
+
+            }else{
+                JsonFile jsonFile=new JsonFile(getApplication());
+                try {
+                    DataCenter.pData.setJsonObject(new JSONObject(jsonFile.readFile()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //テスト使う！！！！！！！！
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            //テスト使う！！！！！！！！
+
+        }else{
+
+            JsonFile jsonFile=new JsonFile(getApplication());
+            try {
+                DataCenter.pData.setJsonObject(new JSONObject(jsonFile.readFile()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //テスト使う！！！！！！！！
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            //テスト使う！！！！！！！！
+        }
     }
 
 
@@ -152,7 +187,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     editor.apply();
 
 
-                    DataCenter.UpdateData();
+                    //DataCenter.UpdateData();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();

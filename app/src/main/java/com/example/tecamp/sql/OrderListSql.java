@@ -14,12 +14,13 @@ public class OrderListSql extends SQLiteOpenHelper {
     public static final String SiteListTableName = "etcamp_SiteList";
 
     private static final String TAG = "OrderListSql";
+    public static final String DATABASE_NAME = "OrderList.db";
 
     protected SQLiteDatabase db;
 
 
     public OrderListSql(Context context) {
-        super(context, null, null, DB_VERSION);
+        super(context, DATABASE_NAME, null, DB_VERSION);
     }
 
     /**

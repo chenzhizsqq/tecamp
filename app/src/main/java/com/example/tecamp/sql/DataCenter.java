@@ -1,5 +1,6 @@
 package com.example.tecamp.sql;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -13,10 +14,16 @@ import java.util.TimerTask;
 
 public class DataCenter {
     private static final String TAG = "DataCenter";
-    public static JsonControl pData = new JsonControl();
+    public static JsonControl pData ;
     private static Timer timer;
 
+    public static void setContext(Context context){
+        pData = new JsonControl(context);
+        Rooms.mapRoomNames = DataCenter.pData.getSqlRoomNames();
+    }
+
     public static String UpdateData() {
+        Log.e(TAG, "UpdateData: begin" );
         int updateDataTimes = 0;
         String status = "";
         //Jsonデータを貰います。 begin
@@ -68,7 +75,7 @@ public class DataCenter {
         // TimerTask インスタンスを生成
         CountUpTimerTask timerTask = new CountUpTimerTask();
 
-        second = 1000;  //1000では、遅延１秒
+        second = 0;  //1000では、遅延１秒
         timer.schedule(timerTask, second, Config.DataUpdateTime);
     }
 
