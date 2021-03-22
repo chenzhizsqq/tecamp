@@ -14,7 +14,7 @@ public class Rooms {
     public static HashMap<Integer, String> mapRoomNames;
 
 
-    public static void onCreate() {
+    public Rooms() {
         mSelectRoom = -1;
     }
 
