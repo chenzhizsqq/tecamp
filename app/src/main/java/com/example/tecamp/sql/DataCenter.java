@@ -61,47 +61,5 @@ public class DataCenter {
         return status;
     }
 
-    public static void timeCreate() {
-        long count, second, minute;
-        // タイマーが走っている最中にボタンをタップされたケース
-        if (null != timer) {
-            timer.cancel();
-            timer = null;
-        }
-
-        // Timer インスタンスを生成
-        timer = new Timer();
-
-        // TimerTask インスタンスを生成
-        CountUpTimerTask timerTask = new CountUpTimerTask();
-
-        second = 0;  //1000では、遅延１秒
-        timer.schedule(timerTask, second, Config.DataUpdateTime);
-    }
-
-    private final static Handler handler = new Handler(Looper.getMainLooper());
-
-    //データ更新task
-    static class CountUpTimerTask extends TimerTask {
-        @Override
-        public void run() {
-            // handlerを使って処理をキューイングする
-            handler.post(new Runnable() {
-                public void run() {
-                    Log.d(TAG, "CountUpTimerTask class  毎60秒更新一回");
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String status = DataCenter.UpdateData();
-                            Log.d(TAG, "CountUpTimerTask status:" + status);
-
-                        }
-                    }).start();
-                }
-            });
-        }
-    }
-
 
 }
