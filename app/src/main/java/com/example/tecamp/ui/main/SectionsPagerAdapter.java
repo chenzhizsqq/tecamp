@@ -1,19 +1,11 @@
 package com.example.tecamp.ui.main;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-
-import com.example.tecamp.Frag02;
-import com.example.tecamp.Frag01;
-import com.example.tecamp.Frag03;
-import com.example.tecamp.Frag04;
-import com.example.tecamp.R;
 
 import org.jetbrains.annotations.NotNull;
 

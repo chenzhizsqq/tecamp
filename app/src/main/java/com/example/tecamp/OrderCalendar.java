@@ -16,7 +16,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.tecamp.decorators.EventDecorator;
 import com.example.tecamp.decorators.HighlightWeekendsDecorator;
 import com.example.tecamp.sql.DataCenter;
-import com.example.tecamp.ui.main.SectionsPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -37,11 +36,11 @@ import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
 //カレンダー
-public class Frag02 extends Fragment
+public class OrderCalendar extends Fragment
         implements OnDateSelectedListener, OnMonthChangedListener {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("EEE曜日, yyyy年 MMM d日 ");
-    private static final String TAG = "Frag02";
+    private static final String TAG = "OrderCalendar";
 
     private TabLayout tabLayout;
 
@@ -50,7 +49,7 @@ public class Frag02 extends Fragment
 
     ViewPager viewPager;
 
-    public Frag02(ViewPager _viewPager){
+    public OrderCalendar(ViewPager _viewPager){
         viewPager=_viewPager;
 
     }
@@ -66,7 +65,7 @@ public class Frag02 extends Fragment
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag02_layout, container, false);
+        View view = inflater.inflate(R.layout.order_calendar_layout, container, false);
         ButterKnife.bind(this, view);
         widget.setOnDateChangedListener(this);
         widget.setOnMonthChangedListener(this);

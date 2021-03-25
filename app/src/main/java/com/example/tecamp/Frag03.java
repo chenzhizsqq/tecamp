@@ -34,7 +34,9 @@ import java.util.function.Consumer;
 
 import butterknife.ButterKnife;
 
-//予約検索
+/**
+* 予約検索 old
+* */
 public class Frag03 extends Fragment implements DatePickerDialog.OnDateSetListener {
 
     private static final String TAG = "Frag03";

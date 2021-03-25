@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Spannable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,7 +24,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.tecamp.sql.DataCenter;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,9 +31,11 @@ import java.util.HashMap;
 
 import butterknife.ButterKnife;
 
-//予約一覧 ALL
+/**
+* 予約一覧 ALL
+* */
 public class FragEachDay extends Fragment implements
-        Frag01DialogFragment.OnInputSelected {
+        OrderUserFragment.OnInputSelected {
 
     ViewPager viewPager;
 
@@ -155,10 +155,10 @@ public class FragEachDay extends Fragment implements
         mOpenDialog_booking_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Frag01SelectFragment frag01SelectFragment = new Frag01SelectFragment(textViewDate,pDateManager);
-                frag01SelectFragment.setTargetFragment(FragEachDay.this, 1);
+                SelectDayFragment selectDayFragment = new SelectDayFragment(textViewDate,pDateManager);
+                selectDayFragment.setTargetFragment(FragEachDay.this, 1);
                 assert getFragmentManager() != null;
-                frag01SelectFragment.show(getFragmentManager(), "frag01SelectFragment");
+                selectDayFragment.show(getFragmentManager(), "selectDayFragment");
 
             }
         });
@@ -241,10 +241,10 @@ public class FragEachDay extends Fragment implements
                                 textView.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Frag01DialogFragment frag01DialogFragment = new Frag01DialogFragment(ordernum, map.get("firstymd"));
-                                        frag01DialogFragment.setTargetFragment(FragEachDay.this, 1);
+                                        OrderUserFragment orderUserFragment = new OrderUserFragment(ordernum, map.get("firstymd"));
+                                        orderUserFragment.setTargetFragment(FragEachDay.this, 1);
                                         assert getFragmentManager() != null;
-                                        frag01DialogFragment.show(getFragmentManager(), "frag01DialogFragment");
+                                        orderUserFragment.show(getFragmentManager(), "orderUserFragment");
 
                                     }
 
@@ -270,10 +270,10 @@ public class FragEachDay extends Fragment implements
                                     textView2.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, pDateManager.getYMD());
-                                            frag01SiteFragment.setTargetFragment(FragEachDay.this, 1);
+                                            OrderSiteFragment orderSiteFragment = new OrderSiteFragment(ordernum, pDateManager.getYMD());
+                                            orderSiteFragment.setTargetFragment(FragEachDay.this, 1);
                                             assert getFragmentManager() != null;
-                                            frag01SiteFragment.show(getFragmentManager(), "frag01SiteFragment");
+                                            orderSiteFragment.show(getFragmentManager(), "orderSiteFragment");
 
                                         }
 

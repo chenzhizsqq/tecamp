@@ -615,43 +615,6 @@ public class JsonControl {
     private final String data_order_by = "orderid  and canceltime";
     //select * from etcamp_order where date = 20201231 group by ordernum  order by createtime  and canceltime
 
-    //更新簡単記録データ
-    public void updateSimpleDataArray(String date) {
-        Cursor cursor = null;
-        try {
-            mSimpleDataArrayList.clear();
-            String selection = "firstymd = " + date;
-            cursor = mDB.query(
-                    OrderListSql.orderTableName
-                    , Frag01.pSimpleDataSqlNames
-                    , selection
-                    , null
-                    , null
-                    , null
-                    , data_order_by);
-
-            //pOrderListArrayListデータ追加
-            boolean isEof = cursor.moveToFirst();
-            while (isEof) {
-                HashMap<String, String> mOrderListMap = new HashMap<String, String>();
-                for (int i = 0; i < Frag01.pSimpleDataSqlNames.length; i++) {
-
-                    mOrderListMap.put(Frag01.pSimpleDataSqlNames[i], cursor.getString(i));
-                }
-                mSimpleDataArrayList.add(mOrderListMap);
-
-                isEof = cursor.moveToNext();
-            }
-            //pOrderListArrayListデータ追加　end
-
-
-        } catch (Exception e) {
-            Log.e(TAG, "updateSimpleDataArray: ", e);
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-    }
 
 
     //更新「サイト数」詳細記録OrderListデータ
@@ -770,7 +733,7 @@ public class JsonControl {
             String selection = " firstymd=" + _date + " and  ordernum = '" + _ordernum + "'";
             cursor = mDB.query(
                     OrderListSql.orderTableName
-                    , Frag01DialogFragment.mSrcList
+                    , OrderUserFragment.mSrcList
                     , selection
                     , null
                     , null
@@ -780,9 +743,9 @@ public class JsonControl {
 
             //データ追加
             boolean isEof = cursor.moveToFirst();
-            for (int i = 0; i < Frag01DialogFragment.mSrcList.length; i++) {
+            for (int i = 0; i < OrderUserFragment.mSrcList.length; i++) {
 
-                rMap.put(Frag01DialogFragment.mSrcList[i], cursor.getString(i));
+                rMap.put(OrderUserFragment.mSrcList[i], cursor.getString(i));
             }
         } catch (Exception e) {
             Log.e(TAG, "getSiteDataMap: ", e);
@@ -821,7 +784,7 @@ public class JsonControl {
             String selection = " ordernum = '" + _ordernum + "'" + " and " + sqlDate;
             cursor = mDB.query(
                     OrderListSql.orderTableName
-                    , Frag01SiteFragment.mSrcArray
+                    , OrderSiteFragment.mSrcArray
                     , selection
                     , null
                     , null
@@ -831,9 +794,9 @@ public class JsonControl {
 
             //データ追加
             boolean isEof = cursor.moveToFirst();
-            for (int i = 0; i < Frag01SiteFragment.mSrcArray.length; i++) {
+            for (int i = 0; i < OrderSiteFragment.mSrcArray.length; i++) {
 
-                rMap.put(Frag01SiteFragment.mSrcArray[i], cursor.getString(i));
+                rMap.put(OrderSiteFragment.mSrcArray[i], cursor.getString(i));
             }
         } catch (Exception e) {
             Log.e(TAG, "getSiteDataMap: ", e);
@@ -980,7 +943,7 @@ public class JsonControl {
         return rMap;
     }
 
-    //Frag02で、毎月データ更新
+    //OrderCalendarで、毎月データ更新
     public HashMap<String, String> getRoomsOneMonth(int year, int month) {
         String sqlMonth = month < 10 ? "0" + month : "" + month;
         String yearMonth = year + "" + sqlMonth;

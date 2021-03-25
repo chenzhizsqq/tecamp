@@ -41,16 +41,19 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class Frag01SelectFragment extends DialogFragment
+/**
+* 検索日 選択
+* */
+public class SelectDayFragment extends DialogFragment
         implements OnDateSelectedListener, OnMonthChangedListener {
 
-    private static final String TAG = "Frag01SelectFragment";
+    private static final String TAG = "SelectDayFragment";
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("EEE曜日, yyyy年 MMM d日 ");
     private TextView mTV_date_src;
     private final TextView mTV_Frag01_date;
     private DateManager mSelectDate;
 
-    Frag01SelectFragment(TextView _TextView,DateManager _selectDate) {
+    SelectDayFragment(TextView _TextView, DateManager _selectDate) {
         mTV_Frag01_date = _TextView;
         mSelectDate = _selectDate;
     }
@@ -64,7 +67,7 @@ public class Frag01SelectFragment extends DialogFragment
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_frag01_select_layout);
+        dialog.setContentView(R.layout.frag_select_day_layout);
 
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
@@ -84,7 +87,7 @@ public class Frag01SelectFragment extends DialogFragment
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_frag01_select_layout, container, false);
+        View view = inflater.inflate(R.layout.frag_select_day_layout, container, false);
 
         ButterKnife.bind(this, view);
         widget.setOnDateChangedListener(this);

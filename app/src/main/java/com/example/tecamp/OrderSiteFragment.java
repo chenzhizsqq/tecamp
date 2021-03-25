@@ -30,7 +30,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Frag01SiteFragment extends DialogFragment {
+/**
+* 毎日予約の場合
+* */
+public class OrderSiteFragment extends DialogFragment {
 
     /*private static final int[] roomId = {
             R.id.roomText0_0,
@@ -139,7 +142,7 @@ public class Frag01SiteFragment extends DialogFragment {
     private String mOrderNum;
     private String mDate;
 
-    public Frag01SiteFragment(String _orederNum, String _date) {
+    public OrderSiteFragment(String _orederNum, String _date) {
         mOrderNum = _orederNum;
         mDate = _date;
         mRoomingArray = DataCenter.pData.getSiteRoomsID(_orederNum);
@@ -168,7 +171,7 @@ public class Frag01SiteFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_frag01_site_layout);
+        dialog.setContentView(R.layout.frag_order_site_layout);
 
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
@@ -184,7 +187,7 @@ public class Frag01SiteFragment extends DialogFragment {
 
     private final int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
     private final int FP = ViewGroup.LayoutParams.MATCH_PARENT;
-    private static final String TAG = "Frag01SiteFragment";
+    private static final String TAG = "OrderSiteFragment";
 
 
 
@@ -193,7 +196,7 @@ public class Frag01SiteFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_frag01_site_layout, container, false);
+        View view = inflater.inflate(R.layout.frag_order_site_layout, container, false);
 
         TableLayout mRoomListTableList = (TableLayout) view.findViewById(R.id.roomListTable);
 

@@ -28,7 +28,10 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 
-//電話受付
+
+/**
+* 電話受付
+* */
 public class Frag04 extends Fragment implements
         DatePickerDialog.OnDateSetListener
         , BookingDialogFragment.OnInputSelected {

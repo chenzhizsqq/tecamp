@@ -34,13 +34,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 
 import butterknife.ButterKnife;
 
-//予約一覧 ALL
+/**
+* 予約一覧 ALL
+* */
 public class FragSelect extends Fragment implements TextWatcher {
 
     ViewPager viewPager;
@@ -317,10 +317,10 @@ public class FragSelect extends Fragment implements TextWatcher {
                                 textView.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Frag01DialogFragment frag01DialogFragment = new Frag01DialogFragment(ordernum, map.get("firstymd"));
-                                        frag01DialogFragment.setTargetFragment(FragSelect.this, 1);
+                                        OrderUserFragment orderUserFragment = new OrderUserFragment(ordernum, map.get("firstymd"));
+                                        orderUserFragment.setTargetFragment(FragSelect.this, 1);
                                         assert getFragmentManager() != null;
-                                        frag01DialogFragment.show(getFragmentManager(), "frag01DialogFragment");
+                                        orderUserFragment.show(getFragmentManager(), "orderUserFragment");
 
                                     }
 
@@ -346,10 +346,10 @@ public class FragSelect extends Fragment implements TextWatcher {
                                     textView2.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, map.get("firstymd"));
-                                            frag01SiteFragment.setTargetFragment(FragSelect.this, 1);
+                                            OrderSiteFragment orderSiteFragment = new OrderSiteFragment(ordernum, map.get("firstymd"));
+                                            orderSiteFragment.setTargetFragment(FragSelect.this, 1);
                                             assert getFragmentManager() != null;
-                                            frag01SiteFragment.show(getFragmentManager(), "frag01SiteFragment");
+                                            orderSiteFragment.show(getFragmentManager(), "orderSiteFragment");
 
                                         }
 

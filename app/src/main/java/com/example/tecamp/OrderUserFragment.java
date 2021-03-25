@@ -24,9 +24,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class Frag01DialogFragment extends DialogFragment {
+/**
+* 客様資料
+* */
+public class OrderUserFragment extends DialogFragment {
 
-    private static final String TAG = "Frag01DialogFragment";
+    private static final String TAG = "OrderUserFragment";
 
     static final public String[] mSrcList= new String[]{
             "firstymd",//R.id.宿泊日,
@@ -77,14 +80,14 @@ public class Frag01DialogFragment extends DialogFragment {
             R.id.予約ID,
     };
 
-    public Frag01DialogFragment(String _orederNum,String _date) {
+    public OrderUserFragment(String _orederNum, String _date) {
         mRoomingArray = DataCenter.pData.getSiteRoomNames(_orederNum);
 
         HashMap<String, String> mapOrderList = DataCenter.pData.getDialogDataArray(_orederNum,_date);
         arrayDetailData.clear();
         for (int n = 0; n < mIdList.length; n++) {
             detailData mDetailData = new detailData();
-            mDetailData.findViewById = Frag01DialogFragment.mIdList[n];
+            mDetailData.findViewById = OrderUserFragment.mIdList[n];
             mDetailData.detail = mapOrderList.get(mSrcList[n]);
             arrayDetailData.add(mDetailData);
         }
@@ -110,7 +113,7 @@ public class Frag01DialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_frag01_layout);
+        dialog.setContentView(R.layout.frag_order_user_layout);
 
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
@@ -131,7 +134,7 @@ public class Frag01DialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_frag01_layout, container, false);
+        View view = inflater.inflate(R.layout.frag_order_user_layout, container, false);
 
         for (int i = 0; i < arrayDetailData.size(); i++) {
             int id =  arrayDetailData.get(i).findViewById;

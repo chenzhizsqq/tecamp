@@ -33,9 +33,11 @@ import java.util.HashMap;
 
 import butterknife.ButterKnife;
 
-//予約一覧 ALL
+/**
+* 予約一覧 ALL
+* */
 public class Frag05 extends Fragment implements
-        Frag01DialogFragment.OnInputSelected
+        OrderUserFragment.OnInputSelected
         , TextWatcher {
 
     ViewPager viewPager;
@@ -142,10 +144,10 @@ public class Frag05 extends Fragment implements
                                 textView.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Frag01DialogFragment frag01DialogFragment = new Frag01DialogFragment(ordernum, map.get("firstymd"));
-                                        frag01DialogFragment.setTargetFragment(Frag05.this, 1);
+                                        OrderUserFragment orderUserFragment = new OrderUserFragment(ordernum, map.get("firstymd"));
+                                        orderUserFragment.setTargetFragment(Frag05.this, 1);
                                         assert getFragmentManager() != null;
-                                        frag01DialogFragment.show(getFragmentManager(), "frag01DialogFragment");
+                                        orderUserFragment.show(getFragmentManager(), "orderUserFragment");
 
                                     }
 
@@ -171,10 +173,10 @@ public class Frag05 extends Fragment implements
                                     textView2.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            Frag01SiteFragment frag01SiteFragment = new Frag01SiteFragment(ordernum, map.get("firstymd"));
-                                            frag01SiteFragment.setTargetFragment(Frag05.this, 1);
+                                            OrderSiteFragment orderSiteFragment = new OrderSiteFragment(ordernum, map.get("firstymd"));
+                                            orderSiteFragment.setTargetFragment(Frag05.this, 1);
                                             assert getFragmentManager() != null;
-                                            frag01SiteFragment.show(getFragmentManager(), "frag01SiteFragment");
+                                            orderSiteFragment.show(getFragmentManager(), "orderSiteFragment");
 
                                         }
 
