@@ -1,11 +1,13 @@
 package com.example.tecamp;
 
-import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+* 時間センター
+* */
 public class DateManager {
 
     private static final String TAG = "DateManager";

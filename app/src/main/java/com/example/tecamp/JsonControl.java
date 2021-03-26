@@ -28,6 +28,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+* jsonセンター
+* */
 public class JsonControl {
     private static final String TAG = "JsonControl";
 
@@ -289,14 +292,6 @@ public class JsonControl {
     }
 
 
-    //sql insert
-
-    public ArrayList<HashMap<String, String>> GetOrderListArrayList() {
-        return mSimpleDataArrayList;
-    }
-
-    //簡単記録list
-    private final ArrayList<HashMap<String, String>> mSimpleDataArrayList = new ArrayList<>();
 
     //「サイト数」詳細記録list
     public final ArrayList<HashMap<String, String>> mSiteDataArrayList = new ArrayList<>();
@@ -304,8 +299,6 @@ public class JsonControl {
     //「サイト数」詳細記録SiteRoom
     private final ArrayList<HashMap<String, String>> mSiteRoomArrayList = new ArrayList<>();
 
-    //「テスト」詳細記録list
-    private final ArrayList<HashMap<String, String>> mTestDataArrayList = new ArrayList<>();
 
 
     private static final String[] mListName = {
@@ -317,79 +310,6 @@ public class JsonControl {
             "way",
             "memo"
     };
-
-    public int getSimpleDataArrayListSize() {
-        return mSimpleDataArrayList.size();
-    }
-
-    public void testOrderListArrayList() throws JSONException {
-        for (int i = 0; i < mSimpleDataArrayList.size(); i++) {
-
-            for (int j = 0; j < mListName.length; j++) {
-
-                Log.d(TAG, "testOrderListArrayList: getOrderListSqlValue(" + j + "," + mListName[j] + "):" + getSimpleData(i, mListName[j]));
-            }
-        }
-    }
-
-
-    public String getSimpleData(int index, String name) throws JSONException {
-        String rStrValue = "";
-        try {
-
-            switch (name) {
-                case "firstymd":
-                    rStrValue = Tools.dataChange(mSimpleDataArrayList.get(index).get(name), "/");
-                    break;
-                case "tel":
-                    String searchName1 = "tel_1";
-                    String v_1 = mSimpleDataArrayList.get(index).get(searchName1);
-                    String searchName2 = "tel_2";
-                    String v_2 = mSimpleDataArrayList.get(index).get(searchName2);
-                    String searchName3 = "tel_3";
-                    String v_3 = mSimpleDataArrayList.get(index).get(searchName3);
-                    rStrValue = v_1 + "-" + v_2 + "-" + v_3;
-                    break;
-                case "count":
-                    int nTemp = 0;
-                    String searchName_count_adult = "count_adult";
-                    String sTemp = Objects.requireNonNull(mSimpleDataArrayList.get(index).get(searchName_count_adult));
-                    int count_adult = 0;
-                    if (!sTemp.isEmpty()) {
-                        count_adult = Integer.parseInt(Objects.requireNonNull(mSimpleDataArrayList.get(index).get(searchName_count_adult)));
-                    }
-
-                    String searchName_count_child = "count_child";
-                    sTemp = Objects.requireNonNull(mSimpleDataArrayList.get(index).get(searchName_count_child));
-                    int count_child = 0;
-                    if (!sTemp.isEmpty()) {
-                        count_child = Integer.parseInt(Objects.requireNonNull(mSimpleDataArrayList.get(index).get(searchName_count_child)));
-                    }
-                    rStrValue = Integer.toString(count_adult + count_child);
-                    if (count_child > 0) {
-                        rStrValue = rStrValue + "(" + count_child + ")";
-                    }
-                    break;
-
-                case "username":
-                    String temp = mSimpleDataArrayList.get(index).get("username");
-                    assert temp != null;
-                    if (temp.isEmpty()) {
-                        temp = "*";
-                    }
-                    rStrValue = temp;
-                    break;
-
-                default:
-                    rStrValue = mSimpleDataArrayList.get(index).get(name);
-                    break;
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "getSimpleData: ", e);
-        }
-        return rStrValue;
-    }
-
 
     public void Json2SqlOrder() {
         try {

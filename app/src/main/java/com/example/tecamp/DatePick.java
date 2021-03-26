@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import java.util.Calendar;
 
+/**
+* androidの時間センター
+* */
 public class DatePick extends DialogFragment implements
         DatePickerDialog.OnDateSetListener{
 

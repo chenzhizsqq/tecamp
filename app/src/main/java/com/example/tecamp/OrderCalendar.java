@@ -35,7 +35,9 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
-//カレンダー
+/**
+*   カレンダー
+* */
 public class OrderCalendar extends Fragment
         implements OnDateSelectedListener, OnMonthChangedListener {
 
