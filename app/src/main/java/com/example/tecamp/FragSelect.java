@@ -39,7 +39,7 @@ import java.util.HashMap;
 import butterknife.ButterKnife;
 
 /**
-* 予約一覧 ALL
+* 予約検索 ALL
 * */
 public class FragSelect extends Fragment implements TextWatcher {
 

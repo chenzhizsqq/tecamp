@@ -64,7 +64,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void run() {
 
-                Login("root@root.root", "root");
+                //Login("root@root.root", "root");
+                Login("demo1@xieyi.co.jp", "root");
             }
         }).start();
 
