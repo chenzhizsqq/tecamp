@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--就是在这里，要说明被封装的东西-->
+    <data>
+
+        <variable
+            name="loginMvvm"
+            type="com.example.tecamp.LoginMvvm" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context=".LoginMvvm">
+
+        <!--然后在下面android:text中写上了"@={UserViewModel.user.status}"，
+        这个被封装的变量。而user这个变量一定要public的，这样才能够读写-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:text="@={loginMvvm.user.status}"
+            android:id="@+id/txt_user_login_status" />
+
+        <!--然后在下面android:text中写上了"@={UserViewModel.user.userName}"，
+        这个被封装的变量。而user这个变量一定要public的，这样才能够读写-->
+        <EditText
+            android:id="@+id/edit_username"
+            android:layout_width="match_parent"
+            android:inputType="textEmailAddress"
+            android:layout_height="wrap_content"
+            android:text="@={loginMvvm.user.userName}"
+            android:hint="メールアドレス" />
+
+        <!--然后在下面android:text中写上了"@={UserViewModel.user.password}"，
+        这个被封装的变量。而user这个变量一定要public的，这样才能够读写-->
+        <EditText
+            android:id="@+id/edit_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:text="@={loginMvvm.user.password}"
+            android:hint="暗証番号" />
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:onClick="click"
+            android:text="確認" />
+
+
+    </LinearLayout>
+
+</layout>
