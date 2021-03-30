@@ -1,6 +1,9 @@
 package com.example.tecamp;
 
+import android.content.Context;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -97,4 +100,15 @@ public class Tools {
             return day2-day1;
         }
     }
+
+    /**
+     * キーボードを閉じる
+    * */
+    public static void hideKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null && imm.isActive()) {
+            imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
 }
