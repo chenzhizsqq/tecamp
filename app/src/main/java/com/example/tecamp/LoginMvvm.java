@@ -35,13 +35,10 @@ public class LoginMvvm extends AppCompatActivity {
 
 
         //テスト使う！！！！！！！！
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(() -> {
 
-                //Login("root@root.root", "root");
-                Login("demo1@xieyi.co.jp", "root");
-            }
+            //Login("root@root.root", "root");
+            Login("demo1@xieyi.co.jp", "root");
         }).start();
         //テスト使う！！！！！！！！
     }
@@ -51,12 +48,7 @@ public class LoginMvvm extends AppCompatActivity {
     }
 
     public void click(View view) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                login();
-            }
-        },0);
+        new Handler().postDelayed(this::login,0);
     }
 
 
@@ -69,12 +61,7 @@ public class LoginMvvm extends AppCompatActivity {
             Log.e(TAG, "password:" + user.password.get());
 
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Login(user.userName.get(),user.password.get());
-                }
-            }).start();
+            new Thread(() -> Login(user.userName.get(),user.password.get())).start();
         } catch (Exception e) {
             Log.e(TAG, "login: ", e);
         }
@@ -95,6 +82,9 @@ public class LoginMvvm extends AppCompatActivity {
                     Log.e(TAG, "Login: 初回登録成功" );
                     //Log.e(TAG, "run: jsonFile.readFile():"+jsonFile.readFile() );
 
+                    Intent intent = new Intent(LoginMvvm.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
                 }else{
                     JsonFile jsonFile=new JsonFile(getApplication());
                     try {
@@ -104,11 +94,6 @@ public class LoginMvvm extends AppCompatActivity {
                     }
                 }
 
-                //テスト使う！！！！！！！！
-                Intent intent = new Intent(LoginMvvm.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-                //テスト使う！！！！！！！！
 
             }else{
                 Log.e(TAG, "jsonサバと連接できません。" );
