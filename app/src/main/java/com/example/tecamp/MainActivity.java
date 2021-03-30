@@ -22,8 +22,6 @@ public class MainActivity extends AppCompatActivity{
 
     private static final String TAG = "MainActivity";
 
-    private  static ViewPager viewPager;
-
 
     @SuppressLint("NonConstantResourceId")
 
