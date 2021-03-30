@@ -42,9 +42,9 @@ public class MainActivity extends AppCompatActivity{
 
         ViewPager viewPager = findViewById(R.id.view_pager);
 
-        sectionsPagerAdapter.add(new Frag05(viewPager),"予約一覧 ALL");
+        sectionsPagerAdapter.add(new Frag05(viewPager),"予約一覧 全部");
         sectionsPagerAdapter.add(new Frag04(viewPager),"電話受付");;
-        sectionsPagerAdapter.add(new FragEachDay(viewPager),"予約一覧 E");
+        sectionsPagerAdapter.add(new FragEachDay(viewPager),"予約一覧 毎日");
         sectionsPagerAdapter.add(new OrderCalendar(viewPager),"カレンダー");
         //sectionsPagerAdapter.add(new Frag03(viewPager),"予約検索");
         sectionsPagerAdapter.add(new FragSelect(viewPager),"予約検索");
