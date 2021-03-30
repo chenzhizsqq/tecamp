@@ -34,7 +34,7 @@ public class LoginMvvm extends AppCompatActivity {
         bing.setLoginMvvm(this);
 
 
-
+        //テスト使う！！！！！！！！
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -43,6 +43,7 @@ public class LoginMvvm extends AppCompatActivity {
                 Login("demo1@xieyi.co.jp", "root");
             }
         }).start();
+        //テスト使う！！！！！！！！
     }
     @Override
     protected void onStart() {

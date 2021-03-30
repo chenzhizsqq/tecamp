@@ -40,6 +40,7 @@ import butterknife.ButterKnife;
 
 /**
 * 予約検索 ALL
+ * search
 * */
 public class FragSelect extends Fragment implements TextWatcher {
 
@@ -52,8 +53,6 @@ public class FragSelect extends Fragment implements TextWatcher {
 
     private static final String TAG = "FragSelect";
     private int mDataOffSet;
-
-    private final DateManager pDateManager = new DateManager();
 
     DateManager pDateManager1 = new DateManager();
     DateManager pDateManager2 = new DateManager();
