@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity{
 
         //最初表示Frag
         viewPager.setCurrentItem(4);
+
+        //キーボードを隠す
+        Tools.hideKeyboard(this);
     }
 
     private Timer timer;

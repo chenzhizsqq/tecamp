@@ -33,6 +33,7 @@ public class LoginMvvm extends AppCompatActivity {
 
         bing.setLoginMvvm(this);
 
+        Tools.hideKeyboard(this);
 
         //テスト使う！！！！！！！！
         new Thread(() -> {
@@ -41,6 +42,7 @@ public class LoginMvvm extends AppCompatActivity {
             Login("demo1@xieyi.co.jp", "root");
         }).start();
         //テスト使う！！！！！！！！
+
     }
     @Override
     protected void onStart() {

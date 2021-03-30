@@ -1,8 +1,10 @@
 package com.example.tecamp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import java.util.Calendar;
@@ -102,12 +104,23 @@ public class Tools {
     }
 
     /**
-     * キーボードを閉じる
+     * キーボードを閉じる    View
     * */
     public static void hideKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null && imm.isActive()) {
             imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    /**
+     * キーボードを閉じる    Activity
+     * */
+    public static void hideKeyboard (Activity activity){
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        if (activity.getCurrentFocus() != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
         }
     }
 
