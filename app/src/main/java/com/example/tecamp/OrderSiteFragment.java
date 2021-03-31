@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -12,13 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.tecamp.sql.DataCenter;
@@ -110,6 +114,7 @@ public class OrderSiteFragment extends DialogFragment {
 
     };*/
 
+    private EditText editText_氏名;
     static final public String[] mSrcArray = new String[]{
 
             "firstymd",
@@ -192,12 +197,14 @@ public class OrderSiteFragment extends DialogFragment {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_order_site_layout, container, false);
 
+        editText_氏名 =(EditText) view.findViewById(R.id.氏名);
         TableLayout mRoomListTableList = (TableLayout) view.findViewById(R.id.roomListTable);
 
         //全部ROOM表示
@@ -371,5 +378,24 @@ public class OrderSiteFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        editText_氏名.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //アプリを開くと、キーボードが自動的に非表示になります。
+                InputMethodManager imm =
+                        (InputMethodManager) editText_氏名.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm.isActive())
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+
+        });
     }
 }
