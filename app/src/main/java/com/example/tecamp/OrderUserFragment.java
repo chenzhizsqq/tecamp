@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.tecamp.sql.DataCenter;
@@ -143,6 +145,7 @@ public class OrderUserFragment extends DialogFragment {
             textView.setText(str);
         }
 
+        editText_代表者氏名_姓 =(EditText) view.findViewById(R.id.代表者氏名_姓);
         //サイト名  mRoomingArray
         TextView textView = (TextView) view.findViewById(R.id.サイト名);
         String s=mRoomingArray.toString();
@@ -177,5 +180,27 @@ public class OrderUserFragment extends DialogFragment {
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
+    }
+
+    EditText editText_代表者氏名_姓;
+
+    @Override
+    public void onResume()
+    {
+        Log.e(TAG, "onResume: begin" );
+        super.onResume();
+        editText_代表者氏名_姓.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Log.e(TAG, "run: being" );
+                InputMethodManager imm =
+                        (InputMethodManager) editText_代表者氏名_姓.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm.isActive())
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+
+        });
     }
 }
