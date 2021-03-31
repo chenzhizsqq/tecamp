@@ -125,7 +125,7 @@ public class SelectDayFragment extends DialogFragment
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: closing dialog");
-                Toast.makeText(getContext(), "戻る", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "戻る", Toast.LENGTH_SHORT).show();
                 Objects.requireNonNull(getDialog()).dismiss();
             }
         });
