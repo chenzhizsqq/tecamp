@@ -184,6 +184,7 @@ public class OrderUserFragment extends DialogFragment {
 
     EditText editText_代表者氏名_姓;
 
+    //
     @Override
     public void onResume()
     {
