@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.tecamp.sql.DataCenter;
@@ -30,6 +32,7 @@ import java.util.Objects;
 public class OrderUserFragment extends DialogFragment {
 
     private static final String TAG = "OrderUserFragment";
+    private EditText editText_代表者氏名_姓;
 
     static final public String[] mSrcList= new String[]{
             "firstymd",//R.id.宿泊日,
@@ -136,6 +139,8 @@ public class OrderUserFragment extends DialogFragment {
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_order_user_layout, container, false);
 
+        editText_代表者氏名_姓 =(EditText) view.findViewById(R.id.代表者氏名_姓);
+
         for (int i = 0; i < arrayDetailData.size(); i++) {
             int id =  arrayDetailData.get(i).findViewById;
             String str = arrayDetailData.get(i).detail;
@@ -178,4 +183,23 @@ public class OrderUserFragment extends DialogFragment {
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
     }
+
+    //お客様の資料は、開いたらキーを隠します。
+    /*@Override
+    public void onResume()
+    {
+        super.onResume();
+        editText_代表者氏名_姓.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                InputMethodManager imm =
+                        (InputMethodManager) editText_代表者氏名_姓.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm.isActive())
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+
+        });
+    }*/
 }
