@@ -119,8 +119,8 @@ public class OrderUserFragment extends DialogFragment {
         window.setBackgroundDrawableResource(android.R.color.transparent);
 
         WindowManager.LayoutParams attributes = window.getAttributes();
-        attributes.gravity = Gravity.BOTTOM;//下方
-        attributes.width = WindowManager.LayoutParams.MATCH_PARENT;//满屏
+        attributes.gravity = Gravity.CENTER;
+        attributes.width = WindowManager.LayoutParams.MATCH_PARENT;
 
         window.setAttributes(attributes);
 
