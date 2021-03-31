@@ -7,10 +7,38 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <TableLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:textAlignment="center">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp"
+        android:gravity="center">
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:background="@color/navy">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAlignment="center">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/navy"
+                    android:textAlignment="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="400dp"
+                        android:layout_marginRight="400dp"
+                        android:text="顧客資料"
+                        android:textSize="25sp" />
+
+                </TableRow>
+            </TableLayout>
+        </TableRow>
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
