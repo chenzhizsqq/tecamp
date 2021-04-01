@@ -38,8 +38,14 @@ public class LoginMvvm extends AppCompatActivity {
         //テスト使う！！！！！！！！
         new Thread(() -> {
 
+            //テスト使う！！！！！！！！
+            Login();
+
             //Login("root@root.root", "root");
-            Login("demo1@xieyi.co.jp", "root");
+
+
+            //Login("demo1@xieyi.co.jp", "root");
+
         }).start();
         //テスト使う！！！！！！！！
 
@@ -69,6 +75,24 @@ public class LoginMvvm extends AppCompatActivity {
         }
     }
 
+    //直接ログイン
+    //テスト使う！！！！！！！！
+    private void Login(){
+        Log.e(TAG, "直接ログイン" );
+
+        JsonFile jsonFile=new JsonFile(getApplication());
+        try {
+            DataCenter.pData.setJsonObject(new JSONObject(jsonFile.readFile()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Intent intent = new Intent(LoginMvvm.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    //テスト使う！！！！！！！！
+
+    //暗証番号でログイン
     private void Login(String mail,String pw) {
         try {
 
