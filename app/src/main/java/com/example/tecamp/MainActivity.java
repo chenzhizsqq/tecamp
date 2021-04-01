@@ -30,7 +30,9 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         DataCenter.setContext(this);
-        timeCreate();
+
+        //＊＊＊＊在家测试，暂时不用每一分钟读取json数据功能
+        //timeCreate();
 
 
         setContentView(R.layout.activity_main);
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity{
         tabs.setupWithViewPager(viewPager);
 
         //最初表示Frag
-        viewPager.setCurrentItem(4);
+        viewPager.setCurrentItem(0);
 
         //キーボードを隠す
         Tools.hideKeyboard(this);
