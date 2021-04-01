@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 
 import butterknife.ButterKnife;
 
@@ -65,6 +66,64 @@ public class Frag05 extends Fragment implements
     };
     ArrayList<HashMap<String, String>> mSqlGetArrayMap;
 
+    //new 20210331
+
+    static final public String[] mSrcList= new String[]{
+            "firstymd",//R.id.宿泊日,
+            "days",//R.id.泊数,
+            "username",//R.id.代表者氏名_姓,
+            "username2",//R.id.代表者氏名_名,
+            "username_kana",//R.id.フリガナ_セイ,
+            "username_kana2",//R.id.フリガナ_メイ,
+            "address",//R.id.住所,
+            "tel_1",//R.id.電話1,
+            "tel_2",//R.id.電話2,
+            "tel_3",//R.id.電話3,
+            "mail",//R.id.メール,
+            "count_adult",//R.id.使用人数_大人,
+            "count_child",//R.id.使用人数_小,
+            "site_count",//R.id.サイト数,
+            "ac_count",//R.id.AC希望数,
+            //"siteid",//R.id.サイト名,
+            "way",//R.id.乗物,
+            "fee",//R.id.料金,
+            "memo",//R.id.備考,
+            "admemo",//R.id.管理者備考,
+            "ordernum",//R.id.予約ID,
+
+    };
+
+    static final public int[] mIdList = new int[]{
+            R.id.宿泊日,
+            R.id.泊数,
+            R.id.代表者氏名_姓,
+            R.id.代表者氏名_名,
+            R.id.フリガナ_セイ,
+            R.id.フリガナ_メイ,
+            R.id.住所,
+            R.id.電話1,
+            R.id.電話2,
+            R.id.電話3,
+            R.id.メール,
+            R.id.使用人数_大人,
+            R.id.使用人数_小,
+            R.id.サイト数,
+            R.id.AC希望数,
+            //R.id.サイト名,
+            R.id.乗物,
+            R.id.料金,
+            R.id.備考,
+            R.id.管理者備考,
+            R.id.予約ID,
+    };
+    private ArrayList mRoomingArray;
+    private ArrayList<detailData> arrayDetailData = new ArrayList<detailData>();
+
+    private class detailData {
+        public int findViewById;
+        public String detail;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,9 +149,62 @@ public class Frag05 extends Fragment implements
         updateView(view);
 
 
+        TableRow TableRowTest = view.findViewById(R.id.TableRowTest);
+        TableRowTest.setVisibility(View.GONE);
         return view;
     }
 
+
+    public void onCreateTopView(View view) {
+
+        for (int i = 0; i < arrayDetailData.size(); i++) {
+            int id =  arrayDetailData.get(i).findViewById;
+            String str = arrayDetailData.get(i).detail;
+            TextView textView = (TextView)view.findViewById(id);
+            textView.setText(str);
+        }
+
+        //サイト名  mRoomingArray
+        TextView textView = (TextView) view.findViewById(R.id.サイト名);
+        String s=mRoomingArray.toString();
+
+        textView.setText(s.substring(1,s.length()-1));
+
+
+        TextView mActionCancel = view.findViewById(R.id.action_cancel);
+        mActionCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                TableLayout mTableLayout = view.findViewById(R.id.frag05_予約一覧);
+                mTableLayout.setVisibility(View.VISIBLE);
+
+                TableRow TableRowTest = view.findViewById(R.id.TableRowTest);
+                TableRowTest.setVisibility(View.GONE);
+            }
+        });
+
+
+        TextView mActionUpdate = view.findViewById(R.id.action_select);
+        mActionUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+    }
+
+    private void OrderUserFrag(String _orederNum, String _date) {
+        mRoomingArray = DataCenter.pData.getSiteRoomNames(_orederNum);
+
+        HashMap<String, String> mapOrderList = DataCenter.pData.getDialogDataArray(_orederNum,_date);
+        arrayDetailData.clear();
+        for (int n = 0; n < mIdList.length; n++) {
+            detailData mDetailData = new detailData();
+            mDetailData.findViewById = mIdList[n];
+            mDetailData.detail = mapOrderList.get(mSrcList[n]);
+            arrayDetailData.add(mDetailData);
+        }
+    }
 
     private void updateView(View view) {
         try {
@@ -144,10 +256,19 @@ public class Frag05 extends Fragment implements
                                 textView.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        OrderUserFragment orderUserFragment = new OrderUserFragment(ordernum, map.get("firstymd"));
+                                        /*OrderUserFragment orderUserFragment = new OrderUserFragment(ordernum, map.get("firstymd"));
                                         orderUserFragment.setTargetFragment(Frag05.this, 1);
                                         assert getFragmentManager() != null;
-                                        orderUserFragment.show(getFragmentManager(), "orderUserFragment");
+                                        orderUserFragment.show(getFragmentManager(), "orderUserFragment");*/
+
+                                        TableLayout mTableLayout = view.findViewById(R.id.frag05_予約一覧);
+                                        mTableLayout.setVisibility(View.GONE);
+
+                                        OrderUserFrag(ordernum, map.get("firstymd"));
+                                        onCreateTopView(view);
+                                        TableRow TableRowTest = view.findViewById(R.id.TableRowTest);
+                                        TableRowTest.setVisibility(View.VISIBLE);
+
 
                                     }
 

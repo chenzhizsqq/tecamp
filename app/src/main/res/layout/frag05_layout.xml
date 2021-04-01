@@ -10,6 +10,780 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:gravity="left">
+        <TableRow
+
+            android:id="@+id/TableRowTest"
+            >
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:gravity="center">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:background="@color/navy">
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAlignment="center">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="400dp"
+                                android:layout_marginRight="400dp"
+                                android:text="顧客資料"
+                                android:textSize="25sp" />
+
+                        </TableRow>
+                    </TableLayout>
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:background="@color/navy"
+                    android:textAlignment="center">
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAlignment="center">
+
+                        <!--宿泊日-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="150dp"
+                                android:background="@color/purple_200"
+                                android:text="宿泊日"
+                                android:textSize="20dp" />
+
+                            <TextView
+                                android:id="@+id/宿泊日"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="2020/12/30"
+                                android:textSize="20sp" />
+                        </TableRow>
+
+                        <!--泊数-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="150dp"
+                                android:background="@color/purple_200"
+                                android:text="泊数"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/泊数"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="700dp"
+                                android:text="12"
+                                android:textSize="20sp" />
+                        </TableRow>
+
+                        <!--代表者氏名-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+
+                            <TableLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:gravity="left">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textAlignment="center">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:width="150dp"
+                                        android:background="@color/purple_200"
+                                        android:text="代表者氏名"
+                                        android:textSize="20sp" />
+                                </TableRow>
+                            </TableLayout>
+
+                            <TableLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:gravity="left">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="left">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="姓"
+                                        android:width="50dp"
+                                        android:textSize="20dp" />
+
+                                    <EditText
+                                        android:id="@+id/代表者氏名_姓"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="#FFFFFF"
+                                        android:text="代表者氏名_姓"
+                                        android:ems="6"
+                                        android:textSize="20dp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="名"
+                                        android:width="50dp"
+                                        android:textSize="20dp" />
+
+                                    <EditText
+                                        android:id="@+id/代表者氏名_名"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="#FFFFFF"
+                                        android:text="代表者氏名_姓"
+                                        android:ems="6"
+                                        android:textSize="20dp" />
+                                </TableRow>
+                            </TableLayout>
+                        </TableRow>
+
+                        <!--フリガナ-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TableLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:gravity="left">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textAlignment="center">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:width="150dp"
+                                        android:background="@color/purple_200"
+                                        android:text="フリガナ"
+                                        android:textSize="20sp" />
+                                </TableRow>
+                            </TableLayout>
+
+                            <TableLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:gravity="left">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="left">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="セイ"
+                                        android:width="50dp"
+                                        android:textSize="20dp" />
+
+                                    <EditText
+                                        android:id="@+id/フリガナ_セイ"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="#FFFFFF"
+                                        android:text="フリガナ_セイ"
+                                        android:ems="6"
+                                        android:textSize="20dp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="メイ"
+                                        android:width="50dp"
+                                        android:textSize="20dp" />
+
+                                    <EditText
+                                        android:id="@+id/フリガナ_メイ"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="#FFFFFF"
+                                        android:text="フリガナ_メイ"
+                                        android:ems="6"
+                                        android:textSize="20dp" />
+                                </TableRow>
+                            </TableLayout>
+
+                        </TableRow>
+
+                        <!--住所-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="150dp"
+                                android:background="@color/purple_200"
+                                android:text="住所"
+                                android:textSize="20sp" />
+
+                            <EditText
+                                android:id="@+id/住所"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="700dp"
+                                android:background="#FFFFFF"
+                                android:text="textSample123456789textSample123456789"
+                                android:textSize="20sp" />
+                        </TableRow>
+
+                        <!--携帯電話番号-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TableLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:gravity="left">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textAlignment="center">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:width="150dp"
+                                        android:background="@color/purple_200"
+                                        android:text="携帯電話番号"
+                                        android:textSize="20sp" />
+                                </TableRow>
+                            </TableLayout>
+
+                            <TableLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:gravity="left">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="left">
+
+
+                                    <EditText
+                                        android:id="@+id/電話1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="#FFFFFF"
+                                        android:text="080"
+                                        android:textAlignment="center"
+                                        android:gravity="center"
+                                        android:ems="2"
+                                        android:inputType="phone"
+                                        android:textSize="20dp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="ー"
+                                        android:textSize="20dp" />
+
+                                    <EditText
+                                        android:id="@+id/電話2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="#FFFFFF"
+                                        android:text="1234"
+                                        android:textAlignment="center"
+                                        android:gravity="center"
+                                        android:ems="3"
+                                        android:inputType="phone"
+                                        android:textSize="20dp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="ー"
+                                        android:textSize="20dp" />
+                                    <EditText
+                                        android:id="@+id/電話3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="#FFFFFF"
+                                        android:text="1234"
+                                        android:textAlignment="center"
+                                        android:gravity="center"
+                                        android:ems="3"
+                                        android:inputType="phone"
+                                        android:textSize="20dp" />
+                                </TableRow>
+                            </TableLayout>
+
+                        </TableRow>
+
+                        <!--メール-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="150dp"
+                                android:background="@color/purple_200"
+                                android:text="メール"
+                                android:textSize="20sp" />
+
+                            <EditText
+                                android:id="@+id/メール"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#FFFFFF"
+                                android:ems="10"
+                                android:inputType="textEmailAddress"
+                                android:textSize="20sp" />
+                        </TableRow>
+
+
+                        <!--使用人数-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TableLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:gravity="left">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textAlignment="center">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:width="150dp"
+                                        android:background="@color/purple_200"
+                                        android:text="使用人数"
+                                        android:textSize="20sp" />
+                                </TableRow>
+                            </TableLayout>
+
+                            <TableLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:gravity="left">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="left">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="大人"
+                                        android:textAlignment="center"
+                                        android:gravity="center"
+                                        android:width="50dp"
+                                        android:textSize="20dp" />
+
+                                    <EditText
+                                        android:id="@+id/使用人数_大人"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="#FFFFFF"
+                                        android:text="100"
+                                        android:textAlignment="center"
+                                        android:gravity="center"
+                                        android:width="50dp"
+                                        android:inputType="number"
+                                        android:textSize="20dp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:width="120dp"
+                                        android:textAlignment="center"
+                                        android:text="小学生以下"
+                                        android:textSize="20dp" />
+
+                                    <EditText
+                                        android:id="@+id/使用人数_小"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="#FFFFFF"
+                                        android:width="50dp"
+                                        android:textAlignment="center"
+                                        android:gravity="center"
+                                        android:text="100"
+                                        android:inputType="number"
+                                        android:textSize="20dp" />
+                                </TableRow>
+                            </TableLayout>
+
+                        </TableRow>
+
+
+                        <!--サイト数-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TableLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:gravity="left">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textAlignment="center">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:width="150dp"
+                                        android:background="@color/purple_200"
+                                        android:text="サイト"
+                                        android:textSize="20sp" />
+                                </TableRow>
+                            </TableLayout>
+
+                            <TableLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                android:gravity="left">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="left">
+
+                                    <TextView
+                                        android:id="@+id/サイト数"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="5"
+                                        android:textAlignment="center"
+                                        android:gravity="center"
+                                        android:width="50dp"
+                                        android:textSize="20dp" />
+
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:width="120dp"
+                                        android:textAlignment="center"
+                                        android:text="AC希望数"
+                                        android:textSize="20dp" />
+
+                                    <EditText
+                                        android:id="@+id/AC希望数"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="#FFFFFF"
+                                        android:width="50dp"
+                                        android:textAlignment="center"
+                                        android:gravity="center"
+                                        android:text="100"
+                                        android:inputType="number"
+                                        android:textSize="20dp" />
+                                </TableRow>
+                            </TableLayout>
+
+                        </TableRow>
+
+                        <!--サイト名-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="150dp"
+                                android:background="@color/purple_200"
+                                android:text="サイト名"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/サイト名"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:ems="10"
+                                android:text="A14　A15　A16　A17　A18"
+                                android:textSize="20sp" />
+                        </TableRow>
+
+                        <!--乗物-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="150dp"
+                                android:background="@color/purple_200"
+                                android:text="乗物"
+                                android:textSize="20sp" />
+
+                            <EditText
+                                android:id="@+id/乗物"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="700dp"
+                                android:background="#FFFFFF"
+                                android:text="textSample123456789textSample123456789"
+                                android:textSize="20sp" />
+                        </TableRow>
+
+                        <!--料金-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="150dp"
+                                android:background="@color/purple_200"
+                                android:text="料金"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/料金"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="700dp"
+                                android:text="12345678"
+                                android:textSize="20sp" />
+                        </TableRow>
+
+                        <!--備考-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="150dp"
+                                android:background="@color/purple_200"
+                                android:text="備考"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/備考"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="700dp"
+                                android:text="備考"
+                                android:textSize="20sp" />
+                        </TableRow>
+
+                        <!--管理者備考-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="150dp"
+                                android:background="@color/purple_200"
+                                android:text="管理者備考"
+                                android:textSize="20sp" />
+
+                            <EditText
+                                android:id="@+id/管理者備考"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="700dp"
+                                android:inputType="textMultiLine"
+                                android:background="#FFFFFF"
+                                android:text="管理者備考"
+                                android:textSize="20sp" />
+                        </TableRow>
+
+                        <!--予約ID-->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1dp"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="150dp"
+                                android:background="@color/purple_200"
+                                android:text="予約ID"
+                                android:textSize="20sp" />
+
+                            <EditText
+                                android:id="@+id/予約ID"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:width="700dp"
+                                android:background="#FFFFFF"
+                                android:text="textSample123456789textSample123456789"
+                                android:textSize="20sp" />
+                        </TableRow>
+                    </TableLayout>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:background="@color/navy">
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAlignment="center">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/navy"
+                            android:textAlignment="center">
+
+                            <Button
+                                android:id="@+id/action_cancel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginLeft="100dp"
+                                android:layout_marginRight="100dp"
+                                android:text="戻る"
+                                android:textAlignment="viewEnd"
+                                android:textColor="#FFFFFF"
+                                android:textSize="25sp" />
+
+                            <Button
+                                android:id="@+id/action_delete"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginLeft="100dp"
+                                android:layout_marginRight="100dp"
+                                android:text="予約取消"
+                                android:textColor="#FFFFFF"
+                                android:textSize="25sp" />
+
+                            <Button
+                                android:id="@+id/action_select"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginLeft="100dp"
+                                android:layout_marginRight="100dp"
+                                android:text="更新"
+                                android:textAlignment="viewEnd"
+                                android:textColor="#FFFFFF"
+                                android:textSize="25sp" />
+                        </TableRow>
+                    </TableLayout>
+                </TableRow>
+            </TableLayout>
+        </TableRow>
 
 
         <TableRow
